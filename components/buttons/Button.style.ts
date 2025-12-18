@@ -1,20 +1,20 @@
-import { StyleSheet } from "react-native";
-import { customizeColors } from "@/libs/core/config/theme/color";
+import { StyleSheet } from 'react-native'
+import { customizeColors } from '@/libs/core/config/theme/color'
 
 export const ButtonVariantStyles = StyleSheet.create({
   buttonBase: {
-    width: "100%",
+    width: '100%',
     paddingVertical: 16,
     borderRadius: 12,
-    alignItems: "center",
-    justifyContent: "center",
-    overflow: "hidden",
+    alignItems: 'center',
+    justifyContent: 'center',
+    overflow: 'hidden',
   },
   primary: {
     backgroundColor: customizeColors.green1,
   },
   primaryOutline: {
-    backgroundColor: "transparent",
+    backgroundColor: 'transparent',
     borderColor: customizeColors.green1,
     borderWidth: 2,
   },
@@ -22,7 +22,7 @@ export const ButtonVariantStyles = StyleSheet.create({
     backgroundColor: customizeColors.blue3,
   },
   submitButtonOutline: {
-    backgroundColor: "rgba(0, 0, 0, 0.3)",
+    backgroundColor: 'rgba(0, 0, 0, 0.3)',
     borderColor: customizeColors.brandColor,
     borderWidth: 2,
   },
@@ -30,17 +30,17 @@ export const ButtonVariantStyles = StyleSheet.create({
     backgroundColor: customizeColors.accents.red,
   },
   scan: {},
-});
+})
 
 export const buttonStyles = StyleSheet.create({
   content: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   textBase: {
     fontSize: 16,
-    fontWeight: "600",
+    fontWeight: '600',
   },
   iconLeft: {
     marginRight: 8,
@@ -51,4 +51,4 @@ export const buttonStyles = StyleSheet.create({
   disabled: {
     opacity: 0.5,
   },
-});
+})

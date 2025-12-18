@@ -1,29 +1,29 @@
-import { ReactNode } from "react";
-import { TextStyle, ViewStyle } from "react-native";
+import { ReactNode } from 'react'
+import { TextStyle, ViewStyle } from 'react-native'
 
 export type ButtonCustomeVariant =
-  | "primary"
-  | "primaryOutline"
-  | "submitButton"
-  | "submitButtonOutline"
-  | "danger"
-  | "scan";
+  | 'primary'
+  | 'primaryOutline'
+  | 'submitButton'
+  | 'submitButtonOutline'
+  | 'danger'
+  | 'scan'
 
 export interface ButtonCustomeProps {
-  title: string;
-  onPress?: () => void;
+  title: string
+  onPress?: () => void
 
   // icon
-  leftIcon?: ReactNode;
-  rightIcon?: ReactNode;
+  leftIcon?: ReactNode
+  rightIcon?: ReactNode
 
   // style
-  variant?: ButtonCustomeVariant;
-  style?: ViewStyle | ViewStyle[];
-  textStyle?: TextStyle | TextStyle[];
+  variant?: ButtonCustomeVariant
+  style?: ViewStyle | ViewStyle[]
+  textStyle?: TextStyle | TextStyle[]
 
   // link / navigation
-  href?: string;
+  href?: string
 
-  disabled?: boolean;
+  disabled?: boolean
 }

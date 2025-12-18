@@ -1,36 +1,36 @@
-import React from "react";
-import { Linking, Pressable, StyleSheet, Text, View } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
-import { buttonStyles, ButtonVariantStyles } from "./Button.style";
-import { ButtonCustomeProps } from "./ButtonCustome.type";
-import getTextColorFromVariant from "./ButtonCustome.utils";
-import { customizeColors } from "@/libs/core/config/theme/color";
+import React from 'react'
+import { Linking, Pressable, StyleSheet, Text, View } from 'react-native'
+import { LinearGradient } from 'expo-linear-gradient'
+import { buttonStyles, ButtonVariantStyles } from './Button.style'
+import { ButtonCustomeProps } from './ButtonCustome.type'
+import getTextColorFromVariant from './ButtonCustome.utils'
+import { customizeColors } from '@/libs/core/config/theme/color'
 
-const GRADIENT_VARIANTS = ["scan"] as const;
+const GRADIENT_VARIANTS = ['scan'] as const
 
 const ButtonCustome = ({
   title,
   onPress,
   leftIcon,
   rightIcon,
-  variant = "primary",
+  variant = 'primary',
   style,
   textStyle,
   href,
   disabled,
 }: ButtonCustomeProps) => {
-  const isGradient = GRADIENT_VARIANTS.includes(variant as any);
+  const isGradient = GRADIENT_VARIANTS.includes(variant as any)
 
   const handlePress = () => {
-    if (disabled) return;
+    if (disabled) return
 
     if (href) {
-      Linking.openURL(href);
-      return;
+      Linking.openURL(href)
+      return
     }
 
-    onPress?.();
-  };
+    onPress?.()
+  }
 
   return (
     <Pressable
@@ -71,7 +71,7 @@ const ButtonCustome = ({
         {rightIcon && <View style={buttonStyles.iconRight}>{rightIcon}</View>}
       </View>
     </Pressable>
-  );
-};
+  )
+}
 
-export default ButtonCustome;
+export default ButtonCustome
