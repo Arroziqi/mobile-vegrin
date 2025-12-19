@@ -16,7 +16,7 @@ function Dev() {
         <ButtonCustome title="Outline" variant="submitButtonOutline" />
 
         <ButtonCustome title="Scan" variant="scan" />
-        <ButtonCustome title="Primary" />
+        <ButtonCustome href={'/(auth)/login'} title="Primary" />
       </View>
     </SafeAreaView>
   )

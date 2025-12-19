@@ -1,10 +1,11 @@
 import React from 'react'
-import { Linking, Pressable, StyleSheet, Text, View } from 'react-native'
+import { Pressable, StyleSheet, Text, View } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
 import { buttonStyles, ButtonVariantStyles } from './Button.style'
 import { ButtonCustomeProps } from './ButtonCustome.type'
 import getTextColorFromVariant from './ButtonCustome.utils'
 import { customizeColors } from '@/libs/core/config/theme/color'
+import { useRouter } from 'expo-router'
 
 const GRADIENT_VARIANTS = ['scan'] as const
 
@@ -20,12 +21,13 @@ const ButtonCustome = ({
   disabled,
 }: ButtonCustomeProps) => {
   const isGradient = GRADIENT_VARIANTS.includes(variant as any)
+  const router = useRouter()
 
   const handlePress = () => {
     if (disabled) return
 
     if (href) {
-      Linking.openURL(href)
+      router.push(href)
       return
     }
 

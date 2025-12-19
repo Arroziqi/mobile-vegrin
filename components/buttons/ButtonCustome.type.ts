@@ -1,5 +1,6 @@
 import { ReactNode } from 'react'
 import { TextStyle, ViewStyle } from 'react-native'
+import { Href } from 'expo-router'
 
 export type ButtonCustomeVariant =
   | 'primary'
@@ -23,7 +24,7 @@ export interface ButtonCustomeProps {
   textStyle?: TextStyle | TextStyle[]
 
   // link / navigation
-  href?: string
+  href?: Href
 
   disabled?: boolean
 }
