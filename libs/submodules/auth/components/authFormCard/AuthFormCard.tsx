@@ -18,12 +18,16 @@ export default function AuthFormCard({
   loading = false,
   buttonHref,
   error,
+  onBack,
+  disabledButton = false,
 }: AuthFormCardProps) {
   const hasError = Boolean(error)
 
   return (
     <View style={authFormCardStyles.form}>
-      {showBackButton && <BackButton style={authFormCardStyles.backButton} />}
+      {showBackButton && (
+        <BackButton onPress={onBack} style={authFormCardStyles.backButton} />
+      )}
 
       {/* Title */}
       <View style={authFormCardStyles.titleWrapper}>
@@ -75,6 +79,7 @@ export default function AuthFormCard({
         onPress={onSubmit}
         loading={loading}
         href={buttonHref}
+        disabled={disabledButton}
       />
 
       {/* Footer */}

@@ -9,7 +9,9 @@ export interface AuthFormCardProps {
 
   /** optional */
   onSubmit?: () => void
+  onBack?: () => void
   showBackButton?: boolean
+  disabledButton?: boolean
   footer?: React.ReactNode
   loading?: boolean
   buttonHref?: Href
