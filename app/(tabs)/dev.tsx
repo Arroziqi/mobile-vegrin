@@ -1,6 +1,6 @@
 import React from 'react'
 import { View } from 'react-native'
-import ButtonCustome from '@/components/buttons/ButtonCustome'
+import ButtonCustome from '@/components/buttons/button-custome/ButtonCustome'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { ThemedText } from '@/components/themed-text'
 

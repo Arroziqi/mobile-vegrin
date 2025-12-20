@@ -1,6 +1,7 @@
 // components/BaseTextInput.tsx
-import React from 'react'
+import React, { forwardRef, useMemo, useState } from 'react'
 import {
+  Pressable,
   StyleProp,
   StyleSheet,
   TextInput,
@@ -9,32 +10,76 @@ import {
   View,
   ViewStyle,
 } from 'react-native'
+import { FontAwesome5 } from '@expo/vector-icons'
 
 interface BaseTextInputProps extends TextInputProps {
   leftIcon?: React.ReactNode
   rightIcon?: React.ReactNode
   containerStyle?: StyleProp<ViewStyle>
   inputStyle?: StyleProp<TextStyle>
+  disableFlex?: boolean
 }
 
-export default function BaseTextInput({
-  leftIcon,
-  rightIcon,
-  containerStyle,
-  inputStyle,
-  style,
-  ...props
-}: BaseTextInputProps) {
-  return (
-    <View style={[styles.container, containerStyle]}>
-      {leftIcon && <View style={styles.iconLeft}>{leftIcon}</View>}
+const BaseTextInput = forwardRef<TextInput, BaseTextInputProps>(
+  (
+    {
+      leftIcon,
+      rightIcon,
+      containerStyle,
+      inputStyle,
+      secureTextEntry,
+      disableFlex,
+      style,
+      ...props
+    },
+    ref
+  ) => {
+    const isPassword = secureTextEntry === true
+    const [isHidden, setIsHidden] = useState<boolean>(isPassword)
 
-      <TextInput {...props} style={[styles.input, style, inputStyle]} />
+    const resolvedSecureTextEntry = isPassword ? isHidden : secureTextEntry
 
-      {rightIcon && <View style={styles.iconRight}>{rightIcon}</View>}
-    </View>
-  )
-}
+    const passwordIcon = useMemo(() => {
+      if (!isPassword) return null
+
+      return (
+        <Pressable onPress={() => setIsHidden(prev => !prev)} hitSlop={8}>
+          <FontAwesome5
+            name={isHidden ? 'eye-slash' : 'eye'}
+            size={16}
+            color="#666"
+          />
+        </Pressable>
+      )
+    }, [isHidden, isPassword])
+
+    return (
+      <View style={[styles.container, containerStyle]}>
+        {leftIcon && <View style={styles.iconLeft}>{leftIcon}</View>}
+
+        <TextInput
+          ref={ref}
+          {...props}
+          secureTextEntry={resolvedSecureTextEntry}
+          style={[
+            styles.input,
+            disableFlex && styles.noFlex,
+            style,
+            inputStyle,
+          ]}
+        />
+
+        {(rightIcon || passwordIcon) && (
+          <View style={styles.iconRight}>{rightIcon ?? passwordIcon}</View>
+        )}
+      </View>
+    )
+  }
+)
+
+BaseTextInput.displayName = 'BaseTextInput'
+
+export default BaseTextInput
 
 const styles = StyleSheet.create({
   container: {
@@ -45,8 +90,11 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: 12,
     paddingHorizontal: 0,
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: '500',
+  },
+  noFlex: {
+    flex: undefined,
   },
   iconLeft: {
     marginRight: 8,
@@ -55,24 +103,3 @@ const styles = StyleSheet.create({
     marginLeft: 8,
   },
 })
-
-/*
-USAGE EXAMPLES:
-
-<BaseTextInput
-  placeholder="Email"
-  leftIcon={<MailIcon />}
-/>
-
-<BaseTextInput
-  placeholder="Password"
-  secureTextEntry
-  rightIcon={<EyeIcon />}
-/>
-
-<BaseTextInput
-  placeholder="Search"
-  leftIcon={<SearchIcon />}
-  rightIcon={<ClearIcon />}
-/>
-*/

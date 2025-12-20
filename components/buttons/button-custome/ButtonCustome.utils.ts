@@ -1,6 +1,6 @@
 import { TextStyle } from 'react-native'
 import { customizeColors } from '@/libs/core/config/theme/color'
-import { ButtonCustomeVariant } from '@/components/buttons/ButtonCustome.type'
+import { ButtonCustomeVariant } from '@/components/buttons/button-custome/ButtonCustome.type'
 
 const getTextColorFromVariant = (
   variant?: ButtonCustomeVariant,

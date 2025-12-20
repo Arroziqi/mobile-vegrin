@@ -1,5 +1,11 @@
 import React from 'react'
-import { Pressable, StyleSheet, Text, View } from 'react-native'
+import {
+  ActivityIndicator,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
 import { buttonStyles, ButtonVariantStyles } from './Button.style'
 import { ButtonCustomeProps } from './ButtonCustome.type'
@@ -19,12 +25,15 @@ const ButtonCustome = ({
   textStyle,
   href,
   disabled,
+  loading = false,
 }: ButtonCustomeProps) => {
   const isGradient = GRADIENT_VARIANTS.includes(variant as any)
   const router = useRouter()
 
+  const isDisabled = disabled || loading
+
   const handlePress = () => {
-    if (disabled) return
+    if (isDisabled) return
 
     if (href) {
       router.push(href)
@@ -37,11 +46,11 @@ const ButtonCustome = ({
   return (
     <Pressable
       onPress={handlePress}
-      disabled={disabled}
+      disabled={isDisabled}
       style={[
         ButtonVariantStyles.buttonBase,
         !isGradient && ButtonVariantStyles[variant],
-        disabled && buttonStyles.disabled,
+        isDisabled && buttonStyles.disabled,
         style,
       ]}
     >
@@ -57,20 +66,31 @@ const ButtonCustome = ({
 
       {/* ===== CONTENT ===== */}
       <View style={buttonStyles.content}>
-        {leftIcon && <View style={buttonStyles.iconLeft}>{leftIcon}</View>}
+        {loading ? (
+          <ActivityIndicator
+            size="small"
+            color={getTextColorFromVariant(variant).color}
+          />
+        ) : (
+          <>
+            {leftIcon && <View style={buttonStyles.iconLeft}>{leftIcon}</View>}
 
-        <Text
-          style={[
-            buttonStyles.textBase,
-            getTextColorFromVariant(variant),
-            textStyle,
-          ]}
-          numberOfLines={1}
-        >
-          {title}
-        </Text>
+            <Text
+              style={[
+                buttonStyles.textBase,
+                getTextColorFromVariant(variant),
+                textStyle,
+              ]}
+              numberOfLines={1}
+            >
+              {title}
+            </Text>
 
-        {rightIcon && <View style={buttonStyles.iconRight}>{rightIcon}</View>}
+            {rightIcon && (
+              <View style={buttonStyles.iconRight}>{rightIcon}</View>
+            )}
+          </>
+        )}
       </View>
     </Pressable>
   )

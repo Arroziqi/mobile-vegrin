@@ -29,4 +29,8 @@ export const customizeColors = {
   },
 
   brandColor: '#2B9846',
+
+  grey: '#6C7278',
+
+  stroke: '#EDF1F3',
 }

@@ -27,4 +27,5 @@ export interface ButtonCustomeProps {
   href?: Href
 
   disabled?: boolean
+  loading?: boolean
 }
