@@ -1,3 +1,4 @@
+// Home.style.ts
 import { StyleSheet } from 'react-native'
 import { customizeColors } from '@/libs/core/config/theme/color'
 
@@ -13,13 +14,16 @@ const homeStyle = StyleSheet.create({
     flex: 1,
     backgroundColor: '#FFFFFF',
   },
+  scrollContent: {
+    flexGrow: 1,
+  },
   warningMessageContainer: {
     alignSelf: 'flex-start',
   },
   contentWrapper: {
     width: '100%',
     paddingHorizontal: 21,
-    flex: 1,
+    paddingBottom: 36,
   },
 })
 

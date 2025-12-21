@@ -1,49 +1,108 @@
 import { Tabs } from 'expo-router'
 import React from 'react'
+import { StyleSheet } from 'react-native'
+import { Ionicons, MaterialIcons, Octicons } from '@expo/vector-icons'
 
 import { HapticTab } from '@/components/haptic-tab'
-import { IconSymbol } from '@/components/ui/icon-symbol'
 import { Colors } from '@/constants/theme'
 import { useColorScheme } from '@/hooks/use-color-scheme'
 
 export default function TabLayout() {
   const colorScheme = useColorScheme()
+  const tintColor = Colors[colorScheme ?? 'light'].tint
 
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+        tabBarActiveTintColor: tintColor,
+        tabBarInactiveTintColor: '#888888',
         headerShown: false,
         tabBarButton: HapticTab,
+        tabBarStyle: styles.tabBar,
+        tabBarShowLabel: true,
+        tabBarLabelStyle: styles.tabBarLabel,
       }}
     >
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => (
-            <IconSymbol size={28} name="house.fill" color={color} />
+          title: 'Beranda',
+          tabBarIcon: ({ color, focused }) => (
+            <Octicons
+              size={28}
+              name={focused ? 'home-fill' : 'home'}
+              color={color}
+            />
           ),
         }}
       />
+
       <Tabs.Screen
         name="explore"
         options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => (
-            <IconSymbol size={28} name="paperplane.fill" color={color} />
+          title: 'AI Kamera',
+          tabBarIcon: ({ color, focused }) => (
+            <MaterialIcons
+              name="camera-alt"
+              size={focused ? 36 : 32}
+              color={focused ? '#FFFFFF' : tintColor}
+              style={[
+                styles.scanIcon,
+                {
+                  backgroundColor: focused ? tintColor : '#FFFFFF',
+                  borderColor: tintColor,
+                },
+              ]}
+            />
           ),
         }}
       />
+
       <Tabs.Screen
         name="dev"
         options={{
-          title: 'Dev',
-          tabBarIcon: ({ color }) => (
-            <IconSymbol size={28} name="paperplane.fill" color={color} />
+          title: 'Profile',
+          tabBarIcon: ({ color, focused }) => (
+            <Ionicons
+              size={28}
+              name={focused ? 'person' : 'person-outline'}
+              color={color}
+            />
           ),
         }}
       />
     </Tabs>
   )
 }
+
+const styles = StyleSheet.create({
+  tabBar: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: 84,
+    backgroundColor: '#EEF5F1',
+    borderTopLeftRadius: 14.67,
+    borderTopRightRadius: 14.67,
+    borderTopWidth: 0,
+    elevation: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: -4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 12,
+    paddingTop: 8,
+  },
+  scanIcon: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    borderWidth: 6,
+    textAlign: 'center',
+    textAlignVertical: 'center',
+    marginTop: -24,
+  },
+  tabBarLabel: {
+    marginTop: 5,
+  },
+})
