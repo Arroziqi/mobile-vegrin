@@ -38,7 +38,7 @@ export default function TabLayout() {
       />
 
       <Tabs.Screen
-        name="explore"
+        name="ai-cam-scan"
         options={{
           title: 'AI Kamera',
           tabBarIcon: ({ color, focused }) => (
