@@ -26,7 +26,10 @@ const WeatherCard = () => (
           <Text style={[styles.condition, styles.text]}>Cerah Berawan</Text>
         </Flex>
       </Flex>
-      <Text style={[styles.degree, styles.text]}>32</Text>
+      <Text style={[styles.degree, styles.text]}>
+        32
+        <Text style={styles.degreeSymbol}>°</Text>
+      </Text>
     </Flex>
   </LinearGradient>
 )
@@ -56,6 +59,10 @@ const styles = StyleSheet.create({
     fontWeight: 'regular',
   },
   degree: {
+    fontSize: 32,
+    fontWeight: '600',
+  },
+  degreeSymbol: {
     fontSize: 32,
   },
 })

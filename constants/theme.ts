@@ -4,9 +4,10 @@
  */
 
 import { Platform } from 'react-native'
+import { customizeColors } from '@/libs/core/config/theme/color'
 
-const tintColorLight = '#0a7ea4'
-const tintColorDark = '#fff'
+const tintColorLight = customizeColors.brandColor
+const tintColorDark = customizeColors.brandColor
 
 export const Colors = {
   light: {

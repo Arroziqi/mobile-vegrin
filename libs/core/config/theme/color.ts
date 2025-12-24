@@ -26,9 +26,12 @@ export const customizeColors = {
     text: ['#16F5ED', '#14EC17', '#F86271'] as const,
     weatherCard: ['#24FF54', '#5BDADF'] as const,
     scanButton: ['#00BC7D', '#00BBA7'] as const,
+    topBar: ['#B2FFB7', 'rgba(223, 255, 225, 0)'] as const,
   },
 
   brandColor: '#2B9846',
+
+  warning: '#FFA500',
 
   grey: '#6C7278',
 
