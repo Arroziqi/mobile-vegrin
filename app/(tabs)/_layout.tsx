@@ -1,7 +1,7 @@
+import { Ionicons, MaterialIcons, Octicons } from '@expo/vector-icons'
 import { Tabs } from 'expo-router'
 import React from 'react'
 import { StyleSheet } from 'react-native'
-import { Ionicons, MaterialIcons, Octicons } from '@expo/vector-icons'
 
 import { HapticTab } from '@/components/haptic-tab'
 import { Colors } from '@/constants/theme'
@@ -41,6 +41,7 @@ export default function TabLayout() {
         name="ai-cam-scan"
         options={{
           title: 'AI Kamera',
+          tabBarStyle: { display: 'none' },
           tabBarIcon: ({ color, focused }) => (
             <MaterialIcons
               name="camera-alt"

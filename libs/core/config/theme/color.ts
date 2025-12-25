@@ -36,4 +36,9 @@ export const customizeColors = {
   grey: '#6C7278',
 
   stroke: '#EDF1F3',
+
+  text: {
+    primary: '#1E2939',
+    reverse: '#FFFFFF',
+  },
 }
