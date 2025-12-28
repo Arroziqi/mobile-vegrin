@@ -18,7 +18,7 @@ const getTextColorFromVariant = (
     case 'submitButton':
       return { color: customizeColors.white || '#FFFFFF' }
     case 'submitButtonOutline':
-      return { color: customizeColors.green1 || '#00FF00' }
+      return { color: customizeColors.brandColor || '#00FF00' }
     case 'danger':
       return { color: customizeColors.white || '#FFFFFF' }
     case 'scan':

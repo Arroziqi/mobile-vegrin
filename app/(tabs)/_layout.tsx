@@ -1,77 +1,88 @@
 import { Tabs } from 'expo-router'
-import React from 'react'
+import React, { useState } from 'react'
 import { StyleSheet } from 'react-native'
 import { Ionicons, MaterialIcons, Octicons } from '@expo/vector-icons'
 
 import { HapticTab } from '@/components/haptic-tab'
 import { Colors } from '@/constants/theme'
 import { useColorScheme } from '@/hooks/use-color-scheme'
+import ProfileDrawer from '@/libs/submodules/profile/components/profileDrawer/ProfileDrawer'
 
 export default function TabLayout() {
   const colorScheme = useColorScheme()
   const tintColor = Colors[colorScheme ?? 'light'].tint
+  const [profileOpen, setProfileOpen] = useState(false)
 
   return (
-    <Tabs
-      screenOptions={{
-        tabBarActiveTintColor: tintColor,
-        tabBarInactiveTintColor: '#888888',
-        headerShown: false,
-        tabBarButton: HapticTab,
-        tabBarStyle: styles.tabBar,
-        tabBarShowLabel: true,
-        tabBarLabelStyle: styles.tabBarLabel,
-      }}
-    >
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: 'Beranda',
-          tabBarIcon: ({ color, focused }) => (
-            <Octicons
-              size={28}
-              name={focused ? 'home-fill' : 'home'}
-              color={color}
-            />
-          ),
+    <>
+      <Tabs
+        screenOptions={{
+          tabBarActiveTintColor: tintColor,
+          tabBarInactiveTintColor: '#888888',
+          headerShown: false,
+          tabBarButton: HapticTab,
+          tabBarStyle: styles.tabBar,
+          tabBarShowLabel: true,
+          tabBarLabelStyle: styles.tabBarLabel,
         }}
-      />
+      >
+        <Tabs.Screen
+          name="index"
+          options={{
+            title: 'Beranda',
+            tabBarIcon: ({ color, focused }) => (
+              <Octicons
+                size={28}
+                name={focused ? 'home-fill' : 'home'}
+                color={color}
+              />
+            ),
+          }}
+        />
 
-      <Tabs.Screen
-        name="ai-cam-scan"
-        options={{
-          title: 'AI Kamera',
-          tabBarIcon: ({ color, focused }) => (
-            <MaterialIcons
-              name="camera-alt"
-              size={focused ? 36 : 32}
-              color={focused ? '#FFFFFF' : tintColor}
-              style={[
-                styles.scanIcon,
-                {
-                  backgroundColor: focused ? tintColor : '#FFFFFF',
-                  borderColor: tintColor,
-                },
-              ]}
-            />
-          ),
-        }}
-      />
+        <Tabs.Screen
+          name="ai-cam-scan"
+          options={{
+            title: 'AI Kamera',
+            tabBarIcon: ({ color, focused }) => (
+              <MaterialIcons
+                name="camera-alt"
+                size={focused ? 36 : 32}
+                color={focused ? '#FFFFFF' : tintColor}
+                style={[
+                  styles.scanIcon,
+                  {
+                    backgroundColor: focused ? tintColor : '#FFFFFF',
+                    borderColor: tintColor,
+                  },
+                ]}
+              />
+            ),
+          }}
+        />
 
-      <Tabs.Screen
-        name="dev"
-        options={{
-          title: 'Profile',
-          tabBarIcon: ({ color, focused }) => (
-            <Ionicons
-              size={28}
-              name={focused ? 'person' : 'person-outline'}
-              color={color}
-            />
-          ),
-        }}
+        <Tabs.Screen
+          name="dev"
+          options={{
+            title: 'Profile',
+            tabBarButton: props => (
+              <HapticTab {...props} onPress={() => setProfileOpen(true)} />
+            ),
+            tabBarIcon: ({ color, focused }) => (
+              <Ionicons
+                size={28}
+                name={focused ? 'person' : 'person-outline'}
+                color={color}
+              />
+            ),
+          }}
+        />
+      </Tabs>
+      <ProfileDrawer
+        visible={profileOpen}
+        onClose={() => setProfileOpen(false)}
       />
-    </Tabs>
+    </>
   )
 }
 

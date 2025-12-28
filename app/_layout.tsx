@@ -8,6 +8,7 @@ import { StatusBar } from 'expo-status-bar'
 import 'react-native-reanimated'
 
 import { useColorScheme } from '@/hooks/use-color-scheme'
+import { GestureHandlerRootView } from 'react-native-gesture-handler'
 
 export const unstable_settings = {
   anchor: '(tabs)',
@@ -17,22 +18,24 @@ export default function RootLayout() {
   const colorScheme = useColorScheme()
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack screenOptions={{ headerShown: false }}>
-        {/* MAIN APP */}
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+        <Stack screenOptions={{ headerShown: false }}>
+          {/* MAIN APP */}
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
 
-        {/* AUTH FLOW */}
-        <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+          {/* AUTH FLOW */}
+          <Stack.Screen name="(auth)" options={{ headerShown: false }} />
 
-        {/* MODAL */}
-        <Stack.Screen
-          name="modal"
-          options={{ presentation: 'modal', title: 'Modal' }}
-        />
-      </Stack>
+          {/* MODAL */}
+          <Stack.Screen
+            name="modal"
+            options={{ presentation: 'modal', title: 'Modal' }}
+          />
+        </Stack>
 
-      <StatusBar style="auto" />
-    </ThemeProvider>
+        <StatusBar style="auto" />
+      </ThemeProvider>
+    </GestureHandlerRootView>
   )
 }
