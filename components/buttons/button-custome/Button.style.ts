@@ -22,7 +22,7 @@ export const ButtonVariantStyles = StyleSheet.create({
     backgroundColor: customizeColors.blue3,
   },
   submitButtonOutline: {
-    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+    backgroundColor: 'transparent',
     borderColor: customizeColors.brandColor,
     borderWidth: 2,
   },

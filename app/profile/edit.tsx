@@ -1,8 +1,8 @@
 import React from 'react'
-import { Text } from 'react-native'
+import EditProfileScreen from '@/libs/submodules/profile/screens/EditProfileScreen'
 
 function Edit() {
-  return <Text>Ini edit page</Text>
+  return <EditProfileScreen />
 }
 
 export default Edit
