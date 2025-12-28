@@ -16,6 +16,8 @@ export const customizeColors = {
   blue2: '#1C8ABA',
   blue3: '#1D61E7',
 
+  border: '#C5C5C5',
+
   secondary: {
     300: '#ACB5BB',
   },
