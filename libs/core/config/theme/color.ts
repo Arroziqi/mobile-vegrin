@@ -38,4 +38,8 @@ export const customizeColors = {
   grey: '#6C7278',
 
   stroke: '#EDF1F3',
+
+  primary: {
+    color1: '#12723D',
+  },
 }
