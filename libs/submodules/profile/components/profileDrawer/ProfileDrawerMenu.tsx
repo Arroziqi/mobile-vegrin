@@ -7,6 +7,7 @@ import Animated, {
 } from 'react-native-reanimated'
 import { MaterialIcons } from '@expo/vector-icons'
 import OutlineButton from './OutlineButton'
+import { useRouter } from 'expo-router'
 
 interface Props {
   settingOpen: boolean
@@ -18,6 +19,7 @@ export default function ProfileDrawerMenu({
   onToggleSetting,
 }: Props) {
   const arrow = useSharedValue(0)
+  const router = useRouter()
 
   useEffect(() => {
     arrow.value = withTiming(settingOpen ? 1 : 0, { duration: 200 })
@@ -29,7 +31,7 @@ export default function ProfileDrawerMenu({
 
   return (
     <View style={styles.container}>
-      <OutlineButton label="Profilku" />
+      <OutlineButton label="Profilku" onPress={() => router.push('/profile')} />
 
       <OutlineButton
         label="Pengaturan"
