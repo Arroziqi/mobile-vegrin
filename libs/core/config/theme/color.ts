@@ -23,6 +23,8 @@ export const customizeColors = {
   purple3: '#432DD7',
   purple4: '#312C85',
 
+  border: '#C5C5C5',
+
   secondary: {
     300: '#ACB5BB',
   },
