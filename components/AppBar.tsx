@@ -6,10 +6,21 @@ import Flex from './Flex'
 
 interface AppBarProps {
   title: string
+  variant: 'default' | 'reverse'
 }
 
-const AppBar = ({ title }: AppBarProps) => {
+const AppBar = ({ title, variant }: AppBarProps) => {
   const navigation = useNavigation()
+  let textColor = customizeColors.text.primary
+  let iconColor = customizeColors.green4
+  let bgIcon = customizeColors.lightGreen
+
+  if (variant === 'reverse') {
+    textColor = customizeColors.text.reverse
+    iconColor = customizeColors.white
+    bgIcon = customizeColors.whiteOpacity10
+  }
+
   return (
     <Flex
       direction="row"
@@ -23,15 +34,14 @@ const AppBar = ({ title }: AppBarProps) => {
     >
       <TouchableOpacity
         onPress={() => navigation.goBack()}
-        style={[styles.backButton, { position: 'absolute', left: 20 }]}
+        style={[
+          styles.backButton,
+          { position: 'absolute', left: 20, backgroundColor: bgIcon },
+        ]}
       >
-        <MaterialIcons
-          name="arrow-back-ios"
-          size={24}
-          color={customizeColors.text.reverse}
-        />
+        <MaterialIcons name="arrow-back" size={24} color={iconColor} />
       </TouchableOpacity>
-      <Text style={styles.h1}>{title}</Text>
+      <Text style={[styles.h1, { color: textColor }]}>{title}</Text>
     </Flex>
   )
 }
@@ -42,12 +52,13 @@ const styles = StyleSheet.create({
   h1: {
     fontSize: 20,
     fontWeight: 'regular',
-    color: customizeColors.text.reverse,
   },
   backButton: {
     width: 40,
     height: 40,
     justifyContent: 'center',
-    alignItems: 'flex-start',
+    alignItems: 'center',
+    backgroundColor: 'red',
+    borderRadius: 20,
   },
 })

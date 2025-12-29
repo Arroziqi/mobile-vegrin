@@ -3,6 +3,7 @@ import { Colors } from '@/constants/theme'
 import { customizeColors } from '@/libs/core/config/theme/color'
 import { MaterialIcons } from '@expo/vector-icons'
 import { LinearGradient } from 'expo-linear-gradient'
+import { useRouter } from 'expo-router'
 import {
   StyleSheet,
   Text,
@@ -13,6 +14,11 @@ import {
 const ActionSection = () => {
   const colorScheme = useColorScheme()
   const tintColor = Colors[colorScheme ?? 'light'].tint
+  const router = useRouter()
+  const handlePressShutter = () => {
+    router.push('/analyze')
+  }
+
   return (
     <LinearGradient
       colors={['#00D492', '#00D5BE', '#00D3F2']}
@@ -45,7 +51,7 @@ const ActionSection = () => {
         <Text style={styles.actionLabel}>History</Text>
       </Flex>
       <Flex direction="column" align="center" gap={8}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={handlePressShutter}>
           <MaterialIcons
             name="camera-alt"
             size={36}

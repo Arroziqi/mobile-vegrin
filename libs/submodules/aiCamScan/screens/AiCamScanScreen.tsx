@@ -15,7 +15,7 @@ export default function AiCamScanScreen() {
         style={{ backgroundColor: '#101828', flex: 1 }}
       >
         {/* AppBar with back button */}
-        <AppBar title="Scan Tanaman" />
+        <AppBar title="Scan Tanaman" variant="reverse" />
         <Flex direction="column" align="center" justify="center" gap={5}>
           <Text style={styles.h6}>Arahkan kamera ke tanaman anda</Text>
           <Text style={styles.p}>Posisikan tanaman di dalam frame</Text>
