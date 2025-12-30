@@ -45,8 +45,18 @@ export default function ProfileDrawerMenu({
 
       {settingOpen && (
         <View style={styles.dropdown}>
-          <OutlineButton label="Pengaturan Aplikasi" indent small />
-          <OutlineButton label="Privacy Policy" indent small />
+          <OutlineButton
+            label="Pengaturan Aplikasi"
+            indent
+            small
+            onPress={() => router.push('/profile/settings')}
+          />
+          <OutlineButton
+            label="Privacy Policy"
+            indent
+            small
+            onPress={() => router.push('/profile/privacy-policy')}
+          />
         </View>
       )}
     </View>
