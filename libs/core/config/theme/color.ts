@@ -27,6 +27,7 @@ export const customizeColors = {
 
   secondary: {
     300: '#ACB5BB',
+    color1: '#2C2E35',
   },
 
   white: '#EEEEEE',
@@ -57,4 +58,6 @@ export const customizeColors = {
   primary: {
     color1: '#12723D',
   },
+
+  placeholder: '#878787',
 }
