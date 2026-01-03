@@ -18,29 +18,19 @@ const ActionSection = () => {
   const handlePressShutter = () => {
     router.push('/analyze')
   }
+  const handleHistoryButton = () => {
+    router.push('/history')
+  }
 
   return (
     <LinearGradient
       colors={['#00D492', '#00D5BE', '#00D3F2']}
       start={{ x: 0, y: 0 }}
       end={{ x: 1, y: 0 }}
-      style={{
-        padding: 16,
-        shadowColor: '#000000',
-        shadowOffset: { width: 0, height: 0 },
-        shadowOpacity: 0.25,
-        shadowRadius: 12,
-        elevation: 25,
-        width: '100%',
-        height: 130,
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-around',
-        gap: 30,
-      }}
+      style={styles.container}
     >
       <Flex direction="column" align="center" gap={8}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={handleHistoryButton}>
           <MaterialIcons
             name="schedule"
             size={32}
@@ -85,6 +75,20 @@ const ActionSection = () => {
 export default ActionSection
 
 const styles = StyleSheet.create({
+  container: {
+    padding: 20,
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.25,
+    shadowRadius: 12,
+    elevation: 25,
+    width: '100%',
+    height: 130,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-around',
+    gap: 30,
+  },
   actionLabel: {
     fontSize: 16,
     fontWeight: '700',

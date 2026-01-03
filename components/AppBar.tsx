@@ -30,6 +30,7 @@ const AppBar = ({ title, variant }: AppBarProps) => {
         padding: 16,
         width: '100%',
         position: 'relative',
+        backgroundColor: variant === 'reverse' ? 'transparent' : 'white',
       }}
     >
       <TouchableOpacity
@@ -58,7 +59,6 @@ const styles = StyleSheet.create({
     height: 40,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'red',
     borderRadius: 20,
   },
 })

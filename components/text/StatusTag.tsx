@@ -3,7 +3,7 @@ import { MaterialIcons } from '@expo/vector-icons'
 import { StyleSheet, Text, View } from 'react-native'
 
 interface StatusTagProps {
-  label: string
+  label?: string
   icon?: string
   backgroundColor?: string
   textColor?: string
@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
   },
   text: {
-    fontSize: 14,
+    fontSize: 12,
     fontWeight: '500',
   },
 })
