@@ -3,10 +3,11 @@ import { customizeColors } from '@/libs/core/config/theme/color'
 import Flex from '@/components/Flex'
 import Avatar from '@/components/Avatar'
 import { useState } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { Pressable, StyleSheet, Text, View } from 'react-native'
 import { Ionicons } from '@expo/vector-icons'
 import { AlertType } from '@/libs/common/types/Alert.type'
 import getColorByAlertType from '@/libs/common/utils/getColorByAlertType'
+import { useRouter } from 'expo-router'
 
 const TopBarHome = () => {
   const [name, setName] = useState('Supri')
@@ -14,6 +15,8 @@ const TopBarHome = () => {
     message: 'Kondisi Cuaca disekitar lahan anda normal',
     variant: 'success',
   })
+
+  const router = useRouter()
   return (
     <LinearGradient
       colors={customizeColors.gradient.topBar}
@@ -25,10 +28,12 @@ const TopBarHome = () => {
             <Avatar source={require('@/assets/images/avatar.jpg')} />
             <Text style={styles.name}>{name}</Text>
           </Flex>
-          <Flex align={'center'} justify={'center'} direction={'column'}>
-            <Ionicons name={'notifications'} size={24} color={'#676767'} />
-            <Text style={styles.labelNotification}>Notifikasi</Text>
-          </Flex>
+          <Pressable onPress={() => router.push('/notification')}>
+            <Flex align={'center'} justify={'center'} direction={'column'}>
+              <Ionicons name={'notifications'} size={24} color={'#676767'} />
+              <Text style={styles.labelNotification}>Notifikasi</Text>
+            </Flex>
+          </Pressable>
         </Flex>
         {alert && (
           <Text

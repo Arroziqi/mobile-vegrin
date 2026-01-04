@@ -30,6 +30,7 @@ export const customizeColors = {
     weatherCard: ['#24FF54', '#5BDADF'] as const,
     scanButton: ['#00BC7D', '#00BBA7'] as const,
     topBar: ['#B2FFB7', 'rgba(223, 255, 225, 0)'] as const,
+    linear: ['#00D492', '#00BBA7'] as const,
   },
 
   brandColor: '#2B9846',
