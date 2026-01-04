@@ -51,6 +51,12 @@ export const customizeColors = {
 
   stroke: '#EDF1F3',
 
+  primary: {
+    color1: '#12723D',
+  },
+
+  placeholder: '#878787',
+
   text: {
     primary: '#1E2939',
     reverse: '#FFFFFF',
