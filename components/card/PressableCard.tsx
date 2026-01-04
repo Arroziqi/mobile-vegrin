@@ -50,19 +50,15 @@ const PressableCard = ({
           body
         ) : (
           <>
-            {(title || note) && (
-              <View style={styles.titleRow}>
-                {title && <Text style={styles.title}>{title}</Text>}
-                {note && <View>{note}</View>}
-              </View>
-            )}
-
+            {title && <Text style={styles.title}>{title}</Text>}
             {description && (
               <Text style={styles.description}>{description}</Text>
             )}
           </>
         )}
       </View>
+
+      {note && <View style={styles.note}>{note}</View>}
 
       {trailing && <View style={styles.trailing}>{trailing}</View>}
     </Pressable>
@@ -77,7 +73,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 16,
     borderRadius: 14,
-    backgroundColor: '#fff',
+    backgroundColor: 'white',
     borderWidth: 1,
     borderColor: customizeColors.border,
     gap: 12,
@@ -102,7 +98,6 @@ const styles = StyleSheet.create({
   },
 
   titleRow: {
-    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     gap: 8,
@@ -117,10 +112,16 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     color: '#000',
+    maxWidth: '80%',
   },
 
   description: {
     fontSize: 14,
     color: '#666',
+  },
+  note: {
+    position: 'absolute',
+    right: 12,
+    top: 16,
   },
 })
