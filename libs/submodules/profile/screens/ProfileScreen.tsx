@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef, useState } from 'react'
 import Container from '@/components/container/Container'
 import { StyleSheet, Text, View } from 'react-native'
 import ProfileTopBar from '@/libs/submodules/profile/components/topbar/ProfileTopBar'
@@ -7,20 +7,39 @@ import Avatar from '@/components/Avatar'
 import Flex from '@/components/Flex'
 import { Link } from 'expo-router'
 import ProfileInfoRow from '@/libs/submodules/profile/components/ProfileInfoRow'
+import { useImagePicker } from '@/hooks/useImagePicker'
+import BottomSheet from '@gorhom/bottom-sheet'
+import ImagePickerBottomSheet from '@/components/ImagePickerBottomSheet'
 
 function ProfileScreen() {
+  const bottomSheetRef = useRef<BottomSheet>(null)
+  const { pickFromCamera, pickFromGallery } = useImagePicker()
+  const [avatar, setAvatar] = useState<string | null>(null)
+
+  const handleCamera = async () => {
+    bottomSheetRef.current?.close()
+    const uri = await pickFromCamera()
+    if (uri) setAvatar(uri)
+  }
+
+  const handleGallery = async () => {
+    bottomSheetRef.current?.close()
+    const uri = await pickFromGallery()
+    if (uri) setAvatar(uri)
+  }
+
   return (
     <Container>
       <View style={styles.container}>
         <ProfileTopBar title={'Profil Ku'} />
         <View style={styles.content}>
           <Avatar
-            source={require('@/assets/images/avatar.jpg')}
-            style={styles.avatar}
+            source={
+              avatar ? { uri: avatar } : require('@/assets/images/avatar.jpg')
+            }
             editable
-            onEditPress={() => {
-              console.log('Edit avatar')
-            }}
+            onEditPress={() => bottomSheetRef.current?.expand()}
+            style={styles.avatar}
           />
 
           <View style={{ height: 48 }} />
@@ -45,6 +64,11 @@ function ProfileScreen() {
           </Flex>
         </View>
       </View>
+      <ImagePickerBottomSheet
+        ref={bottomSheetRef}
+        onPickCamera={handleCamera}
+        onPickGallery={handleGallery}
+      />
     </Container>
   )
 }

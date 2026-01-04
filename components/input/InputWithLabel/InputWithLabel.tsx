@@ -1,5 +1,13 @@
 import React, { useState } from 'react'
-import { StyleSheet, Text, TextInput, TextInputProps, View } from 'react-native'
+import {
+  Pressable,
+  StyleSheet,
+  Text,
+  TextInput,
+  TextInputProps,
+  View,
+} from 'react-native'
+import DateTimePickerModal from 'react-native-modal-datetime-picker'
 import { customizeColors } from '@/libs/core/config/theme/color'
 import { MaterialIcons } from '@expo/vector-icons'
 
@@ -26,8 +34,18 @@ const InputWithLabel = ({
   autoCapitalize,
 }: InputProps) => {
   const [focused, setFocused] = useState(false)
+  const [showDatePicker, setShowDatePicker] = useState(false)
 
+  const isDateTime = textContentType === 'dateTime'
   const isActive = focused || !!value
+
+  const handleConfirmDate = (date: Date) => {
+    setShowDatePicker(false)
+
+    // contoh format: YYYY-MM-DD
+    const formatted = date.toISOString().split('T')[0]
+    onChange?.(formatted)
+  }
 
   return (
     <View style={styles.wrapper}>
@@ -35,37 +53,50 @@ const InputWithLabel = ({
         {label}
       </Text>
 
-      <View
-        style={[
-          styles.container,
-          focused && styles.focused,
-          disabled && styles.disabled,
-        ]}
+      <Pressable
+        disabled={!isDateTime || disabled}
+        onPress={() => setShowDatePicker(true)}
       >
-        <TextInput
-          value={value}
-          onChangeText={onChange}
-          placeholder={isActive ? placeholder : ''}
-          editable={!disabled}
-          style={styles.input}
-          onFocus={() => setFocused(true)}
-          onBlur={() => setFocused(false)}
-          textContentType={textContentType}
-          keyboardType={keyboardType}
-          secureTextEntry={secureTextEntry}
-          autoCapitalize={autoCapitalize}
-        />
+        <View
+          style={[
+            styles.container,
+            focused && styles.focused,
+            disabled && styles.disabled,
+          ]}
+        >
+          <TextInput
+            value={value}
+            placeholder={isActive ? placeholder : ''}
+            editable={!isDateTime && !disabled}
+            pointerEvents={isDateTime ? 'none' : 'auto'}
+            style={styles.input}
+            onFocus={() => setFocused(true)}
+            onBlur={() => setFocused(false)}
+            keyboardType={keyboardType}
+            secureTextEntry={secureTextEntry}
+            autoCapitalize={autoCapitalize}
+          />
 
-        {textContentType === 'dateTime' && (
-          <View style={styles.iconWrapper}>
-            <MaterialIcons
-              name={'calendar-month'}
-              size={20}
-              color={customizeColors.primary.color1}
-            />
-          </View>
-        )}
-      </View>
+          {isDateTime && (
+            <View style={styles.iconWrapper}>
+              <MaterialIcons
+                name="calendar-month"
+                size={20}
+                color={customizeColors.primary.color1}
+              />
+            </View>
+          )}
+        </View>
+      </Pressable>
+
+      {isDateTime && (
+        <DateTimePickerModal
+          isVisible={showDatePicker}
+          mode="date"
+          onConfirm={handleConfirmDate}
+          onCancel={() => setShowDatePicker(false)}
+        />
+      )}
     </View>
   )
 }
