@@ -61,10 +61,4 @@ export const customizeColors = {
     primary: '#1E2939',
     reverse: '#FFFFFF',
   },
-
-  primary: {
-    color1: '#12723D',
-  },
-
-  placeholder: '#878787',
 }
