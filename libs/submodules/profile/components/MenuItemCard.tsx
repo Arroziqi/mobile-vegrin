@@ -1,8 +1,8 @@
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
-import { MaterialIcons } from '@expo/vector-icons'
 import { customizeColors } from '@/libs/core/config/theme/color'
 import PressableCard from '@/components/card/PressableCard'
+import { FontAwesome6 } from '@expo/vector-icons'
 
 interface MenuItemCardProps {
   title: string
@@ -21,12 +21,13 @@ const MenuItemCard = ({
 }: MenuItemCardProps) => {
   return (
     <PressableCard
+      style={styles.container}
       onPress={onPress}
       title={title}
       description={description}
       note={note}
       leading={<View style={styles.iconWrapper}>{icon}</View>}
-      trailing={<MaterialIcons name="chevron-right" size={24} color="#999" />}
+      trailing={<FontAwesome6 name="arrow-right" size={24} color="black" />}
     />
   )
 }
@@ -41,5 +42,8 @@ const styles = StyleSheet.create({
     backgroundColor: customizeColors.primary.color1,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  container: {
+    borderWidth: 0,
   },
 })
