@@ -15,7 +15,8 @@ import {
 } from '@/libs/dummyData/weatherForecasting.dummy'
 import { newsItemDummy } from '@/libs/dummyData/newsItem.dummy'
 import NewsItemCardList from '@/libs/submodules/home/components/newsItemCardList/NewsItemCardList'
-import { ScrollView, View } from 'react-native'
+import { Pressable, ScrollView, View } from 'react-native'
+import { useRouter } from 'expo-router'
 
 const HomeScreen = () => {
   const [warningMessage] = useState<WarningMessageType[]>([
@@ -34,6 +35,8 @@ const HomeScreen = () => {
     'yesterday' | 'today' | 'tomorrow'
   >('today')
 
+  const router = useRouter()
+
   return (
     <Container>
       <Flex direction={'column'} style={{ backgroundColor: 'white', flex: 1 }}>
@@ -48,7 +51,9 @@ const HomeScreen = () => {
               <WarningMessage warningMessage={warningMessage} />
             )}
 
-            <WeatherCard />
+            <Pressable onPress={() => router.push('/dashboard-iot')}>
+              <WeatherCard />
+            </Pressable>
 
             <PillButtonTabs
               items={weatherTabsDummy}
