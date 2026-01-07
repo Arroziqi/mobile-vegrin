@@ -2,9 +2,12 @@ import Flex from '@/components/Flex'
 import { Colors } from '@/constants/theme'
 import { customizeColors } from '@/libs/core/config/theme/color'
 import { MaterialIcons } from '@expo/vector-icons'
+import * as ImagePicker from 'expo-image-picker'
 import { LinearGradient } from 'expo-linear-gradient'
 import { useRouter } from 'expo-router'
+import { useState } from 'react'
 import {
+  Alert,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -13,6 +16,7 @@ import {
 
 const ActionSection = () => {
   const colorScheme = useColorScheme()
+  const [image, setImage] = useState<string | null>(null)
   const tintColor = Colors[colorScheme ?? 'light'].tint
   const router = useRouter()
   const handlePressShutter = () => {
@@ -21,6 +25,32 @@ const ActionSection = () => {
   const handleHistoryButton = () => {
     router.push('/history')
   }
+
+  const pickImage = async () => {
+    const permissionResult =
+      await ImagePicker.requestMediaLibraryPermissionsAsync()
+
+    if (!permissionResult.granted) {
+      Alert.alert(
+        'Permission required',
+        'Permission to access the media library is required.'
+      )
+      return
+    }
+
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ['images', 'videos'],
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    })
+
+    if (!result.canceled) {
+      setImage(result.assets[0].uri)
+    }
+  }
+
+  console.log('Selected image URI:', image)
 
   return (
     <LinearGradient
@@ -58,7 +88,7 @@ const ActionSection = () => {
         <Text style={styles.actionLabel}>Photo</Text>
       </Flex>
       <Flex direction="column" align="center" gap={8}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={pickImage}>
           <MaterialIcons
             name="photo-library"
             size={32}
