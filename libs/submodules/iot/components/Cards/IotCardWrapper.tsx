@@ -1,10 +1,10 @@
 import React from 'react'
-import { StyleSheet, View, ViewStyle } from 'react-native'
+import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native'
 
 interface IotCardWrapperProps {
   children?: React.ReactNode
   color: string
-  style?: ViewStyle
+  style?: StyleProp<ViewStyle>
 }
 
 function IotCardWrapper({ children, color, style }: IotCardWrapperProps) {
