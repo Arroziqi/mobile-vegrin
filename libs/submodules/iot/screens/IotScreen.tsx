@@ -1,48 +1,50 @@
 import React from 'react'
 import Container from '@/components/container/Container'
-import { ScrollView, StyleSheet, Text, View } from 'react-native'
+import { ScrollView, StyleSheet, View } from 'react-native'
 import Flex from '@/components/Flex'
 import TopBarIot from '@/libs/submodules/iot/components/TopBar/TopBarIot'
-import IotCardWrapper from '@/libs/submodules/iot/components/Cards/IotCardWrapper'
-import { FontAwesome6 } from '@expo/vector-icons'
+import IotDataList from '@/libs/submodules/iot/components/IotDataList/IotDataList'
+import DisconnectedWarningMessage from '@/libs/submodules/iot/components/DisconnectedWarningMessage'
+import RefreshConnectionButton from '@/libs/submodules/iot/components/RefreshConnectionButton'
+import TroubleshootingTips from '@/libs/submodules/iot/components/TroubleshootingTips'
+import BottomStatus from '@/libs/submodules/iot/components/BottomStatus'
 
 function IotScreen() {
+  const [isConnected, setIsConnected] = React.useState(false)
+
+  const renderContent = () => {
+    if (isConnected) {
+      return <IotDataList isConnected={isConnected} />
+    } else {
+      return (
+        <>
+          <DisconnectedWarningMessage />
+          <IotDataList isConnected={isConnected} />
+          <Flex
+            direction={'column'}
+            gap={15}
+            style={{ paddingHorizontal: 16, paddingVertical: 24 }}
+          >
+            <RefreshConnectionButton onPress={() => {}} />
+            <TroubleshootingTips />
+          </Flex>
+        </>
+      )
+    }
+  }
+
   return (
     <Container>
-      <Flex
-        flex={1}
-        style={styles.container}
-        align={'flex-start'}
-        direction={'column'}
-      >
-        <TopBarIot />
-        <ScrollView style={[styles.container]}>
-          <Flex
-            wrap={'wrap'}
-            align={'center'}
-            flex={1}
-            style={{ width: '100%' }}
-          >
-            <IotCardWrapper color={'#B9F8CF'} style={styles.itemGrid}>
-              <Flex gap={10}>
-                <FontAwesome6
-                  name="temperature-empty"
-                  size={16}
-                  color="#FF6900"
-                />
-                <Text style={styles.label}>Suhu</Text>
-              </Flex>
-              <View
-                style={{
-                  marginTop: 5,
-                }}
-              >
-                <Text style={styles.textValue}>24</Text>
-                <Text style={styles.unit}>°C</Text>
-              </View>
-            </IotCardWrapper>
-          </Flex>
-          <Text>Ini page IOT</Text>
+      <Flex flex={1} align={'flex-start'} direction={'column'}>
+        <TopBarIot isConnected={isConnected} />
+        <ScrollView
+          style={[
+            styles.container,
+            { backgroundColor: isConnected ? 'white' : '#FEF2F2' },
+          ]}
+        >
+          <View style={styles.content}>{renderContent()}</View>
+          <BottomStatus isConnected={isConnected} />
         </ScrollView>
       </Flex>
     </Container>
@@ -54,24 +56,9 @@ export default IotScreen
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
     width: '100%',
   },
-  grid: {},
-  itemGrid: {
-    width: '50%',
-  },
-  label: {
-    color: '#4A5565',
-  },
-  textValue: {
-    fontSize: 24,
-    color: '#1E2939',
-  },
-  unit: {
-    position: 'absolute',
-    bottom: -3,
-    right: -3,
-    color: '#6A7282',
+  content: {
+    padding: 16,
   },
 })
