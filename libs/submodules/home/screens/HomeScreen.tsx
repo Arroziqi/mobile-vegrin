@@ -51,7 +51,10 @@ const HomeScreen = () => {
               <WarningMessage warningMessage={warningMessage} />
             )}
 
-            <Pressable onPress={() => router.push('/dashboard-iot')}>
+            <Pressable
+              style={{ width: '100%' }}
+              onPress={() => router.push('/dashboard-iot')}
+            >
               <WeatherCard />
             </Pressable>
 
