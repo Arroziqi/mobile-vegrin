@@ -1,0 +1,182 @@
+// hooks/usePlant.ts
+import { useCallback, useState } from 'react'
+import * as ImagePicker from 'expo-image-picker'
+import { useAppDispatch, useAppSelector } from '@/libs/store/reduxHooks'
+import {
+  analyzePlant,
+  getPlantDetail,
+  getPlantLogs,
+} from '@/libs/store/slices/plant.slice'
+
+export const usePlant = () => {
+  const dispatch = useAppDispatch()
+  const { logs, currentLog, loading, analyzing, error } = useAppSelector(
+    state => state.plant
+  )
+  const [localError, setLocalError] = useState<string | null>(null)
+
+  // Analyze plant dari file/blob
+  const analyze = async (imageFile: File | Blob) => {
+    try {
+      setLocalError(null)
+      const result = await dispatch(analyzePlant(imageFile)).unwrap()
+      return { success: true, data: result }
+    } catch (err) {
+      const errorMessage = err as string
+      setLocalError(errorMessage)
+      return { success: false, error: errorMessage }
+    }
+  }
+
+  // Pick image dari galeri dan analyze
+  const pickAndAnalyze = async () => {
+    try {
+      setLocalError(null)
+
+      // Request permission
+      const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync()
+      if (status !== 'granted') {
+        throw new Error('Permission to access gallery was denied')
+      }
+
+      // Pick image
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 0.8,
+      })
+
+      if (result.canceled) {
+        return { success: false, error: 'Dibatalkan oleh user' }
+      }
+
+      // Convert to blob
+      const uri = result.assets[0].uri
+      const response = await fetch(uri)
+      const blob = await response.blob()
+
+      // Analyze
+      const analyzeResult = await dispatch(analyzePlant(blob)).unwrap()
+      return { success: true, data: analyzeResult }
+    } catch (err) {
+      const errorMessage = (err as Error).message
+      setLocalError(errorMessage)
+      return { success: false, error: errorMessage }
+    }
+  }
+
+  // Take photo dengan kamera dan analyze
+  const captureAndAnalyze = async () => {
+    try {
+      setLocalError(null)
+
+      // Request permission
+      const { status } = await ImagePicker.requestCameraPermissionsAsync()
+      if (status !== 'granted') {
+        throw new Error('Permission to access camera was denied')
+      }
+
+      // Take photo
+      const result = await ImagePicker.launchCameraAsync({
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 0.8,
+      })
+
+      if (result.canceled) {
+        return { success: false, error: 'Dibatalkan oleh user' }
+      }
+
+      // Convert to blob
+      const uri = result.assets[0].uri
+      const response = await fetch(uri)
+      const blob = await response.blob()
+
+      // Analyze
+      const analyzeResult = await dispatch(analyzePlant(blob)).unwrap()
+      return { success: true, data: analyzeResult }
+    } catch (err) {
+      const errorMessage = (err as Error).message
+      setLocalError(errorMessage)
+      return { success: false, error: errorMessage }
+    }
+  }
+
+  // Fetch all plant logs
+  const fetchLogs = async () => {
+    try {
+      setLocalError(null)
+      const result = await dispatch(getPlantLogs()).unwrap()
+      return { success: true, data: result }
+    } catch (err) {
+      const errorMessage = err as string
+      setLocalError(errorMessage)
+      return { success: false, error: errorMessage }
+    }
+  }
+
+  // Fetch detail log by ID
+  const fetchDetail = async (plantId: string) => {
+    try {
+      setLocalError(null)
+      const result = await dispatch(getPlantDetail(plantId)).unwrap()
+      return { success: true, data: result }
+    } catch (err) {
+      const errorMessage = err as string
+      setLocalError(errorMessage)
+      return { success: false, error: errorMessage }
+    }
+  }
+
+  // Get logs by condition
+  const getLogsByCondition = useCallback(
+    (condition: string) => {
+      return logs.filter(
+        log => log.condition.toLowerCase() === condition.toLowerCase()
+      )
+    },
+    [logs]
+  )
+
+  // Get healthy plants
+  const healthyPlants = getLogsByCondition('Sehat')
+
+  // Get sick plants
+  const sickPlants = getLogsByCondition('Sakit')
+
+  // Get stats
+  const stats = {
+    total: logs.length,
+    healthy: healthyPlants.length,
+    sick: sickPlants.length,
+  }
+
+  // Clear error
+  const clearError = () => {
+    setLocalError(null)
+  }
+
+  return {
+    // State
+    logs,
+    currentLog,
+    loading,
+    analyzing,
+    error: error || localError,
+
+    // Computed
+    healthyPlants,
+    sickPlants,
+    stats,
+
+    // Actions
+    analyze,
+    pickAndAnalyze,
+    captureAndAnalyze,
+    fetchLogs,
+    fetchDetail,
+    getLogsByCondition,
+    clearError,
+  }
+}
