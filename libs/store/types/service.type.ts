@@ -19,8 +19,8 @@ export interface ApiError {
 export interface LoginRequest {
   email: string
   password: string
-  device_id: string
-  device_name: string
+  device_id?: string
+  device_name?: string
   is_lifetime?: boolean
 }
 
@@ -40,17 +40,23 @@ export interface RegisterRequest {
   password: string
   front_name: string
   back_name: string
-  address: string
-  phone_number: string
-  birth_date: string // ISO date string
+  address?: string
+  phone_number?: string
+  birth_date?: string // ISO date string
+}
+
+export interface RegisterUserData {
+  id: string
+  email: string
+  front_name: string
+  back_name: string
+  is_verify: boolean
+  registered_at: string
 }
 
 export interface RegisterResponse {
-  id: string
-  username: string
-  email: string
-  password: string
-  token: string | null
+  message: string
+  user: RegisterUserData
 }
 
 export interface GoogleLoginRequest {

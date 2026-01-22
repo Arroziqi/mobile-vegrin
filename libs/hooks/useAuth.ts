@@ -16,6 +16,7 @@ import {
   resetPassword,
   verifyEmailReset,
 } from '@/libs/store/slices/auth.slice'
+import { Alert } from 'react-native'
 
 export const useAuth = () => {
   const dispatch = useAppDispatch()
@@ -42,6 +43,9 @@ export const useAuth = () => {
         })
       ).unwrap()
 
+      console.log('result', result)
+      Alert.alert('Berhasil', 'Anda berhasil login')
+
       return { success: true, data: result }
     } catch (err) {
       const errorMessage = err as string
@@ -55,6 +59,11 @@ export const useAuth = () => {
     try {
       setLocalError(null)
       const result = await dispatch(registerUser(userData)).unwrap()
+      Alert.alert(
+        'Berhasil',
+        'Akun Anda berhasil didaftarkan, silakan cek email'
+      )
+      console.log(result)
       return { success: true, data: result }
     } catch (err) {
       const errorMessage = err as string

@@ -1,19 +1,68 @@
 import Container from '@/components/container/Container'
-import { View } from 'react-native'
+import { KeyboardAvoidingView, Platform, View } from 'react-native'
 import LogoVegrin from '@/components/logo/LogoVegrin'
 import AuthFormCard from '@/libs/submodules/auth/components/authFormCard/AuthFormCard'
 import GradientText from '@/components/text/GradientText'
 import { customizeColors } from '@/libs/core/config/theme/color'
-import registerScreenStyle from '@/libs/submodules/auth/screens/register/RegisterScreen.style'
-import RegisterScreenForm from '@/libs/submodules/auth/screens/register/components/RegisterScreen.form'
+import registerScreenStyle from './RegisterScreen.style'
+import RegisterScreenForm, {
+  RegisterFormValue,
+} from './components/RegisterScreen.form'
 import RedirectText from '@/components/text/RedirectText'
 import { useStepper } from '@/hooks/useStepper'
 import VerificationCodeStep from '@/libs/submodules/auth/components/verificationCode/VerificationCodeStep'
 import { useState } from 'react'
+import { useAuth } from '@/libs/hooks'
 
 const RegisterScreen = () => {
   const { step, next, prev } = useStepper(2)
-  const [email, setEmail] = useState<string>('email@test')
+  const { register } = useAuth()
+
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  const [form, setForm] = useState<RegisterFormValue>({
+    front_name: '',
+    back_name: '',
+    email: '',
+    password: '',
+  })
+
+  const onChange = <K extends keyof RegisterFormValue>(
+    key: K,
+    val: RegisterFormValue[K]
+  ) => {
+    setForm(prev => ({ ...prev, [key]: val }))
+  }
+
+  const handleRegister = async () => {
+    setLoading(true)
+    setError(null)
+
+    const result = await register({
+      ...form,
+    })
+
+    setLoading(false)
+
+    if (!result.success) {
+      // @ts-ignore
+      setError(result.error)
+      return
+    }
+
+    // sukses → lanjut ke verifikasi
+    next()
+  }
+
+  const title = (
+    <GradientText
+      colors={customizeColors.gradient.text}
+      style={registerScreenStyle.title}
+    >
+      Daftar Akun
+    </GradientText>
+  )
 
   const subtitle = (
     <RedirectText
@@ -25,51 +74,41 @@ const RegisterScreen = () => {
     />
   )
 
-  const title = (
-    <GradientText
-      colors={customizeColors.gradient.text}
-      style={registerScreenStyle.title}
-    >
-      Daftar Akun
-    </GradientText>
-  )
-
-  const onVerified = async () => {
-    alert('function is not implemented yet')
-  }
-
   return (
     <Container
       imageBackgroundProps={{
         source: require('@/assets/images/bg-register.png'),
       }}
     >
-      <View style={registerScreenStyle.container}>
-        {/* Branding */}
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={registerScreenStyle.container}
+      >
         <View style={registerScreenStyle.branding}>
           <LogoVegrin />
         </View>
 
-        {/* Auth Form Card */}
         {step === 0 && (
           <AuthFormCard
             title={title}
             subtitle={subtitle}
-            formInput={RegisterScreenForm}
+            formInput={<RegisterScreenForm value={form} onChange={onChange} />}
             buttonText="Daftar"
-            onSubmit={next}
+            onSubmit={handleRegister}
+            loading={loading}
+            error={error}
           />
         )}
 
         {step === 1 && (
           <VerificationCodeStep
-            email={email}
-            onVerified={onVerified}
-            submitLabel={'Daftar'}
+            email={form.email}
+            submitLabel="Daftar"
             onBack={prev}
+            onVerified={() => alert('verified')}
           />
         )}
-      </View>
+      </KeyboardAvoidingView>
     </Container>
   )
 }

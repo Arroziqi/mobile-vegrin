@@ -1,1 +1,2 @@
-export const API_BASE_URL = 'https://your-api-base-url.com' // ganti
+export const API_BASE_URL =
+  'https://vegrin-api-service-1093566939606.asia-southeast2.run.app'

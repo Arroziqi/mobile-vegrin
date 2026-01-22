@@ -51,6 +51,8 @@ export const loginUser = createAsyncThunk(
         return rejectWithValue(error.message || 'Login gagal')
       }
 
+      console.log('response: ', response)
+
       const data: ApiResponse<LoginResponse> = await response.json()
       return {
         token: data.data.token.token,

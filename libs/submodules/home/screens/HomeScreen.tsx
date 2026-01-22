@@ -17,6 +17,7 @@ import { newsItemDummy } from '@/libs/dummyData/newsItem.dummy'
 import NewsItemCardList from '@/libs/submodules/home/components/newsItemCardList/NewsItemCardList'
 import { Pressable, ScrollView, View } from 'react-native'
 import { useRouter } from 'expo-router'
+import ButtonCustome from '@/components/buttons/button-custome/ButtonCustome'
 
 const HomeScreen = () => {
   const [warningMessage] = useState<WarningMessageType[]>([
@@ -41,6 +42,10 @@ const HomeScreen = () => {
     <Container>
       <Flex direction={'column'} style={{ backgroundColor: 'white', flex: 1 }}>
         <TopBarHome />
+        <ButtonCustome
+          title={'Register'}
+          onPress={() => router.push('/(auth)/register')}
+        />
         <ScrollView
           style={homeStyle.container}
           showsVerticalScrollIndicator={false}
