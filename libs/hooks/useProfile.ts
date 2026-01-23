@@ -13,13 +13,6 @@ export const useProfile = (autoFetch = false) => {
   const { isAuthenticated } = useAppSelector(state => state.auth)
   const [localError, setLocalError] = useState<string | null>(null)
 
-  // Auto fetch profile ketika mounted jika autoFetch = true
-  useEffect(() => {
-    if (autoFetch && isAuthenticated && !profile) {
-      fetchProfile()
-    }
-  }, [autoFetch, isAuthenticated])
-
   // Fetch user profile
   const fetchProfile = async () => {
     try {
@@ -60,6 +53,13 @@ export const useProfile = (autoFetch = false) => {
   const fullName = profile
     ? `${profile.front_name} ${profile.back_name}`.trim()
     : null
+
+  // Auto fetch profile ketika mounted jika autoFetch = true
+  useEffect(() => {
+    if (autoFetch && isAuthenticated && !profile) {
+      fetchProfile()
+    }
+  }, [autoFetch, isAuthenticated, profile])
 
   return {
     // State

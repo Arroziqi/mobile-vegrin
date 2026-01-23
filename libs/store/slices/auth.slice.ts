@@ -14,6 +14,7 @@ import {
   VerifyEmailResponse,
 } from '@/libs/store/types/service.type'
 import { API_ENDPOINTS } from '@/libs/common/const/endpoint.api'
+import { fetchWithTimeout } from '@/libs/helper/fetchWithTimeout'
 
 interface AuthState {
   token: string | null
@@ -22,7 +23,6 @@ interface AuthState {
   loading: boolean
   error: string | null
   userId: string | null
-  email: string | null
 }
 
 const initialState: AuthState = {
@@ -32,7 +32,6 @@ const initialState: AuthState = {
   loading: false,
   error: null,
   userId: null,
-  email: null,
 }
 
 // Login with email/password
@@ -40,28 +39,53 @@ export const loginUser = createAsyncThunk(
   'auth/login',
   async (credentials: LoginRequest, { rejectWithValue }) => {
     try {
-      const response = await fetch(API_ENDPOINTS.AUTH.LOGIN, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(credentials),
-      })
+      const response = await fetchWithTimeout(
+        API_ENDPOINTS.AUTH.LOGIN,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(credentials),
+        },
+        10_000
+      )
 
       if (!response.ok) {
         const error = await response.json()
         return rejectWithValue(error.message || 'Login gagal')
       }
 
-      console.log('response: ', response)
+      const result: ApiResponse<LoginResponse> = await response.json()
 
-      const data: ApiResponse<LoginResponse> = await response.json()
+      if (!result.success) {
+        return rejectWithValue(result.message || 'Login gagal')
+      }
+
+      const session = result.data.user_session
+      if (!session?.token) {
+        return rejectWithValue('Response login tidak valid')
+      }
+
       return {
-        token: data.data.token.token,
-        userId: data.data.token.id,
-        email: data.data.token.email,
-        deviceId: credentials.device_id,
+        token: session.token,
+        userId: session.user_id,
+        deviceId: session.device_id,
       }
     } catch (error) {
-      return rejectWithValue((error as Error).message)
+      const err = error as Error
+
+      if (err.message === 'REQUEST_TIMEOUT') {
+        return rejectWithValue(
+          'Koneksi timeout. Silakan periksa internet dan coba lagi.'
+        )
+      }
+
+      if (err.message === 'Failed to fetch') {
+        return rejectWithValue(
+          'Tidak dapat terhubung ke server. Pastikan server aktif.'
+        )
+      }
+
+      return rejectWithValue('Terjadi kesalahan. Silakan coba lagi.')
     }
   }
 )
@@ -204,7 +228,6 @@ const authSlice = createSlice({
       state.deviceId = null
       state.isAuthenticated = false
       state.userId = null
-      state.email = null
       state.error = null
     },
     setCredentials: (
@@ -219,7 +242,6 @@ const authSlice = createSlice({
       state.token = action.payload.token
       state.deviceId = action.payload.deviceId
       state.userId = action.payload.userId
-      state.email = action.payload.email
       state.isAuthenticated = true
     },
     clearError: state => {
@@ -238,7 +260,6 @@ const authSlice = createSlice({
         state.token = action.payload.token
         state.deviceId = action.payload.deviceId
         state.userId = action.payload.userId
-        state.email = action.payload.email
         state.isAuthenticated = true
       })
       .addCase(loginUser.rejected, (state, action) => {
@@ -289,7 +310,6 @@ const authSlice = createSlice({
         state.deviceId = null
         state.isAuthenticated = false
         state.userId = null
-        state.email = null
       })
       .addCase(logoutUser.rejected, (state, action) => {
         state.loading = false

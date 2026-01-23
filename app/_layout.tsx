@@ -9,8 +9,9 @@ import 'react-native-reanimated'
 import { useColorScheme } from '@/hooks/use-color-scheme'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { Provider } from 'react-redux'
-import { store } from '@/libs/store'
+import { persistor, store } from '@/libs/store'
 import { RootNavigator } from '@/components/RootNavigator'
+import { PersistGate } from 'redux-persist/integration/react'
 
 export const unstable_settings = {
   anchor: '(tabs)',
@@ -23,8 +24,10 @@ export default function RootLayout() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
         <Provider store={store}>
-          <RootNavigator />
-          <StatusBar style="auto" />
+          <PersistGate loading={null} persistor={persistor}>
+            <RootNavigator />
+            <StatusBar style="auto" />
+          </PersistGate>
         </Provider>
       </ThemeProvider>
     </GestureHandlerRootView>

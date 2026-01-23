@@ -20,7 +20,7 @@ import { Alert } from 'react-native'
 
 export const useAuth = () => {
   const dispatch = useAppDispatch()
-  const { isAuthenticated, loading, error, token, deviceId, userId, email } =
+  const { isAuthenticated, loading, error, token, deviceId, userId } =
     useAppSelector(state => state.auth)
   const [localError, setLocalError] = useState<string | null>(null)
 
@@ -42,9 +42,6 @@ export const useAuth = () => {
           device_name: deviceName,
         })
       ).unwrap()
-
-      console.log('result', result)
-      Alert.alert('Berhasil', 'Anda berhasil login')
 
       return { success: true, data: result }
     } catch (err) {
@@ -141,7 +138,6 @@ export const useAuth = () => {
     token,
     deviceId,
     userId,
-    email,
 
     // Actions
     login,

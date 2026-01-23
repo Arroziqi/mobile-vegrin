@@ -7,11 +7,13 @@ import ProfileTopBar from '@/libs/submodules/profile/components/topbar/ProfileTo
 import ProfileBottomBar from '@/libs/submodules/profile/components/bottombar/ProfileBottomBar'
 import DisplayPassword from '@/libs/submodules/profile/components/DisplayPassword'
 import { useRouter } from 'expo-router'
+import { useProfile } from '@/libs/hooks'
 
 function EditProfileScreen() {
-  const [name, setName] = React.useState('')
-  const [noHp, setNoHp] = React.useState('')
-  const [birthDate, setBirthDate] = React.useState('')
+  const { profile } = useProfile()
+  const [name, setName] = React.useState(profile?.front_name ?? '')
+  const [noHp, setNoHp] = React.useState(profile?.telephone_number ?? '')
+  const [birthDate, setBirthDate] = React.useState(profile?.birth_date ?? '')
   const router = useRouter()
 
   return (

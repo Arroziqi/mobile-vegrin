@@ -8,9 +8,10 @@ import { Ionicons } from '@expo/vector-icons'
 import { AlertType } from '@/libs/common/types/Alert.type'
 import getColorByAlertType from '@/libs/common/utils/getColorByAlertType'
 import { useRouter } from 'expo-router'
+import { useProfile } from '@/libs/hooks'
 
 const TopBarHome = () => {
-  const [name, setName] = useState('Supri')
+  const { profile } = useProfile(true)
   const [alert, setAlert] = useState<AlertType>({
     message: 'Kondisi Cuaca disekitar lahan anda normal',
     variant: 'success',
@@ -26,7 +27,7 @@ const TopBarHome = () => {
         <Flex justify={'space-between'} align={'center'}>
           <Flex align={'center'} gap={10}>
             <Avatar source={require('@/assets/images/avatar.jpg')} />
-            <Text style={styles.name}>{name}</Text>
+            <Text style={styles.name}>{profile?.front_name ?? 'username'}</Text>
           </Flex>
           <Pressable onPress={() => router.push('/notification')}>
             <Flex align={'center'} justify={'center'} direction={'column'}>

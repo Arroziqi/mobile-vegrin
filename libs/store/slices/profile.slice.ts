@@ -3,6 +3,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import type { RootState } from '../index'
 import {
   ApiResponse,
+  GetProfileResponse,
   UpdateProfileRequest,
   UserProfile,
 } from '@/libs/store/types/service.type'
@@ -46,8 +47,9 @@ export const getUserProfile = createAsyncThunk(
         return rejectWithValue(error.message || 'Gagal mengambil profil')
       }
 
-      const data: ApiResponse<UserProfile> = await response.json()
-      return data.data
+      const data: ApiResponse<GetProfileResponse> = await response.json()
+
+      return data.data.user
     } catch (error) {
       return rejectWithValue((error as Error).message)
     }

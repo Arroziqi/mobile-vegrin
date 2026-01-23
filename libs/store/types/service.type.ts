@@ -24,15 +24,20 @@ export interface LoginRequest {
   is_lifetime?: boolean
 }
 
+export interface UserSession {
+  id: string
+  user_id: string
+  token: string
+  device_id: string
+  device_name: string
+  login_at?: string
+  duration_hours?: number
+  is_lifetime?: boolean
+}
+
 export interface LoginResponse {
   message: string
-  token: {
-    id: string
-    username: string
-    email: string
-    password: string
-    token: string
-  }
+  user_session: UserSession
 }
 
 export interface RegisterRequest {
@@ -107,14 +112,22 @@ export interface ResetPasswordResponse {
 // ============ Profile Types ============
 export interface UserProfile {
   id: string
-  username: string
+  user_id: string
   email: string
   front_name: string
   back_name: string
+  photo_profile: string | null
+  telephone_number: string
   address: string
-  phone_number: string
   birth_date: string
-  avatar?: string
+  registered_at: string
+  verification_at: string | null
+  is_verify: boolean
+}
+
+export interface GetProfileResponse {
+  message: string
+  user: UserProfile
 }
 
 export interface UpdateProfileRequest {
