@@ -63,7 +63,7 @@ function ProfileScreen() {
             <View style={styles.infoContainer}>
               <ProfileInfoRow
                 label="Nomor Hp"
-                value={profile?.telephone_number ?? '6287....'}
+                value={profile?.telephone_number ?? 'No Hp Belum diset'}
               />
               <ProfileInfoRow
                 label="Email"

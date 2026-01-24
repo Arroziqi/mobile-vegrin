@@ -3,10 +3,18 @@ import { StyleSheet } from 'react-native'
 import Flex from '@/components/Flex'
 import ButtonCustome from '@/components/buttons/button-custome/ButtonCustome'
 import { customizeColors } from '@/libs/core/config/theme/color'
-import { useRouter } from 'expo-router'
 
-function ProfileBottomBar() {
-  const router = useRouter()
+interface ProfileBottomBarProps {
+  onCancel: () => void
+  onUpdate: () => void
+  loading?: boolean
+}
+
+function ProfileBottomBar({
+  onCancel,
+  onUpdate,
+  loading,
+}: ProfileBottomBarProps) {
   return (
     <Flex
       justify="space-between"
@@ -18,7 +26,8 @@ function ProfileBottomBar() {
         <ButtonCustome
           variant="submitButtonOutline"
           title="Cancel"
-          onPress={() => router.back()}
+          onPress={onCancel}
+          disabled={loading}
         />
       </Flex>
 
@@ -26,7 +35,9 @@ function ProfileBottomBar() {
         <ButtonCustome
           textStyle={styles.textUpdate}
           style={styles.updateButton}
-          title="Update"
+          title={loading ? 'Updating...' : 'Update'}
+          onPress={onUpdate}
+          disabled={loading}
         />
       </Flex>
     </Flex>
