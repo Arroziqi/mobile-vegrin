@@ -10,8 +10,10 @@ import ProfileInfoRow from '@/libs/submodules/profile/components/ProfileInfoRow'
 import { useImagePicker } from '@/hooks/useImagePicker'
 import BottomSheet from '@gorhom/bottom-sheet'
 import ImagePickerBottomSheet from '@/components/ImagePickerBottomSheet'
+import { useProfile } from '@/libs/hooks'
 
 function ProfileScreen() {
+  const { profile } = useProfile()
   const bottomSheetRef = useRef<BottomSheet>(null)
   const { pickFromCamera, pickFromGallery } = useImagePicker()
   const [avatar, setAvatar] = useState<string | null>(null)
@@ -50,15 +52,23 @@ function ProfileScreen() {
               align={'center'}
               style={{ width: '100%' }}
             >
-              <Text style={styles.name}>Ahmad</Text>
+              <Text style={styles.name}>
+                {profile?.front_name ?? 'username'}
+              </Text>
               <Link href={'/profile/edit'} style={styles.editText}>
                 Edit
               </Link>
             </Flex>
 
             <View style={styles.infoContainer}>
-              <ProfileInfoRow label="Nomor Hp" value="08121221" />
-              <ProfileInfoRow label="Email" value="email@gmail" />
+              <ProfileInfoRow
+                label="Nomor Hp"
+                value={profile?.telephone_number ?? 'No Hp Belum diset'}
+              />
+              <ProfileInfoRow
+                label="Email"
+                value={profile?.email ?? 'email@email.co'}
+              />
               <ProfileInfoRow label="Password" value="******" />
             </View>
           </Flex>

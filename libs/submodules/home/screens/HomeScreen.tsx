@@ -5,7 +5,6 @@ import homeStyle from '@/libs/submodules/home/styles/Home.style'
 import TopBarHome from '@/libs/submodules/home/components/TopBarHome'
 import { useState } from 'react'
 import { WarningMessageType } from '@/libs/submodules/home/types/Home.type'
-import WarningMessage from '@/libs/submodules/home/components/WarningMessage'
 import WeatherCard from '@/libs/submodules/home/components/WeatherCard'
 import PillButtonTabs from '@/components/tabs/pill/PillButtonTabs'
 import WeatherForecastingCard from '@/libs/submodules/home/components/WeatherForecastingCard'
@@ -47,9 +46,9 @@ const HomeScreen = () => {
           contentContainerStyle={homeStyle.scrollContent}
         >
           <Flex direction="column" gap={21} style={homeStyle.contentWrapper}>
-            {warningMessage && (
-              <WarningMessage warningMessage={warningMessage} />
-            )}
+            {/*{warningMessage && (*/}
+            {/*  <WarningMessage warningMessage={warningMessage} />*/}
+            {/*)}*/}
 
             <Pressable
               style={{ width: '100%' }}

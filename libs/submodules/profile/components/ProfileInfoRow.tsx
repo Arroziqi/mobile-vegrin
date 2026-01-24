@@ -11,7 +11,14 @@ export default function ProfileInfoRow({ label, value }: ProfileInfoRowProps) {
     <View style={styles.row}>
       <Text style={[styles.label, styles.text]}>{label}</Text>
       <Text style={[styles.separator, styles.text]}>:</Text>
-      <Text style={styles.text}>{value}</Text>
+
+      <Text
+        style={[styles.text, styles.value]}
+        numberOfLines={1}
+        ellipsizeMode="tail"
+      >
+        {value}
+      </Text>
     </View>
   )
 }
@@ -19,7 +26,8 @@ export default function ProfileInfoRow({ label, value }: ProfileInfoRowProps) {
 const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-start',
+    width: '100%',
   },
 
   label: {
@@ -30,6 +38,11 @@ const styles = StyleSheet.create({
   separator: {
     width: 10,
     textAlign: 'center',
+  },
+
+  value: {
+    flex: 1,
+    flexWrap: 'wrap',
   },
 
   text: {

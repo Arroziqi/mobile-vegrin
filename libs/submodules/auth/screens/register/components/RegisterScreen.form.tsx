@@ -3,7 +3,22 @@ import { Text, View } from 'react-native'
 import registerScreenStyle from '@/libs/submodules/auth/screens/register/RegisterScreen.style'
 import BaseTextInput from '@/components/input/BaseTextInput'
 
-const RegisterScreenForm = () => {
+export interface RegisterFormValue {
+  front_name: string
+  back_name: string
+  email: string
+  password: string
+}
+
+interface Props {
+  value: RegisterFormValue
+  onChange: <K extends keyof RegisterFormValue>(
+    key: K,
+    val: RegisterFormValue[K]
+  ) => void
+}
+
+const RegisterScreenForm = ({ value, onChange }: Props) => {
   return (
     <>
       {/* Nama */}
@@ -11,6 +26,8 @@ const RegisterScreenForm = () => {
         <View style={registerScreenStyle.inputWrapper}>
           <Text style={registerScreenStyle.regularText}>Nama Depan</Text>
           <BaseTextInput
+            value={value.front_name}
+            onChangeText={v => onChange('front_name', v)}
             style={registerScreenStyle.input}
             placeholder="Nama Depan"
           />
@@ -19,33 +36,38 @@ const RegisterScreenForm = () => {
         <View style={registerScreenStyle.inputWrapper}>
           <Text style={registerScreenStyle.regularText}>Nama Belakang</Text>
           <BaseTextInput
+            value={value.back_name}
+            onChangeText={v => onChange('back_name', v)}
             style={registerScreenStyle.input}
             placeholder="Nama Belakang"
           />
         </View>
       </Flex>
 
-      <Flex direction="column" align={'flex-start'}>
+      <Flex direction="column" align="flex-start">
         <Text style={registerScreenStyle.regularText}>Email</Text>
         <BaseTextInput
+          value={value.email}
+          onChangeText={v => onChange('email', v)}
           textContentType="emailAddress"
           style={registerScreenStyle.input}
           placeholder="Email"
         />
       </Flex>
 
-      <Flex direction="column" align={'flex-start'}>
+      <Flex direction="column" align="flex-start">
         <Text style={registerScreenStyle.regularText}>Password</Text>
-        <View style={registerScreenStyle.input}>
-          <BaseTextInput
-            secureTextEntry
-            textContentType="password"
-            placeholder="Password"
-          />
-        </View>
+        <BaseTextInput
+          value={value.password}
+          onChangeText={v => onChange('password', v)}
+          secureTextEntry
+          textContentType="password"
+          style={registerScreenStyle.input}
+          placeholder="Password"
+        />
       </Flex>
     </>
   )
 }
 
-export default RegisterScreenForm()
+export default RegisterScreenForm
