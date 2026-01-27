@@ -3,8 +3,10 @@ import { StyleSheet, Text, View } from 'react-native'
 import Flex from '@/components/Flex'
 import BackButton from '@/components/buttons/BackButton'
 import { LinearGradient } from 'expo-linear-gradient'
-import { Entypo, Feather } from '@expo/vector-icons'
+import { Feather } from '@expo/vector-icons'
 import { ShadowStyles } from '@/libs/common/styles/shadow.style'
+import Brightnesss from '@/libs/submodules/iot/components/Brightnesss'
+import Column from '@/components/Column'
 
 interface TopBarProps {
   isConnected?: boolean
@@ -27,15 +29,20 @@ function TopBarIot({ isConnected = false }: TopBarProps) {
         <Flex justify={'space-between'} style={{ width: '100%' }}>
           <BackButton color={'#fff'} />
 
-          <Flex gap={8}>
-            <View style={[styles.iconWrapper]}>
-              {isConnected ? (
-                <Entypo name="light-down" size={20} color="white" />
-              ) : (
+          <Flex gap={12}>
+            {isConnected ? (
+              <Brightnesss />
+            ) : (
+              <View style={[styles.iconWrapper]}>
                 <Feather name="wifi-off" size={20} color="white" />
+              </View>
+            )}
+            <Column>
+              <Text style={styles.title}>Weather Control IoT</Text>
+              {isConnected && (
+                <Text style={styles.subtitle}>Smart Farming System</Text>
               )}
-            </View>
-            <Text style={styles.title}>Weather Control IoT</Text>
+            </Column>
           </Flex>
 
           <Flex style={[styles.iconWrapper]} gap={6}>
@@ -80,6 +87,8 @@ const styles = StyleSheet.create({
     padding: 6,
     borderRadius: 10,
     backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    borderWidth: 1.34,
+    borderColor: 'rgba(255, 255, 255, 0.3)',
   },
   title: {
     fontSize: 16,
@@ -89,5 +98,9 @@ const styles = StyleSheet.create({
     width: 6,
     height: 6,
     borderRadius: 3,
+  },
+  subtitle: {
+    color: 'rgba(255, 255, 255, 0.8)',
+    fontSize: 12,
   },
 })
