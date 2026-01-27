@@ -6,9 +6,10 @@ import IotInfoCard from '@/libs/submodules/iot/components/Cards/IotInfoCard'
 
 const NUM_COLUMNS = 2
 const GRID_GAP = 12
-const ACTIVE_COLOR = '#B9F8CF'
+const DISABLED_COLOR = '#D1D5DC'
+const CARD_VALUE = '-- '
 
-function IotDataList() {
+function NoSignalIotDataList() {
   const [itemWidth, setItemWidth] = useState<number>(0)
 
   const handleLayout = (event: LayoutChangeEvent) => {
@@ -22,51 +23,52 @@ function IotDataList() {
     <View style={styles.container} onLayout={handleLayout}>
       <Flex wrap="wrap" direction="row" style={{ gap: GRID_GAP }}>
         <IotInfoCard
-          color={ACTIVE_COLOR}
+          color={DISABLED_COLOR}
+          disabled={true}
           style={{ width: itemWidth }}
           label="Suhu"
-          value={24}
+          value={CARD_VALUE}
           unit="°C"
           icon={
-            <FontAwesome6 name="temperature-empty" size={16} color="#FF6900" />
+            <FontAwesome6 name="temperature-empty" size={16} color="#99A1AF" />
           }
-          insight={{
-            text: '✓ Normal',
-          }}
         />
 
         <IotInfoCard
-          color={ACTIVE_COLOR}
+          color={DISABLED_COLOR}
+          disabled={true}
           style={{ width: itemWidth }}
           label="Kecerahan"
-          value={934}
+          value={CARD_VALUE}
           unit="(gelap)"
-          icon={<Entypo name="light-up" size={16} color="#F0B100" />}
+          icon={<Entypo name="light-up" size={16} color="#99A1AF" />}
         />
 
         <IotInfoCard
-          color={ACTIVE_COLOR}
+          color={DISABLED_COLOR}
+          disabled={true}
           style={{ width: itemWidth }}
           label="Hujan"
-          value={1}
+          value={CARD_VALUE}
           unit="(Hujan)"
-          icon={<Feather name="cloud-rain" size={16} color="#2B7FFF" />}
+          icon={<Feather name="cloud-rain" size={16} color="#99A1AF" />}
         />
 
         <IotInfoCard
-          color={ACTIVE_COLOR}
+          color={DISABLED_COLOR}
+          disabled={true}
           style={{ width: itemWidth }}
           label="Kelembapan"
-          value={65}
+          value={CARD_VALUE}
           unit="%"
-          icon={<Ionicons name="water-outline" size={16} color="#51A2FF" />}
+          icon={<Ionicons name="water-outline" size={16} color="#99A1AF" />}
         />
       </Flex>
     </View>
   )
 }
 
-export default IotDataList
+export default NoSignalIotDataList
 
 const styles = StyleSheet.create({
   container: {
