@@ -10,7 +10,7 @@ import TroubleshootingTips from '@/libs/submodules/iot/components/Troubleshootin
 import BottomStatus from '@/libs/submodules/iot/components/BottomStatus'
 
 function IotScreen() {
-  const [isConnected, setIsConnected] = React.useState(false)
+  const [isConnected, setIsConnected] = React.useState(true)
 
   const renderContent = () => {
     if (isConnected) {

@@ -46,6 +46,9 @@ function IotDataList({ isConnected }: IotDataListProps) {
               color={isConnected ? '#FF6900' : '#99A1AF'}
             />
           }
+          insight={{
+            text: '✓ Normal',
+          }}
         />
 
         <IotInfoCard
