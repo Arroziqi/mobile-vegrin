@@ -1,26 +1,24 @@
-import React, { useState } from 'react'
-import { LayoutChangeEvent, StyleSheet, View } from 'react-native'
-import { Entypo, Feather, FontAwesome6, Ionicons } from '@expo/vector-icons'
-import Flex from '@/components/Flex'
+import React from 'react'
+import { StyleSheet, View } from 'react-native'
+import {
+  Entypo,
+  Feather,
+  FontAwesome6,
+  Fontisto,
+  Ionicons,
+} from '@expo/vector-icons'
 import IotInfoCard from '@/libs/submodules/iot/components/Cards/IotInfoCard'
+import IotInfoCardSection from '@/libs/submodules/iot/components/Cards/IotInfoCardSection'
+import { useGridLayout } from '@/hooks/useGridLayout'
 
-const NUM_COLUMNS = 2
-const GRID_GAP = 12
 const ACTIVE_COLOR = '#B9F8CF'
 
 function IotDataList() {
-  const [itemWidth, setItemWidth] = useState<number>(0)
-
-  const handleLayout = (event: LayoutChangeEvent) => {
-    const containerWidth = event.nativeEvent.layout.width
-    const calculatedWidth =
-      (containerWidth - GRID_GAP * (NUM_COLUMNS - 1)) / NUM_COLUMNS
-    setItemWidth(calculatedWidth)
-  }
+  const { handleLayout, itemWidth } = useGridLayout()
 
   return (
     <View style={styles.container} onLayout={handleLayout}>
-      <Flex wrap="wrap" direction="row" style={{ gap: GRID_GAP }}>
+      <IotInfoCardSection sectionText={'Sensor Cuaca (4)'}>
         <IotInfoCard
           color={ACTIVE_COLOR}
           style={{ width: itemWidth }}
@@ -38,10 +36,26 @@ function IotDataList() {
         <IotInfoCard
           color={ACTIVE_COLOR}
           style={{ width: itemWidth }}
+          label="Kelembapan Udara"
+          value={65}
+          unit="%"
+          icon={<Ionicons name="water-outline" size={16} color="#51A2FF" />}
+          insight={{
+            text: '✓ Ideal',
+          }}
+        />
+
+        <IotInfoCard
+          color={ACTIVE_COLOR}
+          style={{ width: itemWidth }}
           label="Kecerahan"
           value={934}
-          unit="(gelap)"
+          unit="lux"
           icon={<Entypo name="light-up" size={16} color="#F0B100" />}
+          insight={{
+            text: '🌥️ Redup',
+            status: 'negative',
+          }}
         />
 
         <IotInfoCard
@@ -51,17 +65,61 @@ function IotDataList() {
           value={1}
           unit="(Hujan)"
           icon={<Feather name="cloud-rain" size={16} color="#2B7FFF" />}
+          insight={{
+            text: '☀️ Tidak Hujan',
+          }}
+        />
+      </IotInfoCardSection>
+      <IotInfoCardSection sectionText={'Sensor Tanah (4)'}>
+        <IotInfoCard
+          color={ACTIVE_COLOR}
+          style={{ width: itemWidth }}
+          label="Kelembapan #1"
+          value={24}
+          unit="%"
+          icon={<Ionicons name="water-outline" size={16} color="#51A2FF" />}
+          insight={{
+            text: '🏜️  Kering',
+            status: 'negative',
+          }}
         />
 
         <IotInfoCard
           color={ACTIVE_COLOR}
           style={{ width: itemWidth }}
-          label="Kelembapan"
-          value={65}
+          label="Kelembapan #2"
+          value={68}
           unit="%"
           icon={<Ionicons name="water-outline" size={16} color="#51A2FF" />}
+          insight={{
+            text: '🏜️  Optimal',
+          }}
         />
-      </Flex>
+
+        <IotInfoCard
+          color={ACTIVE_COLOR}
+          style={{ width: itemWidth }}
+          label="pH Tanah #1"
+          value={6.5}
+          unit="pH"
+          icon={<Fontisto name="laboratory" size={16} color="#AD46FF" />}
+          insight={{
+            text: '✓ pH Netral',
+          }}
+        />
+
+        <IotInfoCard
+          color={ACTIVE_COLOR}
+          style={{ width: itemWidth }}
+          label="pH Tanah #2"
+          value={6.5}
+          unit="pH"
+          icon={<Fontisto name="laboratory" size={16} color="#AD46FF" />}
+          insight={{
+            text: '✓ pH Netral',
+          }}
+        />
+      </IotInfoCardSection>
     </View>
   )
 }
@@ -70,6 +128,6 @@ export default IotDataList
 
 const styles = StyleSheet.create({
   container: {
-    width: '100%',
+    gap: 20,
   },
 })
