@@ -15,7 +15,7 @@ export const API_ENDPOINTS = {
   // Profile
   PROFILE: {
     GET: `${API_BASE_URL}/user`,
-    UPDATE: `${API_BASE_URL}/`,
+    UPDATE: `${API_BASE_URL}/user`,
   },
 
   // Weather

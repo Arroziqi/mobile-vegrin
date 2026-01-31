@@ -82,6 +82,7 @@ const styles = StyleSheet.create({
   /* ===== Normal ===== */
   label: {
     color: '#4A5565',
+    fontSize: 12,
   },
   textValue: {
     fontSize: 20,

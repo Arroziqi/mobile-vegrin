@@ -35,7 +35,7 @@ export default function BackButton({
       hitSlop={hitSlop}
       style={[styles.container, style]}
     >
-      <FontAwesome6 name="arrow-left-long" size={size} color={color} />
+      <FontAwesome6 name="arrow-left" size={size} color={color} />
     </Pressable>
   )
 }
