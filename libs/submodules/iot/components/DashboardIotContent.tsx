@@ -9,8 +9,11 @@ import { LinearGradient } from 'expo-linear-gradient'
 import { customizeColors } from '@/libs/core/config/theme/color'
 import Column from '@/components/Column'
 import Dot from '@/components/Dot'
+import { useModal } from '@/hooks/useModal'
+import AddDeviceModal from '@/libs/submodules/iot/components/Modals/AddDeviceModal'
 
 function DashboardIotContent() {
+  const modal = useModal()
   return (
     <>
       <TopBarIot isConnected={true} />
@@ -28,7 +31,7 @@ function DashboardIotContent() {
                 <Text style={styles.titleText}>Perangkat IoT Terhubung</Text>
               </Row>
 
-              <Pressable style={styles.addButton}>
+              <Pressable style={styles.addButton} onPress={modal.show}>
                 <Row gap={5} justify={'space-between'}>
                   <Feather name={'plus'} size={16} color="white" />
                   <Text style={styles.textAddButton}>Tambah</Text>
@@ -150,6 +153,9 @@ function DashboardIotContent() {
         </View>
         <BottomStatus isConnected={true} />
       </ScrollView>
+
+      {/*  modals*/}
+      <AddDeviceModal modal={modal} />
     </>
   )
 }
