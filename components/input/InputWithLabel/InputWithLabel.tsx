@@ -75,6 +75,7 @@ const InputWithLabel = ({
             keyboardType={keyboardType}
             secureTextEntry={secureTextEntry}
             autoCapitalize={autoCapitalize}
+            onChangeText={text => onChange?.(text)}
           />
 
           {isDateTime && (

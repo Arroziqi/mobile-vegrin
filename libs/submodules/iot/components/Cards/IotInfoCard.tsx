@@ -3,6 +3,11 @@ import { StyleSheet, Text, ViewStyle } from 'react-native'
 import Flex from '@/components/Flex'
 import IotCardWrapper from '@/libs/submodules/iot/components/Cards/IotCardWrapper'
 
+interface Insight {
+  status?: 'negative' | 'positive'
+  text: string
+}
+
 interface IotInfoCardProps {
   color: string
   icon: ReactNode
@@ -11,6 +16,7 @@ interface IotInfoCardProps {
   unit?: string
   style?: ViewStyle
   disabled?: boolean
+  insight?: Insight
 }
 
 const IotInfoCard: React.FC<IotInfoCardProps> = ({
@@ -21,6 +27,7 @@ const IotInfoCard: React.FC<IotInfoCardProps> = ({
   unit,
   style,
   disabled = false,
+  insight,
 }) => {
   return (
     <IotCardWrapper
@@ -34,7 +41,7 @@ const IotInfoCard: React.FC<IotInfoCardProps> = ({
         </Text>
       </Flex>
 
-      <Flex style={styles.valueContainer}>
+      <Flex style={styles.valueContainer} align={'flex-end'} gap={2}>
         <Text style={[styles.textValue, disabled && styles.disabledValue]}>
           {value}
         </Text>
@@ -44,6 +51,23 @@ const IotInfoCard: React.FC<IotInfoCardProps> = ({
           </Text>
         )}
       </Flex>
+
+      {insight && (
+        <Text
+          style={[
+            styles.insight,
+            disabled && styles.disabledLabel,
+            {
+              color:
+                insight?.status === 'negative'
+                  ? 'rgba(245, 158, 11, 1)'
+                  : 'rgba(0, 166, 62, 1)',
+            },
+          ]}
+        >
+          {insight?.text}
+        </Text>
+      )}
     </IotCardWrapper>
   )
 }
@@ -58,15 +82,15 @@ const styles = StyleSheet.create({
   /* ===== Normal ===== */
   label: {
     color: '#4A5565',
+    fontSize: 12,
   },
   textValue: {
-    fontSize: 24,
-    color: '#1E2939',
+    fontSize: 20,
+    color: 'rgba(0, 153, 102, 1)',
   },
   unit: {
-    fontSize: 16,
-    color: '#6A7282',
-    marginBottom: -15,
+    fontSize: 12,
+    color: 'rgba(0, 153, 102, 1)',
   },
 
   /* ===== Disabled ===== */
@@ -81,5 +105,11 @@ const styles = StyleSheet.create({
   },
   disabledUnit: {
     color: '#D1D5DC',
+  },
+  insight: {
+    fontSize: 12,
+    lineHeight: 16,
+    marginTop: 5,
+    color: 'rgba(0, 166, 62, 1)',
   },
 })
