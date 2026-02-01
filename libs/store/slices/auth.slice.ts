@@ -6,8 +6,6 @@ import {
   GoogleLoginResponse,
   LoginRequest,
   LoginResponse,
-  RegisterRequest,
-  RegisterResponse,
   ResetPasswordRequest,
   ResetPasswordResponse,
   VerifyEmailRequest,
@@ -86,30 +84,6 @@ export const loginUser = createAsyncThunk(
       }
 
       return rejectWithValue('Terjadi kesalahan. Silakan coba lagi.')
-    }
-  }
-)
-
-// Register new user
-export const registerUser = createAsyncThunk(
-  'auth/register',
-  async (userData: RegisterRequest, { rejectWithValue }) => {
-    try {
-      const response = await fetch(API_ENDPOINTS.AUTH.REGISTER, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(userData),
-      })
-
-      if (!response.ok) {
-        const error = await response.json()
-        return rejectWithValue(error.message || 'Registrasi gagal')
-      }
-
-      const data: ApiResponse<RegisterResponse> = await response.json()
-      return data.data
-    } catch (error) {
-      return rejectWithValue((error as Error).message)
     }
   }
 )
@@ -263,20 +237,6 @@ const authSlice = createSlice({
         state.isAuthenticated = true
       })
       .addCase(loginUser.rejected, (state, action) => {
-        state.loading = false
-        state.error = action.payload as string
-      })
-
-    // Register
-    builder
-      .addCase(registerUser.pending, state => {
-        state.loading = true
-        state.error = null
-      })
-      .addCase(registerUser.fulfilled, state => {
-        state.loading = false
-      })
-      .addCase(registerUser.rejected, (state, action) => {
         state.loading = false
         state.error = action.payload as string
       })
