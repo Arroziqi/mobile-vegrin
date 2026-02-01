@@ -16,7 +16,9 @@ function ProfileScreen() {
   const { profile } = useProfile()
   const bottomSheetRef = useRef<BottomSheet>(null)
   const { pickFromCamera, pickFromGallery } = useImagePicker()
-  const [avatar, setAvatar] = useState<string | null>(null)
+  const [avatar, setAvatar] = useState<string | null>(
+    profile?.photo_profile ?? null
+  )
 
   const handleCamera = async () => {
     bottomSheetRef.current?.close()

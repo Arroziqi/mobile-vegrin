@@ -112,6 +112,7 @@ export interface UpdateProfileRequest {
   address?: string
   phone_number?: string
   birth_date?: string
+  photo_profile?: string
 }
 
 // ============ Weather Types ============
