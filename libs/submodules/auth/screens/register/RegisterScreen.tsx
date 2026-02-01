@@ -5,55 +5,17 @@ import AuthFormCard from '@/libs/submodules/auth/components/authFormCard/AuthFor
 import GradientText from '@/components/text/GradientText'
 import { customizeColors } from '@/libs/core/config/theme/color'
 import registerScreenStyle from './RegisterScreen.style'
-import RegisterScreenForm, {
-  RegisterFormValue,
-} from './components/RegisterScreen.form'
+import RegisterScreenForm from './components/RegisterScreen.form'
 import RedirectText from '@/components/text/RedirectText'
 import { useStepper } from '@/hooks/useStepper'
 import VerificationCodeStep from '@/libs/submodules/auth/components/verificationCode/VerificationCodeStep'
-import { useState } from 'react'
-import { useAuth } from '@/libs/hooks'
+import { useRegisterForm } from '@/libs/submodules/auth/hooks/useRegisterForm'
 
 const RegisterScreen = () => {
   const { step, next, prev } = useStepper(2)
-  const { register } = useAuth()
 
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-
-  const [form, setForm] = useState<RegisterFormValue>({
-    front_name: '',
-    back_name: '',
-    email: '',
-    password: '',
-  })
-
-  const onChange = <K extends keyof RegisterFormValue>(
-    key: K,
-    val: RegisterFormValue[K]
-  ) => {
-    setForm(prev => ({ ...prev, [key]: val }))
-  }
-
-  const handleRegister = async () => {
-    setLoading(true)
-    setError(null)
-
-    const result = await register({
-      ...form,
-    })
-
-    setLoading(false)
-
-    if (!result.success) {
-      // @ts-ignore
-      setError(result.error)
-      return
-    }
-
-    // sukses → lanjut ke verifikasi
-    next()
-  }
+  const { form, onChange, error, loading, submitRegister, isValid } =
+    useRegisterForm()
 
   const title = (
     <GradientText
@@ -94,9 +56,10 @@ const RegisterScreen = () => {
             subtitle={subtitle}
             formInput={<RegisterScreenForm value={form} onChange={onChange} />}
             buttonText="Daftar"
-            onSubmit={handleRegister}
+            onSubmit={submitRegister}
             loading={loading}
             error={error}
+            disabledButton={!isValid}
           />
         )}
 

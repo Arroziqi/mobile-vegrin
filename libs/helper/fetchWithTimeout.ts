@@ -1,8 +1,10 @@
+import { NetworkError, TimeoutError } from '@/libs/common/types/error'
+
 export async function fetchWithTimeout(
   url: string,
   options: RequestInit,
   timeout = 10_000
-) {
+): Promise<Response> {
   const controller = new AbortController()
   const id = setTimeout(() => controller.abort(), timeout)
 
@@ -11,11 +13,11 @@ export async function fetchWithTimeout(
       ...options,
       signal: controller.signal,
     })
-  } catch (error) {
-    if ((error as Error).name === 'AbortError') {
-      throw new Error('REQUEST_TIMEOUT')
+  } catch (e) {
+    if ((e as Error).name === 'AbortError') {
+      throw new TimeoutError()
     }
-    throw error
+    throw new NetworkError()
   } finally {
     clearTimeout(id)
   }

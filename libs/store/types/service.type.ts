@@ -40,30 +40,6 @@ export interface LoginResponse {
   user_session: UserSession
 }
 
-export interface RegisterRequest {
-  email: string
-  password: string
-  front_name: string
-  back_name: string
-  address?: string
-  phone_number?: string
-  birth_date?: string // ISO date string
-}
-
-export interface RegisterUserData {
-  id: string
-  email: string
-  front_name: string
-  back_name: string
-  is_verify: boolean
-  registered_at: string
-}
-
-export interface RegisterResponse {
-  message: string
-  user: RegisterUserData
-}
-
 export interface GoogleLoginRequest {
   id_token: string
   device_id: string

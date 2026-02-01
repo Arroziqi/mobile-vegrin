@@ -4,7 +4,6 @@ import { useAppDispatch, useAppSelector } from '@/libs/store/reduxHooks'
 import {
   GoogleLoginRequest,
   LoginRequest,
-  RegisterRequest,
   ResetPasswordRequest,
 } from '@/libs/store/types/service.type'
 import {
@@ -12,11 +11,9 @@ import {
   loginUser,
   logout,
   logoutUser,
-  registerUser,
   resetPassword,
   verifyEmailReset,
 } from '@/libs/store/slices/auth.slice'
-import { Alert } from 'react-native'
 
 export const useAuth = () => {
   const dispatch = useAppDispatch()
@@ -43,24 +40,6 @@ export const useAuth = () => {
         })
       ).unwrap()
 
-      return { success: true, data: result }
-    } catch (err) {
-      const errorMessage = err as string
-      setLocalError(errorMessage)
-      return { success: false, error: errorMessage }
-    }
-  }
-
-  // Register user baru
-  const register = async (userData: RegisterRequest) => {
-    try {
-      setLocalError(null)
-      const result = await dispatch(registerUser(userData)).unwrap()
-      Alert.alert(
-        'Berhasil',
-        'Akun Anda berhasil didaftarkan, silakan cek email'
-      )
-      console.log(result)
       return { success: true, data: result }
     } catch (err) {
       const errorMessage = err as string
@@ -141,7 +120,6 @@ export const useAuth = () => {
 
     // Actions
     login,
-    register,
     loginWithGoogle,
     logout: logoutHandler,
     verifyEmail,
