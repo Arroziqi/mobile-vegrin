@@ -4,7 +4,7 @@ import ProfileTopBar from '@/libs/submodules/profile/components/topbar/ProfileTo
 import Container from '@/components/container/Container'
 import MenuItemCard from '@/libs/submodules/profile/components/MenuItemCard'
 import { FontAwesome6, Ionicons } from '@expo/vector-icons'
-import { useSettings } from '../hooks/useSettings'
+import useSettings from '../hooks/useSettings'
 
 function SettingsScreen() {
   const {

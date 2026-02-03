@@ -1,14 +1,19 @@
 import { useEffect, useState } from 'react'
-import type { PermissionStatus } from 'expo-location'
 import * as Location from 'expo-location'
+import { PermissionStatus } from 'expo-location'
 import { Camera } from 'expo-camera'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Alert } from 'react-native'
 
-export const useSettings = () => {
-  const [locationStatus, setLocationStatus] = useState<PermissionStatus>()
+const useSettings = () => {
+  const [locationStatus, setLocationStatus] = useState<PermissionStatus>(
+    PermissionStatus.UNDETERMINED
+  )
 
-  const [cameraStatus, setCameraStatus] = useState<PermissionStatus>()
+  const [cameraStatus, setCameraStatus] = useState<PermissionStatus>(
+    PermissionStatus.UNDETERMINED
+  )
+
   const [loading, setLoading] = useState(false)
 
   // 🔍 cek status awal (pas screen kebuka)
@@ -61,3 +66,4 @@ export const useSettings = () => {
     clearCache,
   }
 }
+export default useSettings
