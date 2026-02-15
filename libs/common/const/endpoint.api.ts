@@ -29,4 +29,13 @@ export const API_ENDPOINTS = {
     GET_LOGS: `${API_BASE_URL}/plant`,
     GET_DETAIL: (id: string) => `${API_BASE_URL}/plant/${id}`,
   },
+
+  // Education
+  EDUCATION: {
+    CREATE: `${API_BASE_URL}/education`,
+    GET_LIST: `${API_BASE_URL}/education`,
+    GET_DETAIL: (id: string) => `${API_BASE_URL}/education/${id}`,
+    DELETE: (id: string) => `${API_BASE_URL}/education/${id}`,
+    UPDATE: (id: string) => `${API_BASE_URL}/education/${id}`,
+  },
 } as const
