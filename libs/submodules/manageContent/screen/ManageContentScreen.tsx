@@ -38,16 +38,6 @@ export default function ManageContentScreen() {
     }
   }
 
-  const handleFormSubmit = (data: {
-    title: string
-    source: string
-    url: string
-    image: string | null
-  }) => {
-    console.log('Form Data:', data)
-    Alert.alert('Sukses', 'Konten berhasil ditambahkan')
-  }
-
   return (
     <Container style={styles.container}>
       <AppBar variant="default" title="Admin - Kelola Konten Berita" />
@@ -68,10 +58,7 @@ export default function ManageContentScreen() {
         contentContainerStyle={styles.scrollContent}
       >
         {showAddForm && (
-          <AddContentForm
-            onClose={() => setShowAddForm(false)}
-            onSubmit={handleFormSubmit}
-          />
+          <AddContentForm onClose={() => setShowAddForm(false)} />
         )}
 
         <View style={styles.cardWrapper}>
