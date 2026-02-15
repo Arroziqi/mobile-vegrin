@@ -3,6 +3,7 @@ import { Alert } from 'react-native'
 import { useAuth } from '@/libs/hooks'
 import { useCreateEducation } from '@/libs/hooks/educations/useCreateEducation'
 import { pickImageFromLibrary } from '@/libs/common/utils/pickImage'
+import { useGetEducationList } from '@/libs/hooks/educations/useGetEducationList'
 
 export const useAddContentForm = (onSuccess: () => void) => {
   const [title, setTitle] = useState('')
@@ -11,6 +12,7 @@ export const useAddContentForm = (onSuccess: () => void) => {
   const [image, setImage] = useState<string | null>(null)
 
   const { token, deviceId } = useAuth()
+  const { refetch: refetchEducationList } = useGetEducationList()
   const { createEducation, loading } = useCreateEducation()
 
   const resetForm = () => {
@@ -44,6 +46,7 @@ export const useAddContentForm = (onSuccess: () => void) => {
       Alert.alert('Berhasil', 'Konten berhasil ditambahkan 🎉')
 
       resetForm()
+      await refetchEducationList()
       onSuccess()
     } catch (error: any) {
       Alert.alert('Error', error.message || 'Terjadi kesalahan')

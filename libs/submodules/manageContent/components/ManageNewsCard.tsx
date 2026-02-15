@@ -1,9 +1,9 @@
 import Flex from '@/components/Flex'
-import { NewsData } from '@/libs/dummyData/adminNewsItem.dummy'
 import { MaterialIcons } from '@expo/vector-icons'
 import { Image } from 'expo-image'
 import { Text, TouchableOpacity, View } from 'react-native'
 import styles from '../styles/ManageNewsCard.style'
+import { NewsData } from '@/libs/hooks/educations/useGetEducationList'
 
 const BLURHASH =
   '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj['
