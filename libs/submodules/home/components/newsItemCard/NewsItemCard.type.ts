@@ -1,9 +1,7 @@
-import { ImageSourcePropType } from 'react-native'
-
-export type NewsItemCardProps = {
-  image: ImageSourcePropType
-  description: string
-  publishedAt?: string
-  linkLabel?: string
-  onPressLink?: () => void
+export interface NewsItemCardProps {
+  image: string | null
+  description: string | null
+  publishedAt?: string | null
+  linkLabel?: string | null
+  onPressLink?: (() => void) | null
 }

@@ -2,7 +2,6 @@
 import Container from '@/components/container/Container'
 import Flex from '@/components/Flex'
 import PillButtonTabs from '@/components/tabs/pill/PillButtonTabs'
-import { newsItemDummy } from '@/libs/dummyData/newsItem.dummy'
 import {
   WEATHER_BY_DAY,
   weatherTabsDummy,
@@ -71,7 +70,7 @@ const HomeScreen = () => {
             <WeatherInfoIot />
 
             <View style={{ width: '100%' }}>
-              <NewsItemCardList data={newsItemDummy} />
+              <NewsItemCardList />
               <View style={{ height: 80, width: 80 }} />
             </View>
           </Flex>
