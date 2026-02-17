@@ -2,7 +2,7 @@ import { Pressable, Text, View } from 'react-native'
 import { NewsItemCardProps } from './NewsItemCard.type'
 import styles from './NewsItemCard.style'
 import { Image } from 'expo-image'
-import { DEFAULT_NEWS_IMAGE } from '@/libs/submodules/home/components/newsItemCardList/NewsItemCardList'
+import { DEFAULT_NEWS_IMAGE } from '@/libs/common/const/imageDefault'
 
 const BLURHASH =
   '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj['

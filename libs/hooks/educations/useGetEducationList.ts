@@ -4,12 +4,12 @@ import { useAuth } from '@/libs/hooks'
 
 export interface NewsData {
   id: string
-  number?: number | null
-  title: string | null
-  author?: string | null
-  source: string | null
-  url: string | null
-  imageUrl: string | null
+  number?: number
+  title: string
+  author?: string
+  source: string
+  external_link: string
+  thumbnail: string
 }
 
 export const useGetEducationList = () => {
@@ -49,11 +49,11 @@ export const useGetEducationList = () => {
       const mapped: NewsData[] = educations.map((item: any, index: number) => ({
         id: item.id,
         number: index + 1,
-        title: item.title ?? null,
+        title: item.title,
         author: null, // karena tidak ada di response
-        source: item.source ?? null,
-        url: item.external_link ?? null,
-        imageUrl: item.thumbnail ? `${baseUrl}/${item.thumbnail}` : null,
+        source: item.source,
+        external_link: item.external_link,
+        thumbnail: `${baseUrl}/${item.thumbnail}`,
       }))
 
       setData(mapped)
