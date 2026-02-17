@@ -1,7 +1,6 @@
 import AppBar from '@/components/AppBar'
 import Container from '@/components/container/Container'
 import Flex from '@/components/Flex'
-import { ADMIN_NEWS_DUMMY_CONTENTS } from '@/libs/dummyData/adminNewsItem.dummy'
 import { MaterialIcons } from '@expo/vector-icons'
 import { useState } from 'react'
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native'
@@ -11,11 +10,16 @@ import ManageNewsCard from '../components/ManageNewsCard'
 import styles from '../styles/ManageContentScreen.style'
 import { useDeleteEducation } from '@/libs/hooks/educations/useDeleteEducation'
 import { useGetEducationList } from '@/libs/hooks/educations/useGetEducationList'
+import EmptyState from '@/libs/submodules/manageContent/components/EmptyState'
+import { EducationDetail } from '@/libs/submodules/manageContent/hooks/useContentForm'
 
 export default function ManageContentScreen() {
   const [showAddForm, setShowAddForm] = useState(false)
   const [deleteModalVisible, setDeleteModalVisible] = useState(false)
   const [itemToDelete, setItemToDelete] = useState<string | null>(null)
+  const [itemToEdit, setItemToEdit] = useState<EducationDetail | undefined>(
+    undefined
+  )
 
   const { deleteEducation } = useDeleteEducation()
   const {
@@ -25,16 +29,19 @@ export default function ManageContentScreen() {
   } = useGetEducationList()
 
   const handleAddContent = () => {
-    console.log('Add New Content')
     setShowAddForm(true)
   }
 
   const handleEdit = (id: string) => {
-    console.log('Edit item:', id)
+    const selectedItem = educationList.find(item => item.id === id)
+
+    if (!selectedItem) return
+
+    setItemToEdit(selectedItem)
+    setShowAddForm(true)
   }
 
   const handleDelete = (id: string) => {
-    console.log('Delete item:', id)
     setItemToDelete(id)
     setDeleteModalVisible(true)
   }
@@ -50,7 +57,6 @@ export default function ManageContentScreen() {
       setDeleteModalVisible(false)
       setItemToDelete(null)
 
-      // TODO: nanti kita bisa refresh list di sini
       await refetchEducationList()
     } catch {
       // error sudah ditangani di hook
@@ -77,7 +83,11 @@ export default function ManageContentScreen() {
         contentContainerStyle={styles.scrollContent}
       >
         {showAddForm && (
-          <AddContentForm onClose={() => setShowAddForm(false)} />
+          <AddContentForm
+            itemToEdit={itemToEdit}
+            onClose={() => setShowAddForm(false)}
+            refetchEducationList={refetchEducationList}
+          />
         )}
 
         <View style={styles.cardWrapper}>
@@ -97,32 +107,7 @@ export default function ManageContentScreen() {
 
           {/* Empty State */}
           {!loadingEducationList && educationList.length === 0 && (
-            <View
-              style={{ paddingVertical: 30, alignItems: 'center', gap: 15 }}
-            >
-              <MaterialIcons name="inbox" size={48} color="#9CA3AF" />
-              <Text style={{ color: '#6B7280', fontSize: 16 }}>
-                Belum ada konten
-              </Text>
-
-              <TouchableOpacity
-                onPress={refetchEducationList}
-                style={{
-                  backgroundColor: '#032746',
-                  paddingHorizontal: 20,
-                  paddingVertical: 10,
-                  borderRadius: 8,
-                }}
-                activeOpacity={0.8}
-              >
-                <Flex direction="row" align="center" gap={8}>
-                  <MaterialIcons name="refresh" size={18} color="white" />
-                  <Text style={{ color: 'white', fontWeight: '600' }}>
-                    Refresh
-                  </Text>
-                </Flex>
-              </TouchableOpacity>
-            </View>
+            <EmptyState onPress={refetchEducationList} />
           )}
 
           {/* List */}
@@ -143,8 +128,7 @@ export default function ManageContentScreen() {
         setVisible={setDeleteModalVisible}
         itemTitle={
           itemToDelete
-            ? ADMIN_NEWS_DUMMY_CONTENTS.find(item => item.id === itemToDelete)
-                ?.title
+            ? educationList.find(item => item.id === itemToDelete)?.title
             : undefined
         }
         onConfirmDelete={confirmDelete}

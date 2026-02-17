@@ -57,8 +57,6 @@ const HomeScreen = () => {
 
             <WeatherCard />
 
-            <AdminContentButton onPress={handlePressAdminContent} />
-
             <PillButtonTabs
               items={weatherTabsDummy}
               activeKey={activeTab}
@@ -69,9 +67,11 @@ const HomeScreen = () => {
 
             <WeatherInfoIot />
 
+            <AdminContentButton onPress={handlePressAdminContent} />
+
             <View style={{ width: '100%' }}>
               <NewsItemCardList />
-              <View style={{ height: 80, width: 80 }} />
+              <View style={{ height: 40, width: 40 }} />
             </View>
           </Flex>
         </ScrollView>

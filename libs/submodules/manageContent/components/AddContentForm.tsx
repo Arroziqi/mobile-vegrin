@@ -3,13 +3,22 @@ import { MaterialIcons } from '@expo/vector-icons'
 import { Image } from 'expo-image'
 import { Text, TextInput, TouchableOpacity, View } from 'react-native'
 import styles from '../styles/ManageContentScreen.style'
-import { useAddContentForm } from '@/libs/submodules/manageContent/hooks/useAddContentForm'
+import {
+  EducationDetail,
+  useContentForm,
+} from '@/libs/submodules/manageContent/hooks/useContentForm'
 
 interface AddContentFormProps {
   onClose: () => void
+  itemToEdit?: EducationDetail
+  refetchEducationList: () => Promise<void>
 }
 
-export default function AddContentForm({ onClose }: AddContentFormProps) {
+export default function AddContentForm({
+  onClose,
+  itemToEdit,
+  refetchEducationList,
+}: AddContentFormProps) {
   const {
     title,
     setTitle,
@@ -21,7 +30,8 @@ export default function AddContentForm({ onClose }: AddContentFormProps) {
     handlePickImage,
     submit,
     loading,
-  } = useAddContentForm(onClose)
+    isEditMode,
+  } = useContentForm(onClose, refetchEducationList, itemToEdit)
 
   return (
     <View style={styles.cardWrapper}>
@@ -32,7 +42,9 @@ export default function AddContentForm({ onClose }: AddContentFormProps) {
         gap={10}
       >
         <MaterialIcons name="add-circle" size={24} color="#032746" />
-        <Text style={[styles.listHeaderText, { flex: 1 }]}>Konten Baru</Text>
+        <Text style={[styles.listHeaderText, { flex: 1 }]}>
+          {isEditMode ? 'Edit Konten' : 'Konten Baru'}
+        </Text>
         <TouchableOpacity onPress={onClose}>
           <MaterialIcons name="close" size={24} color="#032746" />
         </TouchableOpacity>
@@ -96,7 +108,11 @@ export default function AddContentForm({ onClose }: AddContentFormProps) {
           disabled={loading}
         >
           <Text style={styles.submitButtonText}>
-            {loading ? 'Menyimpan...' : 'Simpan Konten'}
+            {loading
+              ? 'Menyimpan...'
+              : isEditMode
+                ? 'Update Konten'
+                : 'Simpan Konten'}
           </Text>
         </TouchableOpacity>
       </Flex>

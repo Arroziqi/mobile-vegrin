@@ -3,9 +3,7 @@ import NewsItemCard from '@/libs/submodules/home/components/newsItemCard/NewsIte
 import { useGetEducationList } from '@/libs/hooks/educations/useGetEducationList'
 import { Href, useRouter } from 'expo-router'
 import { MaterialIcons } from '@expo/vector-icons'
-
-export const DEFAULT_NEWS_IMAGE =
-  'https://images.unsplash.com/photo-1504711434969-e33886168f5c?q=80&w=1200&auto=format&fit=crop'
+import { DEFAULT_NEWS_IMAGE } from '@/libs/common/const/imageDefault'
 
 const NewsItemCardList = () => {
   const { data, loading, error, refetch } = useGetEducationList()
@@ -82,11 +80,15 @@ const NewsItemCardList = () => {
       {data.map(item => (
         <View key={item.id} style={{ marginBottom: 12 }}>
           <NewsItemCard
-            image={item.imageUrl ?? DEFAULT_NEWS_IMAGE}
+            image={item.thumbnail ?? DEFAULT_NEWS_IMAGE}
             description={item.title ?? null}
             publishedAt={item.source ?? null}
-            linkLabel={item.url ? 'Baca Selengkapnya' : null}
-            onPressLink={item.url ? () => handlePressLink(item.url) : null}
+            linkLabel={item.external_link ? 'Baca Selengkapnya' : null}
+            onPressLink={
+              item.external_link
+                ? () => handlePressLink(item.external_link)
+                : null
+            }
           />
         </View>
       ))}
