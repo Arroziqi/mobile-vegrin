@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Alert } from 'react-native'
 import { useAuth } from '@/libs/hooks'
 import { API_ENDPOINTS } from '@/libs/common/const/endpoint.api'
+import { useQueryClient } from '@tanstack/react-query'
 
 interface DeleteEducationParams {
   id: string
@@ -10,6 +11,7 @@ interface DeleteEducationParams {
 export const useDeleteEducation = () => {
   const [loading, setLoading] = useState(false)
   const { deviceId, token } = useAuth()
+  const queryClient = useQueryClient()
 
   const deleteEducation = async ({ id }: DeleteEducationParams) => {
     try {
@@ -33,6 +35,8 @@ export const useDeleteEducation = () => {
       }
 
       Alert.alert('Sukses', 'Konten berhasil dihapus')
+
+      await queryClient.invalidateQueries({ queryKey: ['get-education-list'] })
       return result
     } catch (error: any) {
       Alert.alert('Error', error.message)

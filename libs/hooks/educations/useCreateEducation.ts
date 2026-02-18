@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Alert, Platform } from 'react-native'
 import { API_ENDPOINTS } from '@/libs/common/const/endpoint.api'
 import { useAuth } from '@/libs/hooks'
+import { useQueryClient } from '@tanstack/react-query'
 
 interface CreateEducationParams {
   title: string
@@ -13,6 +14,7 @@ interface CreateEducationParams {
 export const useCreateEducation = () => {
   const [loading, setLoading] = useState(false)
   const { token, deviceId } = useAuth()
+  const queryClient = useQueryClient()
 
   const createEducation = async ({
     title,
@@ -61,6 +63,7 @@ export const useCreateEducation = () => {
         throw new Error(result?.message || 'Gagal membuat konten')
       }
 
+      await queryClient.invalidateQueries({ queryKey: ['get-education-list'] })
       return result
     } finally {
       setLoading(false)
