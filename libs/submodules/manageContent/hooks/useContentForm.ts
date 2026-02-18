@@ -4,6 +4,8 @@ import { useState } from 'react'
 import { useAuth } from '@/libs/hooks'
 import { useCreateEducation } from '@/libs/hooks/educations/useCreateEducation'
 import { useUpdateEducation } from '@/libs/hooks/educations/useUpdateEducation'
+import { QueryObserverResult, RefetchOptions } from '@tanstack/react-query'
+import { NewsData } from '@/libs/hooks/educations/useGetEducationList'
 
 export interface EducationDetail {
   id: string
@@ -15,7 +17,9 @@ export interface EducationDetail {
 
 export const useContentForm = (
   onSuccess: () => void,
-  refetchEducationList: () => Promise<void>,
+  refetchEducationList: (
+    options?: RefetchOptions | undefined
+  ) => Promise<QueryObserverResult<NewsData[], Error>>,
   itemToEdit?: EducationDetail
 ) => {
   const isEditMode = !!itemToEdit

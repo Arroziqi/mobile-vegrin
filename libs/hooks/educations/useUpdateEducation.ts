@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { Platform } from 'react-native'
 import { API_ENDPOINTS } from '@/libs/common/const/endpoint.api'
 import { useAuth } from '@/libs/hooks'
+import { useQueryClient } from '@tanstack/react-query'
 
 interface UpdateEducationParams {
   id: string
@@ -15,6 +16,7 @@ interface UpdateEducationParams {
 export const useUpdateEducation = () => {
   const [loading, setLoading] = useState(false)
   const { token, deviceId } = useAuth()
+  const queryClient = useQueryClient()
 
   const updateEducation = async ({
     id,
@@ -61,6 +63,7 @@ export const useUpdateEducation = () => {
         throw new Error(result?.message || 'Gagal update konten')
       }
 
+      await queryClient.invalidateQueries({ queryKey: ['get-education-list'] })
       return result
     } finally {
       setLoading(false)

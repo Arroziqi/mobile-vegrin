@@ -12,6 +12,7 @@ import { Provider } from 'react-redux'
 import { persistor, store } from '@/libs/store'
 import { RootNavigator } from '@/components/RootNavigator'
 import { PersistGate } from 'redux-persist/integration/react'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 export const unstable_settings = {
   anchor: '(tabs)',
@@ -19,17 +20,22 @@ export const unstable_settings = {
 
 export default function RootLayout() {
   const colorScheme = useColorScheme()
+  const queryClient = new QueryClient()
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-        <Provider store={store}>
-          <PersistGate loading={null} persistor={persistor}>
-            <RootNavigator />
-            <StatusBar style="auto" />
-          </PersistGate>
-        </Provider>
-      </ThemeProvider>
-    </GestureHandlerRootView>
+    <QueryClientProvider client={queryClient}>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <ThemeProvider
+          value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
+        >
+          <Provider store={store}>
+            <PersistGate loading={null} persistor={persistor}>
+              <RootNavigator />
+              <StatusBar style="auto" />
+            </PersistGate>
+          </Provider>
+        </ThemeProvider>
+      </GestureHandlerRootView>
+    </QueryClientProvider>
   )
 }

@@ -6,7 +6,7 @@ import { MaterialIcons } from '@expo/vector-icons'
 import { DEFAULT_NEWS_IMAGE } from '@/libs/common/const/imageDefault'
 
 const NewsItemCardList = () => {
-  const { data, loading, error, refetch } = useGetEducationList()
+  const { data = [], isLoading, error, refetch } = useGetEducationList()
   const router = useRouter()
 
   const handlePressLink = (url?: string | null) => {
@@ -15,7 +15,7 @@ const NewsItemCardList = () => {
   }
 
   // ✅ Loading State
-  if (loading) {
+  if (isLoading) {
     return (
       <View style={{ paddingVertical: 30, alignItems: 'center' }}>
         <ActivityIndicator size="small" />
@@ -34,7 +34,7 @@ const NewsItemCardList = () => {
         </Text>
 
         <TouchableOpacity
-          onPress={refetch}
+          onPress={() => refetch}
           style={{
             marginTop: 12,
             backgroundColor: '#032746',
@@ -50,7 +50,7 @@ const NewsItemCardList = () => {
   }
 
   // ✅ Empty State
-  if (!loading && data.length === 0) {
+  if (!isLoading && data.length === 0) {
     return (
       <View style={{ paddingVertical: 40, alignItems: 'center' }}>
         <MaterialIcons name="inbox" size={48} color="#9CA3AF" />
@@ -59,7 +59,7 @@ const NewsItemCardList = () => {
         </Text>
 
         <TouchableOpacity
-          onPress={refetch}
+          onPress={() => refetch}
           style={{
             marginTop: 14,
             backgroundColor: '#032746',

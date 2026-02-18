@@ -23,8 +23,8 @@ export default function ManageContentScreen() {
 
   const { deleteEducation } = useDeleteEducation()
   const {
-    data: educationList,
-    loading: loadingEducationList,
+    data: educationList = [],
+    isLoading: loadingEducationList,
     refetch: refetchEducationList,
   } = useGetEducationList()
 
@@ -107,7 +107,7 @@ export default function ManageContentScreen() {
 
           {/* Empty State */}
           {!loadingEducationList && educationList.length === 0 && (
-            <EmptyState onPress={refetchEducationList} />
+            <EmptyState onPress={() => refetchEducationList} />
           )}
 
           {/* List */}

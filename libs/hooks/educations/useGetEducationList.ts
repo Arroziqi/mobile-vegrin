@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
 import { API_ENDPOINTS } from '@/libs/common/const/endpoint.api'
 import { useAuth } from '@/libs/hooks'
 
@@ -13,26 +13,21 @@ export interface NewsData {
 }
 
 export const useGetEducationList = () => {
-  const [data, setData] = useState<NewsData[]>([])
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-
   const { token, deviceId } = useAuth()
 
-  const fetchEducations = useCallback(async () => {
-    try {
-      if (!token || !deviceId) return
-
-      setLoading(true)
-      setError(null)
-
+  return useQuery<NewsData[]>({
+    queryKey: ['get-education-list', token, deviceId],
+    enabled: !!token && !!deviceId,
+    staleTime: 1000 * 60 * 5, // 5 menit tidak refetch
+    queryFn: async () => {
       const response = await fetch(API_ENDPOINTS.EDUCATION.GET_LIST, {
         method: 'GET',
         headers: {
-          vtoken: token,
-          device_Id: deviceId,
+          vtoken: token!,
+          device_Id: deviceId!,
         },
       })
+
       const result = await response.json()
 
       if (!response.ok) {
@@ -46,32 +41,15 @@ export const useGetEducationList = () => {
         ''
       ).replace(/\/$/, '')
 
-      const mapped: NewsData[] = educations.map((item: any, index: number) => ({
+      return educations.map((item: any, index: number) => ({
         id: item.id,
         number: index + 1,
         title: item.title,
-        author: null, // karena tidak ada di response
+        author: null,
         source: item.source,
         external_link: item.external_link,
         thumbnail: `${baseUrl}/${item.thumbnail}`,
       }))
-
-      setData(mapped)
-    } catch (err: any) {
-      setError(err.message)
-    } finally {
-      setLoading(false)
-    }
-  }, [])
-
-  useEffect(() => {
-    fetchEducations()
-  }, [fetchEducations])
-
-  return {
-    data,
-    loading,
-    error,
-    refetch: fetchEducations,
-  }
+    },
+  })
 }

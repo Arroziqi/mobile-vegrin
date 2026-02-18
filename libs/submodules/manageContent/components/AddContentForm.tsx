@@ -7,11 +7,15 @@ import {
   EducationDetail,
   useContentForm,
 } from '@/libs/submodules/manageContent/hooks/useContentForm'
+import { QueryObserverResult, RefetchOptions } from '@tanstack/react-query'
+import { NewsData } from '@/libs/hooks/educations/useGetEducationList'
 
 interface AddContentFormProps {
   onClose: () => void
   itemToEdit?: EducationDetail
-  refetchEducationList: () => Promise<void>
+  refetchEducationList: (
+    options?: RefetchOptions | undefined
+  ) => Promise<QueryObserverResult<NewsData[], Error>>
 }
 
 export default function AddContentForm({
