@@ -8,6 +8,7 @@ import {
   UserProfile,
 } from '@/libs/store/types/service.type'
 import { API_ENDPOINTS } from '@/libs/common/const/endpoint.api'
+import { logout, logoutUser } from '@/libs/store/slices/auth.slice'
 
 interface ProfileState {
   profile: UserProfile | null
@@ -133,6 +134,16 @@ const profileSlice = createSlice({
         state.loading = false
         state.error = action.payload as string
       })
+
+    builder.addCase(logoutUser.fulfilled, state => {
+      state.profile = null
+      state.error = null
+    })
+
+    builder.addCase(logout, state => {
+      state.profile = null
+      state.error = null
+    })
   },
 })
 
