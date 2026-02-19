@@ -1,11 +1,6 @@
 // HomeScreen.tsx - Menggunakan ScrollView utama
 import Container from '@/components/container/Container'
 import Flex from '@/components/Flex'
-import PillButtonTabs from '@/components/tabs/pill/PillButtonTabs'
-import {
-  WEATHER_BY_DAY,
-  weatherTabsDummy,
-} from '@/libs/dummyData/weatherForecasting.dummy'
 import NewsItemCardList from '@/libs/submodules/home/components/newsItemCardList/NewsItemCardList'
 import TopBarHome from '@/libs/submodules/home/components/TopBarHome'
 import WeatherCard from '@/libs/submodules/home/components/WeatherCard'
@@ -31,10 +26,6 @@ const HomeScreen = () => {
     },
   ])
 
-  const [activeTab, setActiveTab] = useState<
-    'yesterday' | 'today' | 'tomorrow'
-  >('today')
-
   const router = useRouter()
 
   const handlePressAdminContent = () => {
@@ -57,13 +48,7 @@ const HomeScreen = () => {
 
             <WeatherCard />
 
-            <PillButtonTabs
-              items={weatherTabsDummy}
-              activeKey={activeTab}
-              onChange={setActiveTab}
-            />
-
-            <WeatherForecastingCard data={WEATHER_BY_DAY[activeTab]} />
+            <WeatherForecastingCard />
 
             <WeatherInfoIot />
 
