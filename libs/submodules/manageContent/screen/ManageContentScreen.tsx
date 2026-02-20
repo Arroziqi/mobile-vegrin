@@ -1,51 +1,66 @@
 import AppBar from '@/components/AppBar'
 import Container from '@/components/container/Container'
 import Flex from '@/components/Flex'
-import { ADMIN_NEWS_DUMMY_CONTENTS } from '@/libs/dummyData/adminNewsItem.dummy'
 import { MaterialIcons } from '@expo/vector-icons'
 import { useState } from 'react'
-import { Alert, ScrollView, Text, TouchableOpacity, View } from 'react-native'
+import { ScrollView, Text, TouchableOpacity, View } from 'react-native'
 import AddContentForm from '../components/AddContentForm'
 import DeleteContentModal from '../components/DeleteContentModal'
 import ManageNewsCard from '../components/ManageNewsCard'
 import styles from '../styles/ManageContentScreen.style'
+import { useDeleteEducation } from '@/libs/hooks/educations/useDeleteEducation'
+import { useGetEducationList } from '@/libs/hooks/educations/useGetEducationList'
+import EmptyState from '@/libs/submodules/manageContent/components/EmptyState'
+import { EducationDetail } from '@/libs/submodules/manageContent/hooks/useContentForm'
 
 export default function ManageContentScreen() {
   const [showAddForm, setShowAddForm] = useState(false)
   const [deleteModalVisible, setDeleteModalVisible] = useState(false)
   const [itemToDelete, setItemToDelete] = useState<string | null>(null)
+  const [itemToEdit, setItemToEdit] = useState<EducationDetail | undefined>(
+    undefined
+  )
+
+  const { deleteEducation } = useDeleteEducation()
+  const {
+    data: educationList = [],
+    isLoading: loadingEducationList,
+    refetch: refetchEducationList,
+  } = useGetEducationList()
 
   const handleAddContent = () => {
-    console.log('Add New Content')
     setShowAddForm(true)
   }
 
   const handleEdit = (id: string) => {
-    console.log('Edit item:', id)
+    const selectedItem = educationList.find(item => item.id === id)
+
+    if (!selectedItem) return
+
+    setItemToEdit(selectedItem)
+    setShowAddForm(true)
   }
 
   const handleDelete = (id: string) => {
-    console.log('Delete item:', id)
     setItemToDelete(id)
     setDeleteModalVisible(true)
   }
 
-  const confirmDelete = () => {
-    if (itemToDelete) {
-      console.log('Confirming delete for item:', itemToDelete)
-      Alert.alert('Sukses', 'Konten berhasil dihapus')
-      setItemToDelete(null)
-    }
-  }
+  const confirmDelete = async () => {
+    if (!itemToDelete) return
 
-  const handleFormSubmit = (data: {
-    title: string
-    source: string
-    url: string
-    image: string | null
-  }) => {
-    console.log('Form Data:', data)
-    Alert.alert('Sukses', 'Konten berhasil ditambahkan')
+    try {
+      await deleteEducation({
+        id: itemToDelete,
+      })
+
+      setDeleteModalVisible(false)
+      setItemToDelete(null)
+
+      await refetchEducationList()
+    } catch {
+      // error sudah ditangani di hook
+    }
   }
 
   return (
@@ -69,8 +84,9 @@ export default function ManageContentScreen() {
       >
         {showAddForm && (
           <AddContentForm
+            itemToEdit={itemToEdit}
             onClose={() => setShowAddForm(false)}
-            onSubmit={handleFormSubmit}
+            refetchEducationList={refetchEducationList}
           />
         )}
 
@@ -78,18 +94,33 @@ export default function ManageContentScreen() {
           <Flex direction="row" style={styles.listHeader} gap={10}>
             <MaterialIcons name="article" size={24} color="#032746" />
             <Text style={styles.listHeaderText}>
-              Daftar Konten ({ADMIN_NEWS_DUMMY_CONTENTS.length})
+              Daftar Konten ({educationList.length})
             </Text>
           </Flex>
 
-          {ADMIN_NEWS_DUMMY_CONTENTS.map(item => (
-            <ManageNewsCard
-              key={item.id}
-              item={item}
-              onEdit={handleEdit}
-              onDelete={handleDelete}
-            />
-          ))}
+          {/* Loading */}
+          {loadingEducationList && (
+            <View style={{ paddingVertical: 20, alignItems: 'center' }}>
+              <Text>Memuat data...</Text>
+            </View>
+          )}
+
+          {/* Empty State */}
+          {!loadingEducationList && educationList.length === 0 && (
+            <EmptyState onPress={() => refetchEducationList} />
+          )}
+
+          {/* List */}
+          {!loadingEducationList &&
+            educationList.length > 0 &&
+            educationList.map(item => (
+              <ManageNewsCard
+                key={item.id}
+                item={item}
+                onEdit={handleEdit}
+                onDelete={handleDelete}
+              />
+            ))}
         </View>
       </ScrollView>
       <DeleteContentModal
@@ -97,8 +128,7 @@ export default function ManageContentScreen() {
         setVisible={setDeleteModalVisible}
         itemTitle={
           itemToDelete
-            ? ADMIN_NEWS_DUMMY_CONTENTS.find(item => item.id === itemToDelete)
-                ?.title
+            ? educationList.find(item => item.id === itemToDelete)?.title
             : undefined
         }
         onConfirmDelete={confirmDelete}

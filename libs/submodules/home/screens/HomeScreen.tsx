@@ -1,7 +1,7 @@
 // HomeScreen.tsx - Menggunakan ScrollView utama
 import Container from '@/components/container/Container'
 import Flex from '@/components/Flex'
-import { newsItemDummy } from '@/libs/dummyData/newsItem.dummy'
+import PillButtonTabs from '@/components/tabs/pill/PillButtonTabs'
 import NewsItemCardList from '@/libs/submodules/home/components/newsItemCardList/NewsItemCardList'
 import TopBarHome from '@/libs/submodules/home/components/TopBarHome'
 import WeatherCard from '@/libs/submodules/home/components/WeatherCard'
@@ -58,15 +58,15 @@ const HomeScreen = () => {
 
             <WeatherCard />
 
-            <AdminContentButton onPress={handlePressAdminContent} />
-
             <WeatherForecastingCard />
 
             <WeatherInfoIot />
 
+            <AdminContentButton onPress={handlePressAdminContent} />
+
             <View style={{ width: '100%' }}>
-              <NewsItemCardList data={newsItemDummy} />
-              <View style={{ height: 80, width: 80 }} />
+              <NewsItemCardList />
+              <View style={{ height: 40, width: 40 }} />
             </View>
           </Flex>
         </ScrollView>

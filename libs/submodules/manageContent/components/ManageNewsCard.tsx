@@ -1,9 +1,10 @@
 import Flex from '@/components/Flex'
-import { NewsData } from '@/libs/dummyData/adminNewsItem.dummy'
 import { MaterialIcons } from '@expo/vector-icons'
 import { Image } from 'expo-image'
 import { Text, TouchableOpacity, View } from 'react-native'
 import styles from '../styles/ManageNewsCard.style'
+import { NewsData } from '@/libs/hooks/educations/useGetEducationList'
+import React from 'react'
 
 const BLURHASH =
   '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj['
@@ -35,7 +36,7 @@ const ManageNewsCard: React.FC<ManageNewsCardProps> = ({
       <View style={styles.imageContainer}>
         <Image
           style={styles.image}
-          source={item.imageUrl}
+          source={item.thumbnail}
           placeholder={{ blurhash: BLURHASH }}
           contentFit="cover"
           transition={1000}
@@ -49,7 +50,7 @@ const ManageNewsCard: React.FC<ManageNewsCardProps> = ({
         </Text>
         <Flex direction="row" align="center" gap={4}>
           <MaterialIcons name="open-in-new" size={14} color="#032746" />
-          <Text style={styles.urlText}>{item.url}</Text>
+          <Text style={styles.urlText}>{item.external_link}</Text>
         </Flex>
       </Flex>
 

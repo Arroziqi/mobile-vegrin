@@ -8,6 +8,7 @@ import {
   UserProfile,
 } from '@/libs/store/types/service.type'
 import { API_ENDPOINTS } from '@/libs/common/const/endpoint.api'
+import { logout, logoutUser } from '@/libs/store/slices/auth.slice'
 
 interface ProfileState {
   profile: UserProfile | null
@@ -66,24 +67,21 @@ export const updateUserProfile = createAsyncThunk(
   async (profileData: UpdateProfileRequest, { getState, rejectWithValue }) => {
     try {
       const state = getState() as RootState
-      const { token, deviceId, userId } = state.auth
+      const { token, deviceId } = state.auth
 
       if (!token || !deviceId) {
         return rejectWithValue('Token atau Device ID tidak ditemukan')
       }
 
-      const response = await fetch(
-        `${API_ENDPOINTS.PROFILE.UPDATE}/${userId}`,
-        {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            vtoken: token,
-            device_id: deviceId,
-          },
-          body: JSON.stringify(profileData),
-        }
-      )
+      const response = await fetch(`${API_ENDPOINTS.PROFILE.UPDATE}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          vtoken: token,
+          device_id: deviceId,
+        },
+        body: JSON.stringify(profileData),
+      })
 
       if (!response.ok) {
         const error = await response.json()
@@ -140,6 +138,16 @@ const profileSlice = createSlice({
         state.loading = false
         state.error = action.payload as string
       })
+
+    builder.addCase(logoutUser.fulfilled, state => {
+      state.profile = null
+      state.error = null
+    })
+
+    builder.addCase(logout, state => {
+      state.profile = null
+      state.error = null
+    })
   },
 })
 

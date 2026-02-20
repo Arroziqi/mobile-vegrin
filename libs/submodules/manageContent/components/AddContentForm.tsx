@@ -1,54 +1,41 @@
 import Flex from '@/components/Flex'
 import { MaterialIcons } from '@expo/vector-icons'
 import { Image } from 'expo-image'
-import * as ImagePicker from 'expo-image-picker'
-import { useState } from 'react'
 import { Text, TextInput, TouchableOpacity, View } from 'react-native'
 import styles from '../styles/ManageContentScreen.style'
+import {
+  EducationDetail,
+  useContentForm,
+} from '@/libs/submodules/manageContent/hooks/useContentForm'
+import { QueryObserverResult, RefetchOptions } from '@tanstack/react-query'
+import { NewsData } from '@/libs/hooks/educations/useGetEducationList'
 
 interface AddContentFormProps {
   onClose: () => void
-  onSubmit: (data: {
-    title: string
-    source: string
-    url: string
-    image: string | null
-  }) => void
+  itemToEdit?: EducationDetail
+  refetchEducationList: (
+    options?: RefetchOptions | undefined
+  ) => Promise<QueryObserverResult<NewsData[], Error>>
 }
 
 export default function AddContentForm({
   onClose,
-  onSubmit,
+  itemToEdit,
+  refetchEducationList,
 }: AddContentFormProps) {
-  const [title, setTitle] = useState<string>('')
-  const [source, setSource] = useState<string>('')
-  const [url, setUrl] = useState<string>('')
-  const [image, setImage] = useState<string | null>(null)
-
-  const pickImage = async () => {
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ['images'],
-      allowsEditing: true,
-      aspect: [16, 9],
-      quality: 1,
-    })
-
-    if (!result.canceled) {
-      setImage(result.assets[0].uri)
-    }
-  }
-
-  const handleSubmit = () => {
-    const payload = { title, source, url, image }
-    console.log('Form Data:', payload)
-    onSubmit(payload)
-    // Reset form
-    setTitle('')
-    setSource('')
-    setUrl('')
-    setImage(null)
-    onClose()
-  }
+  const {
+    title,
+    setTitle,
+    source,
+    setSource,
+    url,
+    setUrl,
+    image,
+    handlePickImage,
+    submit,
+    loading,
+    isEditMode,
+  } = useContentForm(onClose, refetchEducationList, itemToEdit)
 
   return (
     <View style={styles.cardWrapper}>
@@ -59,17 +46,21 @@ export default function AddContentForm({
         gap={10}
       >
         <MaterialIcons name="add-circle" size={24} color="#032746" />
-        <Text style={[styles.listHeaderText, { flex: 1, width: '100%' }]}>
-          Konten Baru
+        <Text style={[styles.listHeaderText, { flex: 1 }]}>
+          {isEditMode ? 'Edit Konten' : 'Konten Baru'}
         </Text>
         <TouchableOpacity onPress={onClose}>
           <MaterialIcons name="close" size={24} color="#032746" />
         </TouchableOpacity>
       </Flex>
+
       <Flex direction="column" style={styles.itemContainer} gap={15}>
-        {/* Field: Upload Gambar */}
         <Text style={styles.label}>Gambar Berita</Text>
-        <TouchableOpacity style={styles.uploadPlaceholder} onPress={pickImage}>
+
+        <TouchableOpacity
+          style={styles.uploadPlaceholder}
+          onPress={handlePickImage}
+        >
           {image ? (
             <Image source={{ uri: image }} style={styles.previewImage} />
           ) : (
@@ -79,47 +70,54 @@ export default function AddContentForm({
             </Flex>
           )}
         </TouchableOpacity>
-        {/* Field: Judul Berita */}
+
         <View style={styles.inputGroup}>
           <Text style={styles.label}>Judul Berita</Text>
           <TextInput
             style={styles.input}
-            placeholder="Masukkan judul berita..."
             value={title}
             onChangeText={setTitle}
+            placeholder="Masukkan judul berita..."
             placeholderTextColor="#9CA3AF"
           />
         </View>
 
-        {/* Field: Sumber Berita */}
         <View style={styles.inputGroup}>
           <Text style={styles.label}>Sumber Berita</Text>
           <TextInput
             style={styles.input}
-            placeholder="Contoh: detikProperti, Kompas"
             value={source}
             onChangeText={setSource}
+            placeholder="Contoh: Kompas"
             placeholderTextColor="#9CA3AF"
           />
         </View>
 
-        {/* Field: Link External */}
         <View style={styles.inputGroup}>
-          <Text style={styles.label}>Link External (URL)</Text>
+          <Text style={styles.label}>Link External</Text>
           <TextInput
             style={styles.input}
-            placeholder="https://example.com"
             value={url}
             onChangeText={setUrl}
+            placeholder="https://example.com"
             keyboardType="url"
             autoCapitalize="none"
             placeholderTextColor="#9CA3AF"
           />
         </View>
 
-        {/* Submit Button */}
-        <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
-          <Text style={styles.submitButtonText}>Simpan Konten</Text>
+        <TouchableOpacity
+          style={[styles.submitButton, { opacity: loading ? 0.6 : 1 }]}
+          onPress={submit}
+          disabled={loading}
+        >
+          <Text style={styles.submitButtonText}>
+            {loading
+              ? 'Menyimpan...'
+              : isEditMode
+                ? 'Update Konten'
+                : 'Simpan Konten'}
+          </Text>
         </TouchableOpacity>
       </Flex>
     </View>
