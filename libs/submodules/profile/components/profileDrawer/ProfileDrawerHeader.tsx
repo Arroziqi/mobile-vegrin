@@ -27,6 +27,8 @@ const styles = StyleSheet.create({
     height: HEADER_HEIGHT,
     alignItems: 'center',
     justifyContent: 'center',
+    paddingTop: 40,
+    paddingBottom: 20,
   },
   avatar: {
     width: 100,

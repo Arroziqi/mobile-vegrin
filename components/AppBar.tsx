@@ -1,7 +1,7 @@
 import { customizeColors } from '@/libs/core/config/theme/color'
 import { MaterialIcons } from '@expo/vector-icons'
 import { useNavigation } from 'expo-router'
-import { StyleSheet, Text, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import Flex from './Flex'
 
 interface AppBarProps {
@@ -22,28 +22,35 @@ const AppBar = ({ title, variant }: AppBarProps) => {
   }
 
   return (
-    <Flex
-      direction="row"
-      justify="center"
-      align="center"
+    <View
       style={{
-        padding: 16,
-        width: '100%',
-        position: 'relative',
+        paddingTop: 40,
         backgroundColor: variant === 'reverse' ? 'transparent' : 'white',
+        width: '100%',
       }}
     >
-      <TouchableOpacity
-        onPress={() => navigation.goBack()}
-        style={[
-          styles.backButton,
-          { position: 'absolute', left: 20, backgroundColor: bgIcon },
-        ]}
+      <Flex
+        direction="row"
+        justify="center"
+        align="center"
+        style={{
+          padding: 16,
+          width: '100%',
+          position: 'relative',
+        }}
       >
-        <MaterialIcons name="arrow-back" size={24} color={iconColor} />
-      </TouchableOpacity>
-      <Text style={[styles.h1, { color: textColor }]}>{title}</Text>
-    </Flex>
+        <TouchableOpacity
+          onPress={() => navigation.goBack()}
+          style={[
+            styles.backButton,
+            { position: 'absolute', left: 20, backgroundColor: bgIcon },
+          ]}
+        >
+          <MaterialIcons name="arrow-back" size={24} color={iconColor} />
+        </TouchableOpacity>
+        <Text style={[styles.h1, { color: textColor }]}>{title}</Text>
+      </Flex>
+    </View>
   )
 }
 

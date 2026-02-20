@@ -65,7 +65,7 @@ export default function ManageContentScreen() {
 
   return (
     <Container style={styles.container}>
-      <AppBar variant="default" title="Admin - Kelola Konten Berita" />
+      <AppBar variant="default" title="Kelola Konten Berita" />
       <View style={styles.topActionContainer}>
         <TouchableOpacity
           style={styles.addButton}

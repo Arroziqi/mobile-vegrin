@@ -1,4 +1,3 @@
-import { SafeAreaView } from 'react-native-safe-area-context'
 import {
   ImageBackground,
   ImageBackgroundProps,
@@ -26,9 +25,9 @@ const Container = ({
       {/* Overlay biar text kebaca */}
       <View style={styles.overlay} />
 
-      <SafeAreaView style={[styles.safeArea, props.style]} {...props}>
+      <View style={[styles.safeArea, props.style]} {...props}>
         {children}
-      </SafeAreaView>
+      </View>
     </ImageBackground>
   )
 }

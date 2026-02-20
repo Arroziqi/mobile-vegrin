@@ -92,6 +92,7 @@ const styles = StyleSheet.create({
   },
   gradient: {
     flex: 1,
+    paddingBottom: 50,
   },
   listContainer: {
     padding: 20,

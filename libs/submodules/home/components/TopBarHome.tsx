@@ -69,7 +69,8 @@ const styles = StyleSheet.create({
   linearGradient: {
     width: '100%',
     paddingHorizontal: 16,
-    paddingVertical: 21,
+    paddingTop: 40,
+    paddingBottom: 21,
   },
   labelNotification: {
     fontSize: 10,
