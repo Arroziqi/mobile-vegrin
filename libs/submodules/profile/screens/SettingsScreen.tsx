@@ -4,45 +4,47 @@ import ProfileTopBar from '@/libs/submodules/profile/components/topbar/ProfileTo
 import Container from '@/components/container/Container'
 import MenuItemCard from '@/libs/submodules/profile/components/MenuItemCard'
 import { FontAwesome6, Ionicons } from '@expo/vector-icons'
+import useSettings from '../hooks/useSettings'
 
 function SettingsScreen() {
+  const {
+    locationStatus,
+    cameraStatus,
+    requestLocationPermission,
+    requestCameraPermission,
+    clearCache,
+  } = useSettings()
+
+  const renderNote = (status: string) => (
+    <Text
+      style={{
+        fontSize: 12,
+        color: status === 'granted' ? '#34C759' : '#FF3B30',
+      }}
+    >
+      {status === 'granted' ? 'Aktif' : 'Belum lengkap'}
+    </Text>
+  )
+
   return (
     <Container>
       <View style={styles.container}>
-        <ProfileTopBar title={'Pengaturan Aplikasi'} />
+        <ProfileTopBar title="Pengaturan Aplikasi" />
         <ScrollView style={styles.content}>
           <MenuItemCard
             title="Akses Lokasi"
             description="Untuk Akurasi Perkiraan Cuaca"
             icon={<Ionicons name="location-outline" size={36} color="white" />}
-            note={
-              <Text
-                style={{
-                  fontSize: 12,
-                  color: '#FF3B30',
-                }}
-              >
-                Belum lengkap
-              </Text>
-            }
-            onPress={() => {}}
+            note={renderNote(locationStatus)}
+            onPress={requestLocationPermission}
           />
 
           <MenuItemCard
-            title="Akses Kamera "
+            title="Akses Kamera"
             description="Untuk Bisa Gunain Fitur AI Kami"
             icon={<Ionicons name="camera-outline" size={36} color="white" />}
-            note={
-              <Text
-                style={{
-                  fontSize: 12,
-                  color: '#FF3B30',
-                }}
-              >
-                Belum lengkap
-              </Text>
-            }
-            onPress={() => {}}
+            note={renderNote(cameraStatus)}
+            onPress={requestCameraPermission}
           />
 
           <MenuItemCard
@@ -50,16 +52,9 @@ function SettingsScreen() {
             description="Solusi Cepat Untuk Atasi Masalah Aplikasi"
             icon={<FontAwesome6 name="trash-can" size={34} color="white" />}
             note={
-              <Text
-                style={{
-                  fontSize: 12,
-                  color: '#FF3B30',
-                }}
-              >
-                Belum lengkap
-              </Text>
+              <Text style={{ fontSize: 12, color: '#8E8E93' }}>Opsional</Text>
             }
-            onPress={() => {}}
+            onPress={clearCache}
           />
         </ScrollView>
       </View>

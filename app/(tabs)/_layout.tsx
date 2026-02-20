@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    height: 84,
+    height: 'auto',
     backgroundColor: '#EEF5F1',
     borderTopLeftRadius: 14.67,
     borderTopRightRadius: 14.67,

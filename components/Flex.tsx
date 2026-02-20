@@ -1,6 +1,12 @@
 // components/Flex.tsx
 import React from 'react'
-import { View, StyleSheet, ViewStyle, StyleProp } from 'react-native'
+import {
+  LayoutChangeEvent,
+  StyleProp,
+  StyleSheet,
+  View,
+  ViewStyle,
+} from 'react-native'
 
 type FlexDirection = 'row' | 'column'
 type AlignItems = 'flex-start' | 'flex-end' | 'center' | 'stretch' | 'baseline'
@@ -13,7 +19,7 @@ type JustifyContent =
   | 'space-around'
   | 'space-evenly'
 
-interface FlexProps {
+export interface FlexProps {
   children: React.ReactNode
   direction?: FlexDirection
   align?: AlignItems
@@ -22,6 +28,7 @@ interface FlexProps {
   gap?: number
   flex?: number
   style?: StyleProp<ViewStyle>
+  onLayout?: (event: LayoutChangeEvent) => void
 }
 
 export default function Flex({
@@ -33,9 +40,11 @@ export default function Flex({
   gap = 0,
   flex,
   style,
+  onLayout,
 }: FlexProps) {
   return (
     <View
+      onLayout={onLayout}
       style={[
         styles.base,
         {

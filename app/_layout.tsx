@@ -3,12 +3,16 @@ import {
   DefaultTheme,
   ThemeProvider,
 } from '@react-navigation/native'
-import { Stack } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
 import 'react-native-reanimated'
 
 import { useColorScheme } from '@/hooks/use-color-scheme'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
+import { Provider } from 'react-redux'
+import { persistor, store } from '@/libs/store'
+import { RootNavigator } from '@/components/RootNavigator'
+import { PersistGate } from 'redux-persist/integration/react'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 export const unstable_settings = {
   anchor: '(tabs)',
@@ -16,26 +20,22 @@ export const unstable_settings = {
 
 export default function RootLayout() {
   const colorScheme = useColorScheme()
+  const queryClient = new QueryClient()
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-        <Stack screenOptions={{ headerShown: false }}>
-          {/* MAIN APP */}
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-
-          {/* AUTH FLOW */}
-          <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-
-          {/* MODAL */}
-          <Stack.Screen
-            name="modal"
-            options={{ presentation: 'modal', title: 'Modal' }}
-          />
-        </Stack>
-
-        <StatusBar style="auto" />
-      </ThemeProvider>
-    </GestureHandlerRootView>
+    <QueryClientProvider client={queryClient}>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <ThemeProvider
+          value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
+        >
+          <Provider store={store}>
+            <PersistGate loading={null} persistor={persistor}>
+              <RootNavigator />
+              <StatusBar style="auto" />
+            </PersistGate>
+          </Provider>
+        </ThemeProvider>
+      </GestureHandlerRootView>
+    </QueryClientProvider>
   )
 }

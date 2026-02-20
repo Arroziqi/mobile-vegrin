@@ -6,18 +6,26 @@ import InputWithLabel from '@/components/input/InputWithLabel/InputWithLabel'
 import ProfileTopBar from '@/libs/submodules/profile/components/topbar/ProfileTopBar'
 import ProfileBottomBar from '@/libs/submodules/profile/components/bottombar/ProfileBottomBar'
 import DisplayPassword from '@/libs/submodules/profile/components/DisplayPassword'
-import { useRouter } from 'expo-router'
+import { useEditProfileForm } from '@/libs/submodules/profile/hooks/useEditProfileForm'
 
 function EditProfileScreen() {
-  const [name, setName] = React.useState('')
-  const [noHp, setNoHp] = React.useState('')
-  const [birthDate, setBirthDate] = React.useState('')
-  const router = useRouter()
+  const {
+    name,
+    noHp,
+    birthDate,
+    setName,
+    setNoHp,
+    setBirthDate,
+    handleUpdate,
+    loading,
+    goBack,
+  } = useEditProfileForm()
 
   return (
     <Container>
-      <ProfileTopBar title={'Edit Profile'} />
-      <Flex flex={1} direction={'column'} gap={21} style={styles.container}>
+      <ProfileTopBar title="Edit Profile" />
+
+      <Flex flex={1} direction="column" gap={21} style={styles.container}>
         <InputWithLabel label="Nama" value={name} onChange={setName} />
         <InputWithLabel label="NO HP" value={noHp} onChange={setNoHp} />
 
@@ -29,14 +37,14 @@ function EditProfileScreen() {
           placeholder="Pilih tanggal"
         />
 
-        <DisplayPassword
-          label="Password"
-          onChangePassword={() => {
-            router.push('/forgot-password')
-          }}
-        />
+        <DisplayPassword label="Password" onChangePassword={() => {}} />
       </Flex>
-      <ProfileBottomBar />
+
+      <ProfileBottomBar
+        onCancel={goBack}
+        onUpdate={handleUpdate}
+        loading={loading}
+      />
     </Container>
   )
 }

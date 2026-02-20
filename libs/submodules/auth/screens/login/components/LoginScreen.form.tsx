@@ -5,13 +5,21 @@ import { AntDesign, Entypo } from '@expo/vector-icons'
 import { customizeColors } from '@/libs/core/config/theme/color'
 import { Link } from 'expo-router'
 import ButtonCustome from '@/components/buttons/button-custome/ButtonCustome'
+import { useLoginForm } from '@/libs/submodules/auth/screens/login/useLoginForm'
 
 const LoginScreenForm = () => {
+  const { email, password, loading, setEmail, setPassword, handleLogin } =
+    useLoginForm()
+
   return (
     <>
       <View style={loginScreenStyles.form}>
         <BaseTextInput
           placeholder="Email"
+          value={email}
+          onChangeText={setEmail}
+          autoCapitalize="none"
+          keyboardType="email-address"
           leftIcon={
             <Entypo name="mail" size={18} color={customizeColors.blue1} />
           }
@@ -20,12 +28,14 @@ const LoginScreenForm = () => {
         <BaseTextInput
           placeholder="Password"
           secureTextEntry
+          value={password}
+          onChangeText={setPassword}
           leftIcon={
             <AntDesign name="lock" size={18} color={customizeColors.blue1} />
           }
         />
       </View>
-      {/* Forgot password */}
+
       <Link
         style={[
           loginScreenStyles.forgotPasswordLinkText,
@@ -35,7 +45,13 @@ const LoginScreenForm = () => {
       >
         Lupa Password?
       </Link>
-      <ButtonCustome title={'Masuk'} variant={'primary'} />
+
+      <ButtonCustome
+        title="Masuk"
+        variant="primary"
+        onPress={handleLogin}
+        loading={loading}
+      />
     </>
   )
 }

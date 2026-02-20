@@ -23,6 +23,7 @@ export default ProfileTopBar
 const styles = StyleSheet.create({
   container: {
     width: '100%',
+    paddingTop: 40,
     padding: 21,
     backgroundColor: '#B2FFB7',
   },

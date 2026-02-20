@@ -28,3 +28,20 @@ export const getTimeOnly = (dateString: string): string => {
     return ''
   }
 }
+
+// khusus untuk tampilan input date
+export const formatDateOnlyFromISO = (isoString: string) => {
+  if (!isoString) return ''
+
+  try {
+    const date = new Date(isoString)
+
+    if (isNaN(date.getTime())) return ''
+
+    return format(date, 'yyyy-MM-dd', { locale: id })
+    // ganti ke 'dd MMMM yyyy' kalau mau lebih manusiawi
+  } catch (error) {
+    console.error('Date Error:', error)
+    return ''
+  }
+}
