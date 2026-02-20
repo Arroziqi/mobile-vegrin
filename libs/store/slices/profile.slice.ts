@@ -42,6 +42,10 @@ export const getUserProfile = createAsyncThunk(
         },
       })
 
+      if (response.status === 401) {
+        return rejectWithValue('UNAUTHORIZED')
+      }
+
       if (!response.ok) {
         const error = await response.json()
         return rejectWithValue(error.message || 'Gagal mengambil profil')

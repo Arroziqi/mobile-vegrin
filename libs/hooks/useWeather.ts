@@ -8,6 +8,7 @@ import {
   WeatherTabKey,
 } from '@/libs/common/utils/weatherTransform'
 import { AppState } from 'react-native'
+import { endDate, startDate } from '@/libs/helper/getStartAndEndDateWeather'
 
 type WeatherState = Record<WeatherTabKey, WeatherItemProps[]>
 
@@ -37,7 +38,14 @@ export const useWeather = (lat: number, lon: number): UseWeatherReturn => {
       setLoading(true)
       setError(null)
 
-      const res = await fetchWeather(lat, lon, token, deviceId)
+      const res = await fetchWeather(
+        lat,
+        lon,
+        token,
+        deviceId,
+        startDate,
+        endDate
+      )
 
       const transformed = transformWeatherData(res.data.weather)
 

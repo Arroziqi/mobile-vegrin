@@ -2,8 +2,14 @@
 
 import { WeatherItemProps } from '@/libs/submodules/home/components/WeatherItem'
 import { WeatherApiItem } from '@/libs/types/weather.type'
+import { PillButtonTabItem } from '@/components/tabs/pill/PillButtonTabs.type'
 
 export type WeatherTabKey = 'yesterday' | 'today' | 'tomorrow'
+export const weatherTabs: PillButtonTabItem<WeatherTabKey>[] = [
+  { key: 'yesterday', label: 'Kemarin' },
+  { key: 'today', label: 'Hari Ini' },
+  { key: 'tomorrow', label: 'Besok' },
+]
 
 export const transformWeatherData = (
   items: WeatherApiItem[]
@@ -28,10 +34,6 @@ export const transformWeatherData = (
       },
       degree: `${Math.round(item.temperature)}°`,
     }
-
-    console.log('Today:', result.today.length)
-    console.log('Yesterday:', result.yesterday.length)
-    console.log('Tomorrow:', result.tomorrow.length)
 
     if (date === todayDate) {
       result.today.push(formatted)

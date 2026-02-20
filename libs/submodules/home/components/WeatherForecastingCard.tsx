@@ -2,9 +2,11 @@ import WeatherItem, {
   WeatherItemProps,
 } from '@/libs/submodules/home/components/WeatherItem'
 import PillButtonTabs from '@/components/tabs/pill/PillButtonTabs'
-import { weatherTabsDummy } from '@/libs/dummyData/weatherForecasting.dummy'
 import { useWeather } from '@/libs/hooks'
-import { WeatherTabKey } from '@/libs/common/utils/weatherTransform'
+import {
+  WeatherTabKey,
+  weatherTabs,
+} from '@/libs/common/utils/weatherTransform'
 
 import {
   AppState,
@@ -22,6 +24,7 @@ const { width } = Dimensions.get('window')
 const ITEM_VISIBLE = 5
 const ITEM_WIDTH = width / ITEM_VISIBLE
 
+// TODO: ini nanti sesuaikan dengan data user
 const LAT = -6.228161576699955
 const LON = 106.77819428123819
 
@@ -71,7 +74,7 @@ const WeatherForecastingCard = () => {
   return (
     <View style={styles.container}>
       <PillButtonTabs
-        items={weatherTabsDummy}
+        items={weatherTabs}
         activeKey={activeTab}
         onChange={setActiveTab}
       />

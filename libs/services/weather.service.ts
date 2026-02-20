@@ -7,18 +7,19 @@ export const fetchWeather = async (
   lat: number,
   lon: number,
   token: string,
-  deviceId: string
+  deviceId: string,
+  startDate?: string,
+  endDate?: string
 ): Promise<WeatherApiResponse> => {
-  const response = await fetch(
-    `${API_ENDPOINTS.WEATHER.GET}?lat=${lat}&lon=${lon}`,
-    {
-      method: 'GET',
-      headers: {
-        vtoken: token,
-        device_id: deviceId,
-      },
-    }
-  )
+  const url = `${API_ENDPOINTS.WEATHER.GET}?lat=${lat}&lon=${lon}&start_date=${startDate}&end_date=${endDate}`
+
+  const response = await fetch(url, {
+    method: 'GET',
+    headers: {
+      vtoken: token,
+      device_id: deviceId,
+    },
+  })
 
   if (!response.ok) {
     throw new Error('Failed to fetch weather')

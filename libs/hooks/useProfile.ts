@@ -6,6 +6,7 @@ import {
   updateUserProfile,
 } from '@/libs/store/slices/profile.slice'
 import { UpdateProfileRequest } from '@/libs/store/types/service.type'
+import { logout } from '@/libs/store/slices/auth.slice'
 
 export const useProfile = (autoFetch = false) => {
   const dispatch = useAppDispatch()
@@ -21,6 +22,12 @@ export const useProfile = (autoFetch = false) => {
       return { success: true, data: result }
     } catch (err) {
       const errorMessage = err as string
+
+      console.log(errorMessage)
+
+      // FORCE LOGOUT
+      dispatch(logout())
+
       setLocalError(errorMessage)
       return { success: false, error: errorMessage }
     }
