@@ -82,13 +82,14 @@ export default ActionSection
 const styles = StyleSheet.create({
   container: {
     padding: 20,
+    paddingBottom: 40,
     shadowColor: '#000000',
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.25,
     shadowRadius: 12,
     elevation: 25,
     width: '100%',
-    height: 130,
+    height: 'auto',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-around',

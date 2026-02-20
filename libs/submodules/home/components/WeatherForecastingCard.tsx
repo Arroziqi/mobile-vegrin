@@ -14,10 +14,10 @@ import {
   FlatList,
   StyleSheet,
   Text,
-  TouchableOpacity,
   View,
 } from 'react-native'
 import { useEffect, useRef, useState } from 'react'
+import EmptyState from '@/libs/submodules/manageContent/components/EmptyState'
 
 const { width } = Dimensions.get('window')
 
@@ -82,12 +82,11 @@ const WeatherForecastingCard = () => {
       {loading ? (
         <Text style={styles.infoText}>Loading weather...</Text>
       ) : weatherData.length === 0 ? (
-        <View style={styles.emptyContainer}>
-          <Text style={styles.infoText}>Data tidak tersedia</Text>
-          <TouchableOpacity style={styles.refreshBtn} onPress={refetch}>
-            <Text style={styles.refreshText}>Refresh</Text>
-          </TouchableOpacity>
-        </View>
+        <EmptyState
+          onPress={refetch}
+          hideIcon={true}
+          message={'Data tidak tersedia'}
+        />
       ) : (
         <FlatList
           ref={flatListRef}

@@ -50,8 +50,9 @@ const styles = StyleSheet.create({
   container: {
     width: '100%',
     backgroundColor: '#ECFCF4',
-    paddingVertical: 11,
+    paddingTop: 11,
     paddingHorizontal: 20,
+    paddingBottom: 50,
   },
   updateButton: {
     backgroundColor: customizeColors.brandColor,

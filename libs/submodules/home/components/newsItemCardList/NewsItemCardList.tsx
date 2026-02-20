@@ -4,6 +4,7 @@ import { useGetEducationList } from '@/libs/hooks/educations/useGetEducationList
 import { Href, useRouter } from 'expo-router'
 import { MaterialIcons } from '@expo/vector-icons'
 import { DEFAULT_NEWS_IMAGE } from '@/libs/common/const/imageDefault'
+import EmptyState from '@/libs/submodules/manageContent/components/EmptyState'
 
 const NewsItemCardList = () => {
   const { data = [], isLoading, error, refetch } = useGetEducationList()
@@ -51,27 +52,7 @@ const NewsItemCardList = () => {
 
   // ✅ Empty State
   if (!isLoading && data.length === 0) {
-    return (
-      <View style={{ paddingVertical: 40, alignItems: 'center' }}>
-        <MaterialIcons name="inbox" size={48} color="#9CA3AF" />
-        <Text style={{ marginTop: 10, color: '#6B7280' }}>
-          Belum ada berita tersedia
-        </Text>
-
-        <TouchableOpacity
-          onPress={() => refetch}
-          style={{
-            marginTop: 14,
-            backgroundColor: '#032746',
-            paddingHorizontal: 16,
-            paddingVertical: 8,
-            borderRadius: 6,
-          }}
-        >
-          <Text style={{ color: 'white' }}>Refresh</Text>
-        </TouchableOpacity>
-      </View>
-    )
+    return <EmptyState onPress={refetch} />
   }
 
   // ✅ Normal State

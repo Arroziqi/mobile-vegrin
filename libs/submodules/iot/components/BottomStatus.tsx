@@ -60,7 +60,8 @@ export default BottomStatus
 
 const styles = StyleSheet.create({
   container: {
-    paddingVertical: 24,
+    paddingTop: 24,
+    paddingBottom: 50,
   },
   iconWrapper: {
     borderRadius: 24,

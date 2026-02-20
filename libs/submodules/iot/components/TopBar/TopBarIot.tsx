@@ -76,7 +76,8 @@ export default TopBarIot
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingTop: 40,
+    paddingBottom: 12,
     width: '100%',
   },
   text: {

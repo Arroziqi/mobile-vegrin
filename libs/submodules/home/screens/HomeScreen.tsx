@@ -56,7 +56,7 @@ const HomeScreen = () => {
 
             <View style={{ width: '100%' }}>
               <NewsItemCardList />
-              <View style={{ height: 40, width: 40 }} />
+              <View style={{ height: 90, width: 50 }} />
             </View>
           </Flex>
         </ScrollView>
