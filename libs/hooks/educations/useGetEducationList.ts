@@ -15,7 +15,7 @@ export interface NewsData {
 export const useGetEducationList = () => {
   const { token, deviceId } = useAuth()
 
-  return useQuery<NewsData[]>({
+  return useQuery<NewsData[], Error>({
     queryKey: ['get-education-list', token, deviceId],
     enabled: !!token && !!deviceId,
     staleTime: 1000 * 60 * 5, // 5 menit tidak refetch
