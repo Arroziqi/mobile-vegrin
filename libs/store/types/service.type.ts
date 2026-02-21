@@ -145,7 +145,7 @@ export interface PlantAnalyzeRequest {
 
 export interface PlantAnalyzeResponse {
   message: string
-  log_data: PlantLogData
+  plant: PlantLogData
 }
 
 export interface PlantLogData {
@@ -154,7 +154,7 @@ export interface PlantLogData {
   plant_name: string
   plant_image: string
   condition: string
-  diagnosis: string
+  diagnosis: string | null
   detail: {
     is_plant: boolean
     symptoms: string[]

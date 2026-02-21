@@ -56,7 +56,7 @@ export const analyzePlant = createAsyncThunk(
       }
 
       const data: ApiResponse<PlantAnalyzeResponse> = await response.json()
-      return data.data.log_data
+      return data.data.plant
     } catch (error) {
       return rejectWithValue((error as Error).message)
     }
