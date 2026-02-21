@@ -15,11 +15,11 @@ export const usePlant = () => {
   )
   const [localError, setLocalError] = useState<string | null>(null)
 
-  // Analyze plant dari file/blob
-  const analyze = async (imageFile: File | Blob) => {
+  // Analyze plant dari URI
+  const analyze = async (uri: string) => {
     try {
       setLocalError(null)
-      const result = await dispatch(analyzePlant(imageFile)).unwrap()
+      const result = await dispatch(analyzePlant(uri)).unwrap()
       return { success: true, data: result }
     } catch (err) {
       const errorMessage = err as string
@@ -42,8 +42,6 @@ export const usePlant = () => {
       // Pick image
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-        aspect: [4, 3],
         quality: 0.8,
       })
 
@@ -51,13 +49,11 @@ export const usePlant = () => {
         return { success: false, error: 'Dibatalkan oleh user' }
       }
 
-      // Convert to blob
+      // Pass URI langsung — React Native tidak butuh convert ke Blob
       const uri = result.assets[0].uri
-      const response = await fetch(uri)
-      const blob = await response.blob()
 
       // Analyze
-      const analyzeResult = await dispatch(analyzePlant(blob)).unwrap()
+      const analyzeResult = await dispatch(analyzePlant(uri)).unwrap()
       return { success: true, data: analyzeResult }
     } catch (err) {
       const errorMessage = (err as Error).message
@@ -79,8 +75,6 @@ export const usePlant = () => {
 
       // Take photo
       const result = await ImagePicker.launchCameraAsync({
-        allowsEditing: true,
-        aspect: [4, 3],
         quality: 0.8,
       })
 
@@ -88,13 +82,11 @@ export const usePlant = () => {
         return { success: false, error: 'Dibatalkan oleh user' }
       }
 
-      // Convert to blob
+      // Pass URI langsung — React Native tidak butuh convert ke Blob
       const uri = result.assets[0].uri
-      const response = await fetch(uri)
-      const blob = await response.blob()
 
       // Analyze
-      const analyzeResult = await dispatch(analyzePlant(blob)).unwrap()
+      const analyzeResult = await dispatch(analyzePlant(uri)).unwrap()
       return { success: true, data: analyzeResult }
     } catch (err) {
       const errorMessage = (err as Error).message

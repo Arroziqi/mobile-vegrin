@@ -168,7 +168,7 @@ export interface PlantLogData {
 
 export interface PlantLogsResponse {
   message: string
-  log_data: PlantLogData
+  plant: PlantLogData
 }
 
 export interface PlantDetailResponse {
