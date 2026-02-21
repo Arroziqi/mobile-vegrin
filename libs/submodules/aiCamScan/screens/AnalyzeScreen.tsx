@@ -2,15 +2,17 @@ import AppBar from '@/components/AppBar'
 import Container from '@/components/container/Container'
 import Flex from '@/components/Flex'
 import StatusTag from '@/components/text/StatusTag'
-import React from 'react'
+import { usePlant } from '@/libs/hooks/usePlants'
 import { ScrollView, StyleSheet } from 'react-native'
 import AnalyzeAICard from '../components/AnalyzeAICard'
 import ImageCard from '../components/ImageCard'
 import NoteCard from '../components/NoteCard'
-import ResultCard from '../components/ResultCard'
+import ResultCard, { PlantCondition } from '../components/ResultCard'
 import ScanButton from '../components/ScanButton'
 
 const AnalyzeScreen = () => {
+  const { currentLog } = usePlant()
+  if (!currentLog) return null
   return (
     <Container style={styles.container}>
       <AppBar variant="default" title="Hasil Scan" />
@@ -22,9 +24,19 @@ const AnalyzeScreen = () => {
         <Flex direction="row" justify="center">
           <StatusTag label="Analisis Selesai" />
         </Flex>
-        <ImageCard />
-        <ResultCard />
-        <AnalyzeAICard />
+        <ImageCard
+          imagePath={currentLog.plant_image}
+          confidence={currentLog.detail.confidence}
+        />
+        <ResultCard
+          plant_name={currentLog.plant_name}
+          condition={currentLog.condition as PlantCondition}
+          diagnose={currentLog.diagnosis}
+        />
+        <AnalyzeAICard
+          symptoms={currentLog.detail.symptoms}
+          treatment={currentLog.detail.treatment}
+        />
         <NoteCard />
       </ScrollView>
 

@@ -1,17 +1,68 @@
 import Flex from '@/components/Flex'
 import { customizeColors } from '@/libs/core/config/theme/color'
 import { MaterialIcons } from '@expo/vector-icons'
+import { ComponentProps } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 
 const resultCardData = {
   plantName: 'Kangkung',
   scientificName: 'Ipomoea aquatica',
-  statusTitle: 'Kondisi Tanaman',
-  statusDescription: 'Dilihat dari visualnya, kondisi kangkung bagus',
-  iconName: 'eco',
 }
 
-const ResultCard = () => {
+type IconName = ComponentProps<typeof MaterialIcons>['name']
+
+export enum PlantCondition {
+  Baik = 'BAIK',
+  Cukup = 'CUKUP',
+  PerluPerhatian = 'PERLU_PERHATIAN',
+}
+
+interface ResultCardProps {
+  plant_name: string
+  condition: PlantCondition
+  diagnose: string | null
+}
+
+interface StatusConfigItem {
+  icon: IconName
+  iconColor: string
+  bgColor: string
+  borderColor: string
+  titleColor: string
+  descColor: string
+}
+
+const statusConfig: Record<PlantCondition, StatusConfigItem> = {
+  [PlantCondition.Baik]: {
+    icon: 'trending-up',
+    iconColor: customizeColors.green4 || '#10B981',
+    bgColor: '#ECFDF5',
+    borderColor: '#34D399',
+    titleColor: '#004F3B',
+    descColor: customizeColors.green4 || '#10B981',
+  },
+  [PlantCondition.Cukup]: {
+    icon: 'trending-flat',
+    iconColor: '#F59E0B',
+    bgColor: '#FFFBEB',
+    borderColor: '#FCD34D',
+    titleColor: '#78350F',
+    descColor: '#D97706',
+  },
+  [PlantCondition.PerluPerhatian]: {
+    icon: 'trending-down',
+    iconColor: '#EF4444',
+    bgColor: '#FEF2F2',
+    borderColor: '#F87171',
+    titleColor: '#7F1D1D',
+    descColor: '#DC2626',
+  },
+}
+
+const ResultCard = ({ plant_name, condition, diagnose }: ResultCardProps) => {
+  const currentStatus =
+    statusConfig[condition] ?? statusConfig[PlantCondition.Baik]
+
   return (
     <Flex direction="column" style={styles.container} gap={10}>
       <Flex
@@ -29,27 +80,42 @@ const ResultCard = () => {
           />
         </View>
         <Flex direction="column" align="flex-start">
-          <Text style={styles.plantName}>{resultCardData.plantName}</Text>
+          <Text style={styles.plantName}>{plant_name}</Text>
           <Text style={styles.scientificName}>
             {resultCardData.scientificName}
           </Text>
         </Flex>
       </Flex>
       <Flex
-        style={styles.statusContainer}
+        style={[
+          styles.statusContainer,
+          {
+            backgroundColor: currentStatus.bgColor,
+            borderLeftColor: currentStatus.borderColor,
+          },
+        ]}
         direction="row"
         gap={10}
         align="flex-start"
       >
         <MaterialIcons
-          name="trending-up"
+          name={currentStatus.icon}
           size={20}
-          color={customizeColors.green4}
+          color={currentStatus.iconColor}
         />
         <Flex direction="column" align="flex-start">
-          <Text style={styles.statusTitle}>{resultCardData.statusTitle}</Text>
-          <Text style={styles.statusDescription}>
-            {resultCardData.statusDescription}
+          <Text
+            style={[styles.statusTitle, { color: currentStatus.titleColor }]}
+          >
+            Kondisi Tanaman
+          </Text>
+          <Text
+            style={[
+              styles.statusDescription,
+              { color: currentStatus.descColor },
+            ]}
+          >
+            {diagnose || 'Tanaman sehat tanpa penyakit yang terdeteksi.'}
           </Text>
         </Flex>
       </Flex>
@@ -100,21 +166,17 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   statusContainer: {
-    backgroundColor: '#ECFDF5',
     padding: 10,
     borderRadius: 10,
     marginTop: 10,
     borderLeftWidth: 4,
-    borderLeftColor: '#34D399',
     width: '100%',
   },
   statusTitle: {
-    color: '#004F3B',
     fontSize: 14,
-    fontWeight: '400',
+    fontWeight: '600',
   },
   statusDescription: {
-    color: customizeColors.green4,
     fontSize: 12,
     fontWeight: '400',
   },
