@@ -95,9 +95,8 @@ export const getPlantLogs = createAsyncThunk(
       }
 
       const data: ApiResponse<PlantLogsResponse> = await response.json()
-      // API mengembalikan single log_data, tapi kita expect array
-      // Jadi wrap dalam array atau sesuaikan dengan response sebenarnya
-      return [data.data.plant]
+      // log_data sudah berupa array dari API
+      return data.data.log_data ?? []
     } catch (error) {
       return rejectWithValue((error as Error).message)
     }

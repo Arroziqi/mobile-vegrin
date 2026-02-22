@@ -125,7 +125,7 @@ export const usePlant = () => {
   const getLogsByCondition = useCallback(
     (condition: string) => {
       return logs.filter(
-        log => log.condition.toLowerCase() === condition.toLowerCase()
+        log => log?.condition?.toLowerCase() === condition.toLowerCase()
       )
     },
     [logs]

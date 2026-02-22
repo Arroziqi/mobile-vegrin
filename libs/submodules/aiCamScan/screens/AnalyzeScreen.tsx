@@ -1,7 +1,6 @@
 import AppBar from '@/components/AppBar'
 import Container from '@/components/container/Container'
 import Flex from '@/components/Flex'
-import StatusTag from '@/components/text/StatusTag'
 import { usePlant } from '@/libs/hooks/usePlants'
 import { ScrollView, StyleSheet } from 'react-native'
 import AnalyzeAICard from '../components/AnalyzeAICard'
@@ -21,9 +20,9 @@ const AnalyzeScreen = () => {
         contentContainerStyle={styles.listContainer}
         showsVerticalScrollIndicator={false}
       >
-        <Flex direction="row" justify="center">
-          <StatusTag label="Analisis Selesai" />
-        </Flex>
+        {/* <Flex direction="row" justify="center">
+          <StatusTag condition="Analisis Selesai" />
+        </Flex> */}
         <ImageCard
           imagePath={currentLog.plant_image}
           confidence={currentLog.detail.confidence}
