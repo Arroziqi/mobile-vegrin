@@ -1,29 +1,33 @@
 import { customizeColors } from '@/libs/core/config/theme/color'
-import { PlantCondition } from '@/libs/submodules/aiCamScan/components/ResultCard'
 import { MaterialIcons } from '@expo/vector-icons'
 import { StyleSheet, Text, View } from 'react-native'
+import {
+  getConditionDisplay,
+  normalizeCondition,
+  PlantCondition,
+} from '@/libs/common/utils/getPlantCondition'
 
 interface StatusTagProps {
   condition: PlantCondition
 }
 
 const conditionConfig = {
-  [PlantCondition.Baik]: {
-    label: 'Baik',
+  [PlantCondition.SEHAT]: {
+    label: 'Sehat',
     backgroundColor: customizeColors.lightGreen,
     textColor: customizeColors.green4,
     iconColor: customizeColors.green4,
     icon: 'check-circle',
   },
-  [PlantCondition.Cukup]: {
-    label: 'Cukup',
+  [PlantCondition.SAKIT]: {
+    label: 'Sakit',
     backgroundColor: '#FEF3C7', // kuning soft
     textColor: '#B45309',
     iconColor: '#B45309',
     icon: 'error-outline',
   },
-  [PlantCondition.PerluPerhatian]: {
-    label: 'Perlu Perhatian',
+  [PlantCondition.HAMA]: {
+    label: 'Hama',
     backgroundColor: '#FEE2E2', // merah soft
     textColor: '#DC2626',
     iconColor: '#DC2626',
@@ -32,7 +36,12 @@ const conditionConfig = {
 }
 
 const StatusTag = ({ condition }: StatusTagProps) => {
-  const config = conditionConfig[condition]
+  // Normalisasi condition ke enum
+  const normalizedCondition = normalizeCondition(condition)
+  const config = conditionConfig[normalizedCondition]
+
+  // Atau pakai display text dari utility function
+  const displayLabel = getConditionDisplay(condition)
 
   return (
     <View
@@ -44,7 +53,7 @@ const StatusTag = ({ condition }: StatusTagProps) => {
         color={config.iconColor}
       />
       <Text style={[styles.text, { color: config.textColor }]}>
-        {config.label}
+        {displayLabel}
       </Text>
     </View>
   )

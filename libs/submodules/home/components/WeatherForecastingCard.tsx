@@ -8,14 +8,7 @@ import {
   weatherTabs,
 } from '@/libs/common/utils/weatherTransform'
 
-import {
-  AppState,
-  Dimensions,
-  FlatList,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native'
+import { Dimensions, FlatList, StyleSheet, Text, View } from 'react-native'
 import { useEffect, useRef, useState } from 'react'
 import EmptyState from '@/libs/submodules/manageContent/components/EmptyState'
 
@@ -61,15 +54,15 @@ const WeatherForecastingCard = () => {
   }, [weatherData])
 
   // Refresh when app reopen
-  useEffect(() => {
-    const subscription = AppState.addEventListener('change', state => {
-      if (state === 'active') {
-        refetch()
-      }
-    })
-
-    return () => subscription.remove()
-  }, [refetch])
+  // useEffect(() => {
+  //   const subscription = AppState.addEventListener('change', state => {
+  //     if (state === 'active') {
+  //       refetch()
+  //     }
+  //   })
+  //
+  //   return () => subscription.remove()
+  // }, [refetch])
 
   return (
     <View style={styles.container}>
@@ -95,7 +88,7 @@ const WeatherForecastingCard = () => {
           scrollEnabled={weatherData.length > 5}
           showsHorizontalScrollIndicator={false}
           data={weatherData}
-          keyExtractor={item => item.time}
+          keyExtractor={(item, index) => item.time + '_' + index}
           getItemLayout={(_, index) => ({
             length: ITEM_WIDTH,
             offset: ITEM_WIDTH * index,

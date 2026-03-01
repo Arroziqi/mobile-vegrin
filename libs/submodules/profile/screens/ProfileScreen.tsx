@@ -1,16 +1,16 @@
-import React, { useRef, useState } from 'react'
-import Container from '@/components/container/Container'
-import { StyleSheet, Text, View } from 'react-native'
-import ProfileTopBar from '@/libs/submodules/profile/components/topbar/ProfileTopBar'
-import { customizeColors } from '@/libs/core/config/theme/color'
 import Avatar from '@/components/Avatar'
+import Container from '@/components/container/Container'
 import Flex from '@/components/Flex'
-import { Link } from 'expo-router'
-import ProfileInfoRow from '@/libs/submodules/profile/components/ProfileInfoRow'
-import { useImagePicker } from '@/hooks/useImagePicker'
-import BottomSheet from '@gorhom/bottom-sheet'
 import ImagePickerBottomSheet from '@/components/ImagePickerBottomSheet'
+import { useImagePicker } from '@/hooks/useImagePicker'
+import { customizeColors } from '@/libs/core/config/theme/color'
 import { useProfile } from '@/libs/hooks'
+import ProfileInfoRow from '@/libs/submodules/profile/components/ProfileInfoRow'
+import ProfileTopBar from '@/libs/submodules/profile/components/topbar/ProfileTopBar'
+import BottomSheet from '@gorhom/bottom-sheet'
+import { Link } from 'expo-router'
+import { useRef, useState } from 'react'
+import { StyleSheet, Text, View } from 'react-native'
 
 function ProfileScreen() {
   const { profile } = useProfile()
@@ -20,16 +20,26 @@ function ProfileScreen() {
     profile?.photo_profile ?? null
   )
 
+  const { updateProfilePhoto } = useProfile()
+
   const handleCamera = async () => {
     bottomSheetRef.current?.close()
     const uri = await pickFromCamera()
-    if (uri) setAvatar(uri)
+
+    if (uri) {
+      setAvatar(uri)
+      await updateProfilePhoto(uri)
+    }
   }
 
   const handleGallery = async () => {
     bottomSheetRef.current?.close()
     const uri = await pickFromGallery()
-    if (uri) setAvatar(uri)
+
+    if (uri) {
+      setAvatar(uri)
+      await updateProfilePhoto(uri)
+    }
   }
 
   return (

@@ -3,6 +3,7 @@ import { customizeColors } from '@/libs/core/config/theme/color'
 import { MaterialIcons } from '@expo/vector-icons'
 import { ComponentProps } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
+import { PlantCondition } from '@/libs/common/utils/getPlantCondition'
 
 const resultCardData = {
   plantName: 'Kangkung',
@@ -10,12 +11,6 @@ const resultCardData = {
 }
 
 type IconName = ComponentProps<typeof MaterialIcons>['name']
-
-export enum PlantCondition {
-  Baik = 'BAIK',
-  Cukup = 'CUKUP',
-  PerluPerhatian = 'PERLU_PERHATIAN',
-}
 
 interface ResultCardProps {
   plant_name: string
@@ -33,7 +28,7 @@ interface StatusConfigItem {
 }
 
 const statusConfig: Record<PlantCondition, StatusConfigItem> = {
-  [PlantCondition.Baik]: {
+  [PlantCondition.SEHAT]: {
     icon: 'trending-up',
     iconColor: customizeColors.green4 || '#10B981',
     bgColor: '#ECFDF5',
@@ -41,7 +36,7 @@ const statusConfig: Record<PlantCondition, StatusConfigItem> = {
     titleColor: '#004F3B',
     descColor: customizeColors.green4 || '#10B981',
   },
-  [PlantCondition.Cukup]: {
+  [PlantCondition.SAKIT]: {
     icon: 'trending-flat',
     iconColor: '#F59E0B',
     bgColor: '#FFFBEB',
@@ -49,7 +44,7 @@ const statusConfig: Record<PlantCondition, StatusConfigItem> = {
     titleColor: '#78350F',
     descColor: '#D97706',
   },
-  [PlantCondition.PerluPerhatian]: {
+  [PlantCondition.HAMA]: {
     icon: 'trending-down',
     iconColor: '#EF4444',
     bgColor: '#FEF2F2',
@@ -61,7 +56,7 @@ const statusConfig: Record<PlantCondition, StatusConfigItem> = {
 
 const ResultCard = ({ plant_name, condition, diagnose }: ResultCardProps) => {
   const currentStatus =
-    statusConfig[condition] ?? statusConfig[PlantCondition.Baik]
+    statusConfig[condition] ?? statusConfig[PlantCondition.SEHAT]
 
   return (
     <Flex direction="column" style={styles.container} gap={10}>

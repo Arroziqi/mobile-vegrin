@@ -2,7 +2,6 @@ import AppBar from '@/components/AppBar'
 import Container from '@/components/container/Container'
 import { groupPlantsByDate, TPlant } from '@/libs/dummyData/plant.dummy'
 import { usePlant } from '@/libs/hooks'
-import { PlantCondition } from '@/libs/submodules/aiCamScan/components/ResultCard'
 import { format } from 'date-fns'
 import { LinearGradient } from 'expo-linear-gradient'
 import { useEffect, useMemo, useState } from 'react'
@@ -16,12 +15,16 @@ import {
 import HistoryCard from '../components/HistoryCard'
 import HistoryTabs from '../components/HistoryTabs'
 import SearchBar from '../components/SearchBar'
+import {
+  normalizeCondition,
+  PlantCondition,
+} from '@/libs/common/utils/getPlantCondition'
 
 const FILTER_TABS = [
   { label: 'Semua', value: 'Semua' },
-  { label: 'Baik', value: PlantCondition.Baik },
-  { label: 'Cukup', value: PlantCondition.Cukup },
-  { label: 'Perlu Perhatian', value: PlantCondition.PerluPerhatian },
+  { label: 'Sehat', value: PlantCondition.SEHAT },
+  { label: 'Sakit', value: PlantCondition.SAKIT },
+  { label: 'Hama', value: PlantCondition.HAMA },
 ]
 
 const HistoryScreen = () => {
@@ -60,7 +63,8 @@ const HistoryScreen = () => {
         .includes(searchQuery.toLowerCase())
 
       const matchesFilter =
-        activeFilter === 'Semua' || plant.condition === activeFilter
+        activeFilter === 'Semua' ||
+        normalizeCondition(plant.condition) === normalizeCondition(activeFilter)
 
       return matchesSearch && matchesFilter
     })

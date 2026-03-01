@@ -6,8 +6,9 @@ import { ScrollView, StyleSheet } from 'react-native'
 import AnalyzeAICard from '../components/AnalyzeAICard'
 import ImageCard from '../components/ImageCard'
 import NoteCard from '../components/NoteCard'
-import ResultCard, { PlantCondition } from '../components/ResultCard'
+import ResultCard from '../components/ResultCard'
 import ScanButton from '../components/ScanButton'
+import { PlantCondition } from '@/libs/common/utils/getPlantCondition'
 
 const AnalyzeScreen = () => {
   const { currentLog } = usePlant()
@@ -67,7 +68,8 @@ const styles = StyleSheet.create({
 
   actionButtonContainer: {
     backgroundColor: 'white',
-    height: 80,
+    height: 120,
     paddingHorizontal: 16,
+    paddingBottom: 40,
   },
 })

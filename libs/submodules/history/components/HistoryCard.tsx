@@ -4,10 +4,10 @@ import { customizeColors } from '@/libs/core/config/theme/color'
 import { type TPlant } from '@/libs/dummyData/plant.dummy'
 import { getTimeOnly } from '@/libs/helper/formatDate'
 import { usePlant } from '@/libs/hooks/usePlants'
-import { PlantCondition } from '@/libs/submodules/aiCamScan/components/ResultCard'
 import { MaterialIcons } from '@expo/vector-icons'
 import { useRouter } from 'expo-router'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { PlantCondition } from '@/libs/common/utils/getPlantCondition'
 
 const HistoryCard = ({
   id,
