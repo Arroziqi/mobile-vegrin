@@ -1,22 +1,29 @@
+import { API_BASE_URL } from '@/libs/core/config/app.config'
 import { customizeColors } from '@/libs/core/config/theme/color'
 import { Image, StyleSheet, Text, View } from 'react-native'
 
-const imageCardData = {
-  imagePath: require('@/assets/images/kangkung.jpg'),
-  confidence: 92.5,
+// const imageCardData = {
+//   imagePath: require('@/assets/images/kangkung.jpg'),
+//   confidence: 92.5,
+// }
+
+interface ImageCardProps {
+  imagePath: string
+  confidence: number
 }
 
-const ImageCard = () => {
+const ImageCard = ({ imagePath, confidence }: ImageCardProps) => {
+  const imageUrl = `${API_BASE_URL}/${imagePath}`
   return (
     <View style={styles.container}>
       <Image
-        source={imageCardData.imagePath}
+        source={{ uri: imageUrl }}
         style={styles.image}
         resizeMode="cover"
       />
       <View style={styles.confidenceContainer}>
         <Text style={styles.confidenceLabel}>
-          {imageCardData.confidence.toFixed(1)}% Akurat
+          {`${confidence.toFixed(1)}% Akurat`}
         </Text>
       </View>
     </View>
