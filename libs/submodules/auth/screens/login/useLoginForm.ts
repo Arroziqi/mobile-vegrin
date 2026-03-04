@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Alert } from 'react-native'
 import { useRouter } from 'expo-router'
 import { useAuth } from '@/libs/hooks'
+import setupDeviceAfterLogin from '@/libs/services/setupDeviceAfterLogin'
 
 export const useLoginForm = () => {
   const { login } = useAuth()
@@ -23,6 +24,8 @@ export const useLoginForm = () => {
       email,
       password,
     })
+
+    await setupDeviceAfterLogin()
 
     setLoading(false)
 

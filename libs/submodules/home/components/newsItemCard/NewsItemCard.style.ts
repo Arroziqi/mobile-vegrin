@@ -20,7 +20,7 @@ const newsItemCardStyle = StyleSheet.create({
   },
   content: {
     flex: 1,
-    justifyContent: 'space-between',
+    justifyContent: 'center',
   },
   description: {
     fontSize: 14,
