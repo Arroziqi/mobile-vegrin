@@ -14,6 +14,7 @@ import {
   resetPassword,
   verifyEmailReset,
 } from '@/libs/store/slices/auth.slice'
+import { getDeviceId } from '@/libs/common/utils/getDeviceId'
 
 export const useAuth = () => {
   const dispatch = useAppDispatch()
@@ -29,7 +30,7 @@ export const useAuth = () => {
       setLocalError(null)
 
       // Generate device info (bisa disesuaikan)
-      const generatedDeviceId = `device-${Date.now()}`
+      const generatedDeviceId = await getDeviceId()
       const deviceName = 'Mobile App'
 
       const result = await dispatch(

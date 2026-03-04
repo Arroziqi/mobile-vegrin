@@ -12,6 +12,11 @@ export const API_ENDPOINTS = {
     VERIFY_EMAIL: `${API_BASE_URL}/auth/verify-email`,
   },
 
+  // User
+  USER: {
+    CREATE_DEVICE: `${API_BASE_URL}/user/device`,
+  },
+
   // Profile
   PROFILE: {
     GET: `${API_BASE_URL}/user`,
