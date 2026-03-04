@@ -9,9 +9,11 @@ import NoteCard from '../components/NoteCard'
 import ResultCard from '../components/ResultCard'
 import ScanButton from '../components/ScanButton'
 import { PlantCondition } from '@/libs/common/utils/getPlantCondition'
+import { useRouter } from 'expo-router'
 
 const AnalyzeScreen = () => {
   const { currentLog } = usePlant()
+  const router = useRouter()
   if (!currentLog) return null
   return (
     <Container style={styles.container}>
@@ -45,7 +47,7 @@ const AnalyzeScreen = () => {
         align="center"
         justify="center"
       >
-        <ScanButton />
+        <ScanButton onPress={() => router.push('/ai-cam-scan')} />
       </Flex>
     </Container>
   )

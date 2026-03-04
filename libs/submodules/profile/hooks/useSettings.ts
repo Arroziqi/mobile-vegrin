@@ -30,6 +30,8 @@ const useSettings = () => {
   }
 
   const requestLocationPermission = async () => {
+    if (locationStatus === PermissionStatus.GRANTED) return
+
     setLoading(true)
     const { status } = await Location.requestForegroundPermissionsAsync()
     setLocationStatus(status)
@@ -37,6 +39,8 @@ const useSettings = () => {
   }
 
   const requestCameraPermission = async () => {
+    if (cameraStatus === PermissionStatus.GRANTED) return
+
     setLoading(true)
     const { status } = await Camera.requestCameraPermissionsAsync()
     setCameraStatus(status)

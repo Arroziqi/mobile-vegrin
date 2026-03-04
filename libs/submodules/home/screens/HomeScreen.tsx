@@ -12,6 +12,7 @@ import { useRouter } from 'expo-router'
 import { useState } from 'react'
 import { ScrollView, View } from 'react-native'
 import AdminContentButton from '../components/AdminContentButton'
+import { useAuth } from '@/libs/hooks'
 
 const HomeScreen = () => {
   const [warningMessage] = useState<WarningMessageType[]>([
@@ -31,6 +32,8 @@ const HomeScreen = () => {
   const handlePressAdminContent = () => {
     router.push('/manage-content')
   }
+
+  const { roleName } = useAuth()
 
   return (
     <Container>
@@ -52,7 +55,9 @@ const HomeScreen = () => {
 
             <WeatherInfoIot />
 
-            <AdminContentButton onPress={handlePressAdminContent} />
+            {roleName === 'Admin' && (
+              <AdminContentButton onPress={handlePressAdminContent} />
+            )}
 
             <View style={{ width: '100%' }}>
               <NewsItemCardList />

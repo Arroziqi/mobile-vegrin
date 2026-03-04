@@ -15,6 +15,7 @@ const LoginScreenForm = () => {
     <>
       <View style={loginScreenStyles.form}>
         <BaseTextInput
+          inputStyle={{ color: '#000' }}
           placeholder="Email"
           value={email}
           onChangeText={setEmail}
@@ -26,6 +27,7 @@ const LoginScreenForm = () => {
         />
 
         <BaseTextInput
+          inputStyle={{ color: '#000' }}
           placeholder="Password"
           secureTextEntry
           value={password}

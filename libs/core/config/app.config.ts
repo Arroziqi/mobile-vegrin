@@ -1,2 +1,1 @@
-export const API_BASE_URL =
-  'https://existed-fibre-dam-concord.trycloudflare.com'
+export const API_BASE_URL = 'https://api-vegrin.moratelindo.co.id/'

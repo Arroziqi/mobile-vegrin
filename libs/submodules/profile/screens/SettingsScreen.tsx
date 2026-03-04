@@ -37,6 +37,7 @@ function SettingsScreen() {
             icon={<Ionicons name="location-outline" size={36} color="white" />}
             note={renderNote(locationStatus)}
             onPress={requestLocationPermission}
+            disabled={locationStatus === 'granted'}
           />
 
           <MenuItemCard
@@ -45,6 +46,7 @@ function SettingsScreen() {
             icon={<Ionicons name="camera-outline" size={36} color="white" />}
             note={renderNote(cameraStatus)}
             onPress={requestCameraPermission}
+            disabled={cameraStatus === 'granted'}
           />
 
           <MenuItemCard

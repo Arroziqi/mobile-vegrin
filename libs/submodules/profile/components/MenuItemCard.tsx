@@ -10,6 +10,7 @@ interface MenuItemCardProps {
   icon: React.ReactNode
   note?: React.ReactNode
   onPress?: () => void
+  disabled?: boolean
 }
 
 const MenuItemCard = ({
@@ -18,6 +19,7 @@ const MenuItemCard = ({
   icon,
   note,
   onPress,
+  disabled = false,
 }: MenuItemCardProps) => {
   return (
     <PressableCard
@@ -28,6 +30,7 @@ const MenuItemCard = ({
       note={note}
       leading={<View style={styles.iconWrapper}>{icon}</View>}
       trailing={<FontAwesome6 name="arrow-right" size={24} color="black" />}
+      disabled={disabled}
     />
   )
 }

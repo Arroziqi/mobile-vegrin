@@ -75,7 +75,7 @@ const HistoryScreen = () => {
   return (
     <Container style={styles.container}>
       <LinearGradient colors={['#ECFDF5', '#FFFFFF']} style={styles.gradient}>
-        <AppBar variant="default" title="Riwayat Sscan" />
+        <AppBar variant="default" title="Riwayat Scan" />
         <View style={styles.headerWrapper}>
           <SearchBar value={searchQuery} onChangeText={setSearchQuery} />
 

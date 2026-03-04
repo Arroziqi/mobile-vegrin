@@ -17,7 +17,7 @@ import {
 
 export const useAuth = () => {
   const dispatch = useAppDispatch()
-  const { isAuthenticated, loading, error, token, deviceId, userId } =
+  const { isAuthenticated, loading, error, token, deviceId, userId, roleName } =
     useAppSelector(state => state.auth)
   const [localError, setLocalError] = useState<string | null>(null)
 
@@ -117,6 +117,7 @@ export const useAuth = () => {
     token,
     deviceId,
     userId,
+    roleName,
 
     // Actions
     login,

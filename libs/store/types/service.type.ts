@@ -38,6 +38,7 @@ export interface UserSession {
 export interface LoginResponse {
   message: string
   user_session: UserSession
+  role_name: string
 }
 
 export interface GoogleLoginRequest {

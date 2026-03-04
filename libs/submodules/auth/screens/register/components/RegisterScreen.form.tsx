@@ -26,6 +26,7 @@ const RegisterScreenForm = ({ value, onChange }: Props) => {
         <View style={registerScreenStyle.inputWrapper}>
           <Text style={registerScreenStyle.regularText}>Nama Depan</Text>
           <BaseTextInput
+            inputStyle={{ color: '#000' }}
             value={value.front_name}
             onChangeText={v => onChange('front_name', v)}
             style={registerScreenStyle.input}
@@ -36,6 +37,7 @@ const RegisterScreenForm = ({ value, onChange }: Props) => {
         <View style={registerScreenStyle.inputWrapper}>
           <Text style={registerScreenStyle.regularText}>Nama Belakang</Text>
           <BaseTextInput
+            inputStyle={{ color: '#000' }}
             value={value.back_name}
             onChangeText={v => onChange('back_name', v)}
             style={registerScreenStyle.input}
@@ -47,6 +49,7 @@ const RegisterScreenForm = ({ value, onChange }: Props) => {
       <Flex direction="column" align="flex-start">
         <Text style={registerScreenStyle.regularText}>Email</Text>
         <BaseTextInput
+          inputStyle={{ color: '#000' }}
           value={value.email}
           onChangeText={v => onChange('email', v)}
           textContentType="emailAddress"
@@ -58,6 +61,7 @@ const RegisterScreenForm = ({ value, onChange }: Props) => {
       <Flex direction="column" align="flex-start">
         <Text style={registerScreenStyle.regularText}>Password</Text>
         <BaseTextInput
+          inputStyle={{ color: '#000' }}
           value={value.password}
           onChangeText={v => onChange('password', v)}
           secureTextEntry
