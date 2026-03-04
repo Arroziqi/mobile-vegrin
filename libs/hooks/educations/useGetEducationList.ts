@@ -20,6 +20,14 @@ export const useGetEducationList = () => {
     enabled: !!token && !!deviceId,
     staleTime: 1000 * 60 * 5, // 5 menit tidak refetch
     queryFn: async () => {
+<<<<<<< Updated upstream
+=======
+      if (!token || !deviceId) {
+        console.log('No access token')
+        throw new Error('Token atau Device ID belum tersedia')
+      }
+
+>>>>>>> Stashed changes
       const response = await fetch(API_ENDPOINTS.EDUCATION.GET_LIST, {
         method: 'GET',
         headers: {
