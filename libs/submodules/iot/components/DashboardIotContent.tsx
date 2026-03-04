@@ -40,6 +40,7 @@ function DashboardIotContent() {
             </Row>
           </LinearGradient>
 
+          {/*Item per device iot*/}
           <View style={styles.content}>
             <Row justify={'space-between'} gap={12} align={'flex-start'}>
               <View style={styles.iconWrapper}>
@@ -144,6 +145,7 @@ function DashboardIotContent() {
               </Column>
             </Row>
           </View>
+
           <View style={[styles.content, { marginTop: 0 }]}>
             <Text style={{ textAlign: 'center', color: '#6A7282' }}>
               💡 Tips: Klik tombol Tambah untuk menghubungkan perangkat IoT

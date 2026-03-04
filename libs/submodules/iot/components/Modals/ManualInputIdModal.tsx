@@ -1,58 +1,100 @@
-import React, { JSX } from 'react'
+import React, { JSX, useState } from 'react'
 import { CustomModal } from '@/components/modal/CustomModal'
-import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native'
+import {
+  Alert,
+  Pressable,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from 'react-native'
 import { UseModalReturn } from '@/hooks/useModal'
 import Column from '@/components/Column'
+import { useCreateDeviceIOT } from '@/libs/hooks/iot/useIot'
 
 interface Props {
   modal: UseModalReturn
+  onSuccess?: (deviceId: string) => void
 }
 
-function ManualInputIdModal({ modal }: Props): JSX.Element {
+function ManualInputIdModal({ modal, onSuccess }: Props): JSX.Element {
+  const [deviceId, setDeviceId] = useState('')
+  const { create, loading: creating } = useCreateDeviceIOT()
+
+  const handleConnect = async () => {
+    if (!deviceId.trim()) {
+      Alert.alert('Device ID kosong', 'Silakan masukkan Device ID')
+      return
+    }
+
+    try {
+      const result = await create(deviceId.trim().toUpperCase())
+      if (result) {
+        Alert.alert('Berhasil', `Device IOT berhasil dibuat: ${deviceId}`)
+        setDeviceId('') // reset input
+        modal.hide()
+        onSuccess?.(deviceId)
+      } else {
+        Alert.alert('Gagal', 'Device IOT gagal dibuat')
+      }
+    } catch (err: any) {
+      Alert.alert('Error', err.message || 'Terjadi kesalahan')
+    }
+  }
+
   return (
-    <>
-      <CustomModal
-        isVisible={modal.isVisible}
-        onClose={modal.hide}
-        title="Tambah Perangkat IoT"
-        headerStyle={styles.headerStyle}
-        closeButtonStyle={styles.closeButtonStyle}
-        titleStyle={styles.titleStyle}
-        contentStyle={styles.container}
-      >
-        <Text style={styles.inputLabel}>Device ID</Text>
-        <TextInput
-          style={styles.input}
-          autoCapitalize={'characters'}
-          placeholder={'WS-2024-001'}
-        />
-        <Text style={styles.inputHint}>
-          Format: XX-XXXX-XXX (Huruf kapital dan angka)
+    <CustomModal
+      isVisible={modal.isVisible}
+      onClose={modal.hide}
+      title="Tambah Perangkat IoT"
+      headerStyle={styles.headerStyle}
+      closeButtonStyle={styles.closeButtonStyle}
+      titleStyle={styles.titleStyle}
+      contentStyle={styles.container}
+    >
+      <Text style={styles.inputLabel}>Device ID</Text>
+      <TextInput
+        style={styles.input}
+        autoCapitalize="characters"
+        placeholder="WS-2024-001"
+        value={deviceId}
+        onChangeText={setDeviceId}
+      />
+      <Text style={styles.inputHint}>
+        Format: XX-XXXX-XXX (Huruf kapital dan angka)
+      </Text>
+
+      <View style={styles.exampleContainer}>
+        <Text style={{ color: '#0A0A0A', fontSize: 12 }}>
+          Contoh Device ID:
         </Text>
+        <Column gap={5}>
+          <Text style={styles.exampleValue}>WS-2024-001</Text>
+          <Text style={styles.exampleValue}>WS-2024-002</Text>
+          <Text style={styles.exampleValue}>WS-2024-003</Text>
+        </Column>
+      </View>
 
-        <View style={styles.exampleContainer}>
-          <Text style={{ color: '#0A0A0A', fontSize: 12 }}>
-            Contoh Device ID:
-          </Text>
-          <Column gap={5}>
-            <Text style={styles.exampleValue}>WS-2024-001</Text>
-            <Text style={styles.exampleValue}>WS-2024-002</Text>
-            <Text style={styles.exampleValue}>WS-2024-003</Text>
-          </Column>
-        </View>
+      <Pressable
+        style={[
+          styles.button,
+          { backgroundColor: creating ? '#6B7280' : '#00C950' },
+        ]}
+        onPress={handleConnect}
+        disabled={creating}
+      >
+        <Text style={styles.buttonText}>
+          {creating ? 'Menghubungkan...' : 'Hubungkan Perangkat'}
+        </Text>
+      </Pressable>
 
-        <Pressable style={[styles.button, { backgroundColor: '#00C950' }]}>
-          <Text style={styles.buttonText}>Hubungkan Perangkat</Text>
-        </Pressable>
-
-        <Pressable
-          style={[styles.button, { backgroundColor: '#00BBA7' }]}
-          onPress={modal.hide}
-        >
-          <Text style={styles.buttonText}>Kembali</Text>
-        </Pressable>
-      </CustomModal>
-    </>
+      <Pressable
+        style={[styles.button, { backgroundColor: '#00BBA7' }]}
+        onPress={modal.hide}
+      >
+        <Text style={styles.buttonText}>Kembali</Text>
+      </Pressable>
+    </CustomModal>
   )
 }
 
@@ -75,18 +117,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: 'center',
   },
-  buttonTextDesc: { fontSize: 12, color: 'white' },
-  modalText: {
-    color: '#4A5565',
-    marginBottom: 12,
-    textAlign: 'center',
-  },
   input: {
     borderRadius: 14,
     borderWidth: 1.34,
     borderColor: '#D1D5DC',
     padding: 16,
-    color: 'rgba(10, 10, 10, 0.5)',
+    color: 'rgba(10, 10, 10, 0.9)',
   },
   inputLabel: {
     color: '#364153',

@@ -4,6 +4,7 @@ import { CustomModal } from '@/components/modal/CustomModal'
 import QrCodeScanner from '@/libs/submodules/iot/components/QrCodeScanner'
 import { useQrScanner } from '@/hooks/useQrScanner'
 import { UseModalReturn } from '@/hooks/useModal'
+import { useCreateDeviceIOT } from '@/libs/hooks/iot/useIot'
 
 interface Props {
   modal: UseModalReturn
@@ -12,20 +13,42 @@ interface Props {
 
 function ScanQrModal({ modal, onScanSuccess }: Props): JSX.Element {
   const scanner = useQrScanner()
+  const { create, loading: creating, error: createError } = useCreateDeviceIOT()
 
   // Handle scan success
   useEffect(() => {
     if (scanner.scannedData) {
-      if (onScanSuccess) {
-        onScanSuccess(scanner.scannedData)
-      } else {
-        Alert.alert('QR Code Scanned', `Data: ${scanner.scannedData}`)
+      const handleCreateDevice = async () => {
+        try {
+          console.log('Scanned data', scanner.scannedData)
+          const result = await create(scanner.scannedData!)
+          if (result) {
+            Alert.alert(
+              'Berhasil',
+              `Device IOT berhasil dibuat: ${scanner.scannedData}`
+            )
+          } else {
+            Alert.alert(
+              'Gagal',
+              `Device IOT gagal dibuat: ${createError || 'Unknown error'}`
+            )
+          }
+
+          if (onScanSuccess) {
+            onScanSuccess(scanner.scannedData!)
+          }
+
+          // Reset scanner
+          setTimeout(() => {
+            scanner.resetScanner()
+          }, 1000)
+        } catch (err: any) {
+          Alert.alert('Error', err.message || 'Terjadi kesalahan')
+          scanner.resetScanner()
+        }
       }
 
-      // Reset scanner after showing result
-      setTimeout(() => {
-        scanner.resetScanner()
-      }, 1000)
+      handleCreateDevice()
     }
   }, [scanner.scannedData])
 
@@ -75,13 +98,16 @@ function ScanQrModal({ modal, onScanSuccess }: Props): JSX.Element {
       <Pressable
         style={[
           styles.button,
-          { backgroundColor: scanner.isScanning ? '#6B7280' : '#00C950' },
+          {
+            backgroundColor:
+              scanner.isScanning || creating ? '#6B7280' : '#00C950',
+          },
         ]}
         onPress={handleStartScan}
-        disabled={scanner.isScanning}
+        disabled={scanner.isScanning || creating}
       >
         <Text style={styles.buttonText}>
-          {scanner.isScanning ? 'Sedang Scan...' : 'Mulai Scan'}
+          {scanner.isScanning || creating ? 'Sedang Scan...' : 'Mulai Scan'}
         </Text>
       </Pressable>
 
