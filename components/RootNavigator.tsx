@@ -21,11 +21,6 @@ export function RootNavigator() {
         <Stack.Screen name="(tabs)" />
       </Stack.Protected>
 
-      {/* ONLY ADMIN */}
-      <Stack.Protected guard={roleName === 'Admin'}>
-        <Stack.Screen name="(tabs)" />
-      </Stack.Protected>
-
       {/* AUTH FLOW */}
       <Stack.Protected guard={!isAuthenticated}>
         <Stack.Screen name="(auth)" />
