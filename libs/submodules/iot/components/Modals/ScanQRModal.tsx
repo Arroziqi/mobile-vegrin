@@ -1,3 +1,7 @@
+// ============================================================
+// libs/submodules/iot/components/Modals/ScanQRModal.tsx
+// ============================================================
+
 import React, { JSX, useEffect } from 'react'
 import { Alert, Pressable, StyleSheet, Text } from 'react-native'
 import { CustomModal } from '@/components/modal/CustomModal'
@@ -13,46 +17,37 @@ interface Props {
 
 function ScanQrModal({ modal, onScanSuccess }: Props): JSX.Element {
   const scanner = useQrScanner()
-  const { create, loading: creating, error: createError } = useCreateDeviceIOT()
+  // React Query mutation — mutateAsync, isPending, isError
+  const { mutateAsync: createDevice, isPending: creating } =
+    useCreateDeviceIOT()
 
   // Handle scan success
   useEffect(() => {
-    if (scanner.scannedData) {
-      const handleCreateDevice = async () => {
-        try {
-          console.log('Scanned data', scanner.scannedData)
-          const result = await create(scanner.scannedData!)
-          if (result) {
-            Alert.alert(
-              'Berhasil',
-              `Device IOT berhasil dibuat: ${scanner.scannedData}`
-            )
-          } else {
-            Alert.alert(
-              'Gagal',
-              `Device IOT gagal dibuat: ${createError || 'Unknown error'}`
-            )
-          }
+    if (!scanner.scannedData) return
 
-          if (onScanSuccess) {
-            onScanSuccess(scanner.scannedData!)
-          }
-
-          // Reset scanner
-          setTimeout(() => {
-            scanner.resetScanner()
-          }, 1000)
-        } catch (err: any) {
-          Alert.alert('Error', err.message || 'Terjadi kesalahan')
-          scanner.resetScanner()
-        }
+    const handleCreateDevice = async () => {
+      try {
+        await createDevice(scanner.scannedData!)
+        // onSuccess di hook sudah invalidate → dashboard refetch otomatis
+        Alert.alert(
+          'Berhasil',
+          `Device IOT berhasil ditambahkan: ${scanner.scannedData}`
+        )
+        onScanSuccess?.(scanner.scannedData!)
+      } catch (err: any) {
+        Alert.alert(
+          'Gagal',
+          err.message || 'Terjadi kesalahan saat menambahkan perangkat'
+        )
+      } finally {
+        setTimeout(() => scanner.resetScanner(), 1000)
       }
-
-      handleCreateDevice()
     }
+
+    handleCreateDevice()
   }, [scanner.scannedData])
 
-  // Reset scanner when modal closes
+  // Reset scanner saat modal tutup
   useEffect(() => {
     if (!modal.isVisible) {
       scanner.stopScanning()
@@ -66,7 +61,6 @@ function ScanQrModal({ modal, onScanSuccess }: Props): JSX.Element {
       scanner.requestPermission()
       return
     }
-
     if (scanner.hasPermission === false) {
       Alert.alert(
         'Permisi Ditolak',
@@ -74,7 +68,6 @@ function ScanQrModal({ modal, onScanSuccess }: Props): JSX.Element {
       )
       return
     }
-
     scanner.startScanning()
   }
 
@@ -82,6 +75,8 @@ function ScanQrModal({ modal, onScanSuccess }: Props): JSX.Element {
     scanner.stopScanning()
     modal.hide()
   }
+
+  const isDisabled = scanner.isScanning || creating
 
   return (
     <CustomModal
@@ -98,16 +93,17 @@ function ScanQrModal({ modal, onScanSuccess }: Props): JSX.Element {
       <Pressable
         style={[
           styles.button,
-          {
-            backgroundColor:
-              scanner.isScanning || creating ? '#6B7280' : '#00C950',
-          },
+          { backgroundColor: isDisabled ? '#6B7280' : '#00C950' },
         ]}
         onPress={handleStartScan}
-        disabled={scanner.isScanning || creating}
+        disabled={isDisabled}
       >
         <Text style={styles.buttonText}>
-          {scanner.isScanning || creating ? 'Sedang Scan...' : 'Mulai Scan'}
+          {creating
+            ? 'Menambahkan...'
+            : scanner.isScanning
+              ? 'Sedang Scan...'
+              : 'Mulai Scan'}
         </Text>
       </Pressable>
 
@@ -127,22 +123,7 @@ const styles = StyleSheet.create({
   headerStyle: { backgroundColor: '#00BC7D' },
   closeButtonStyle: { color: 'white' },
   titleStyle: { color: 'white', fontWeight: 'regular' },
-  container: {
-    gap: 12,
-    padding: 20,
-  },
-  button: {
-    padding: 12,
-    borderRadius: 14,
-  },
-  buttonText: {
-    color: 'white',
-    fontSize: 16,
-    textAlign: 'center',
-  },
-  modalText: {
-    color: '#4A5565',
-    marginBottom: 12,
-    textAlign: 'center',
-  },
+  container: { gap: 12, padding: 20 },
+  button: { padding: 12, borderRadius: 14 },
+  buttonText: { color: 'white', fontSize: 16, textAlign: 'center' },
 })

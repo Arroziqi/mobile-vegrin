@@ -1,115 +1,59 @@
 // ============================================================
 // hooks/useIot.ts
-// Custom hooks untuk consume IoT services
-// Data yang dikembalikan sudah dalam bentuk SensorDevice[] (normalized)
+// IoT hooks menggunakan React Query (TanStack Query)
 // ============================================================
 
-import { useCallback, useEffect, useState } from 'react'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
   createDeviceIOT,
   deleteDeviceIOT,
   getDeviceAreaList,
   getDeviceAreaSpecific,
 } from '@/libs/services/iotServices'
-import type { SensorDevice } from '@/libs/common/utils/sensorTransformer'
+import { queryKeys } from '@/libs/common/const/queryKeys'
 
 // ─── useDeviceAreaList ────────────────────────────────────────
 
 export const useDeviceAreaList = () => {
-  const [data, setData] = useState<SensorDevice[]>([])
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-
-  const fetch = useCallback(async () => {
-    setLoading(true)
-    try {
-      const result = await getDeviceAreaList()
-      setData(result)
-      setError(null)
-    } catch (err: any) {
-      setError(err.message ?? 'Gagal mengambil daftar perangkat')
-    } finally {
-      setLoading(false)
-    }
-  }, [])
-
-  useEffect(() => {
-    fetch()
-  }, [fetch])
-
-  return { data, loading, error, refetch: fetch }
+  return useQuery({
+    queryKey: queryKeys.iot.deviceList(),
+    queryFn: () => getDeviceAreaList(),
+  })
 }
 
 // ─── useDeviceAreaSpecific ────────────────────────────────────
 
 export const useDeviceAreaSpecific = (areaId: string) => {
-  const [data, setData] = useState<SensorDevice | null>(null)
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-
-  const fetch = useCallback(async () => {
-    if (!areaId) return
-    setLoading(true)
-    try {
-      const result = await getDeviceAreaSpecific(areaId)
-      setData(result)
-      setError(null)
-    } catch (err: any) {
-      setError(err.message ?? 'Gagal mengambil detail perangkat')
-    } finally {
-      setLoading(false)
-    }
-  }, [areaId])
-
-  useEffect(() => {
-    fetch()
-  }, [fetch])
-
-  return { data, loading, error, refetch: fetch }
+  return useQuery({
+    queryKey: queryKeys.iot.deviceDetail(areaId),
+    queryFn: () => getDeviceAreaSpecific(areaId),
+    enabled: !!areaId,
+  })
 }
 
 // ─── useCreateDeviceIOT ───────────────────────────────────────
 
 export const useCreateDeviceIOT = () => {
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const queryClient = useQueryClient()
 
-  const create = useCallback(async (device_id: string) => {
-    setLoading(true)
-    try {
-      const result = await createDeviceIOT(device_id)
-      setError(null)
-      return result
-    } catch (err: any) {
-      setError(err.message ?? 'Gagal menambahkan perangkat')
-      return null
-    } finally {
-      setLoading(false)
-    }
-  }, [])
-
-  return { create, loading, error }
+  return useMutation({
+    mutationFn: (device_id: string) => createDeviceIOT(device_id),
+    onSuccess: () => {
+      // Invalidate device list → otomatis refetch dashboard
+      queryClient.invalidateQueries({ queryKey: queryKeys.iot.deviceList() })
+    },
+  })
 }
 
 // ─── useDeleteDeviceIOT ───────────────────────────────────────
 
 export const useDeleteDeviceIOT = () => {
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const queryClient = useQueryClient()
 
-  const remove = useCallback(async (deviceId: string) => {
-    setLoading(true)
-    try {
-      const result = await deleteDeviceIOT(deviceId)
-      setError(null)
-      return result
-    } catch (err: any) {
-      setError(err.message ?? 'Gagal menghapus perangkat')
-      return null
-    } finally {
-      setLoading(false)
-    }
-  }, [])
-
-  return { remove, loading, error }
+  return useMutation({
+    mutationFn: (deviceId: string) => deleteDeviceIOT(deviceId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.iot.deviceList() })
+    },
+  })
 }
