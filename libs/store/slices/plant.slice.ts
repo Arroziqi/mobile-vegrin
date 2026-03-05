@@ -56,8 +56,22 @@ export const analyzePlant = createAsyncThunk(
       })
 
       if (!response.ok) {
-        const error = await response.json()
-        return rejectWithValue(error.message || 'Gagal menganalisis tanaman')
+        let errorMessage = `Server error ${response.status}`
+        try {
+          const error = await response.json()
+          errorMessage = error.message || errorMessage
+        } catch {
+          // Server returned non-JSON (e.g. HTML error page — likely file too large)
+          if (response.status === 413) {
+            errorMessage = 'Ukuran gambar terlalu besar, coba ambil foto ulang'
+          }
+        }
+        console.error(
+          '[analyzePlant] Server error:',
+          response.status,
+          errorMessage
+        )
+        return rejectWithValue(errorMessage)
       }
 
       const data: ApiResponse<PlantAnalyzeResponse> = await response.json()
