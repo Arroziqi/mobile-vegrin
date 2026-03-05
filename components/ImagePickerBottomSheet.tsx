@@ -1,7 +1,8 @@
 import React, { forwardRef, useMemo } from 'react'
 import { Pressable, StyleSheet, Text, View } from 'react-native'
-import BottomSheet, {
+import {
   BottomSheetBackdrop,
+  BottomSheetModal,
   BottomSheetView,
 } from '@gorhom/bottom-sheet'
 import { MaterialIcons } from '@expo/vector-icons'
@@ -13,14 +14,13 @@ interface Props {
 }
 
 // eslint-disable-next-line react/display-name
-const ImagePickerBottomSheet = forwardRef<BottomSheet, Props>(
+const ImagePickerBottomSheet = forwardRef<BottomSheetModal, Props>(
   ({ onPickCamera, onPickGallery }, ref) => {
     const snapPoints = useMemo(() => ['32%'], [])
 
     return (
-      <BottomSheet
+      <BottomSheetModal
         ref={ref}
-        index={-1}
         snapPoints={snapPoints}
         enablePanDownToClose
         backdropComponent={props => (
@@ -38,7 +38,7 @@ const ImagePickerBottomSheet = forwardRef<BottomSheet, Props>(
           <View style={styles.header}>
             <Text style={styles.title}>Profile Photo</Text>
 
-            <Pressable onPress={() => (ref as any)?.current?.close()}>
+            <Pressable onPress={() => (ref as any)?.current?.dismiss()}>
               <MaterialIcons name="close" size={22} color="#000" />
             </Pressable>
           </View>
@@ -70,7 +70,7 @@ const ImagePickerBottomSheet = forwardRef<BottomSheet, Props>(
             </Pressable>
           </View>
         </BottomSheetView>
-      </BottomSheet>
+      </BottomSheetModal>
     )
   }
 )
@@ -85,6 +85,7 @@ const styles = StyleSheet.create({
   },
 
   content: {
+    paddingBottom: 50,
     paddingHorizontal: 24,
     paddingTop: 12,
   },

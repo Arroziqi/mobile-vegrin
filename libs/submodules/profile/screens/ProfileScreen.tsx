@@ -7,14 +7,14 @@ import { customizeColors } from '@/libs/core/config/theme/color'
 import { useProfile } from '@/libs/hooks'
 import ProfileInfoRow from '@/libs/submodules/profile/components/ProfileInfoRow'
 import ProfileTopBar from '@/libs/submodules/profile/components/topbar/ProfileTopBar'
-import BottomSheet from '@gorhom/bottom-sheet'
+import { BottomSheetModal } from '@gorhom/bottom-sheet'
 import { Link } from 'expo-router'
 import { useRef, useState } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 
 function ProfileScreen() {
   const { profile } = useProfile()
-  const bottomSheetRef = useRef<BottomSheet>(null)
+  const bottomSheetRef = useRef<BottomSheetModal>(null)
   const { pickFromCamera, pickFromGallery } = useImagePicker()
   const [avatar, setAvatar] = useState<string | null>(
     profile?.photo_profile ?? null
@@ -52,7 +52,7 @@ function ProfileScreen() {
               avatar ? { uri: avatar } : require('@/assets/images/avatar.jpg')
             }
             editable
-            onEditPress={() => bottomSheetRef.current?.expand()}
+            onEditPress={() => bottomSheetRef.current?.present()}
             style={styles.avatar}
           />
 
