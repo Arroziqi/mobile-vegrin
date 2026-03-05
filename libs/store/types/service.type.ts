@@ -153,6 +153,7 @@ export interface PlantLogData {
   id: string
   user_id?: string
   plant_name: string
+  plant_name_latin?: string
   plant_image: string
   condition: string
   diagnosis: string | null
