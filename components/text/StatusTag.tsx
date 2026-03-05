@@ -1,33 +1,33 @@
-import { customizeColors } from '@/libs/core/config/theme/color'
-import { MaterialIcons } from '@expo/vector-icons'
-import { StyleSheet, Text, View } from 'react-native'
 import {
   getConditionDisplay,
   normalizeCondition,
   PlantCondition,
 } from '@/libs/common/utils/getPlantCondition'
+import { customizeColors } from '@/libs/core/config/theme/color'
+import { MaterialIcons } from '@expo/vector-icons'
+import { StyleSheet, Text, View } from 'react-native'
 
 interface StatusTagProps {
   condition: PlantCondition
 }
 
 const conditionConfig = {
-  [PlantCondition.SEHAT]: {
-    label: 'Sehat',
+  [PlantCondition.BAIK]: {
+    label: 'Baik',
     backgroundColor: customizeColors.lightGreen,
     textColor: customizeColors.green4,
     iconColor: customizeColors.green4,
     icon: 'check-circle',
   },
-  [PlantCondition.SAKIT]: {
-    label: 'Sakit',
+  [PlantCondition.CUKUP]: {
+    label: 'Cukup',
     backgroundColor: '#FEF3C7', // kuning soft
     textColor: '#B45309',
     iconColor: '#B45309',
     icon: 'error-outline',
   },
-  [PlantCondition.HAMA]: {
-    label: 'Hama',
+  [PlantCondition.PERLU_PERHATIAN]: {
+    label: 'Perlu Perhatian',
     backgroundColor: '#FEE2E2', // merah soft
     textColor: '#DC2626',
     iconColor: '#DC2626',

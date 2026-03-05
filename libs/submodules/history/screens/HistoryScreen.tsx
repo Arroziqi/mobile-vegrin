@@ -1,5 +1,9 @@
 import AppBar from '@/components/AppBar'
 import Container from '@/components/container/Container'
+import {
+  normalizeCondition,
+  PlantCondition,
+} from '@/libs/common/utils/getPlantCondition'
 import { groupPlantsByDate, TPlant } from '@/libs/dummyData/plant.dummy'
 import { usePlant } from '@/libs/hooks'
 import { format } from 'date-fns'
@@ -15,16 +19,12 @@ import {
 import HistoryCard from '../components/HistoryCard'
 import HistoryTabs from '../components/HistoryTabs'
 import SearchBar from '../components/SearchBar'
-import {
-  normalizeCondition,
-  PlantCondition,
-} from '@/libs/common/utils/getPlantCondition'
 
 const FILTER_TABS = [
   { label: 'Semua', value: 'Semua' },
-  { label: 'Sehat', value: PlantCondition.SEHAT },
-  { label: 'Sakit', value: PlantCondition.SAKIT },
-  { label: 'Hama', value: PlantCondition.HAMA },
+  { label: 'Baik', value: PlantCondition.BAIK },
+  { label: 'Cukup', value: PlantCondition.CUKUP },
+  { label: 'Perlu Perhatian', value: PlantCondition.PERLU_PERHATIAN },
 ]
 
 const HistoryScreen = () => {
@@ -43,9 +43,9 @@ const HistoryScreen = () => {
       logs.map(log => ({
         id: log.id,
         name: log.plant_name,
-        scientificName: '-',
+        scientificName: log.plant_name_latin ?? '-',
         condition: log.condition,
-        accuracy: '0',
+        accuracy: log.detail?.confidence ? `${log.detail.confidence}%` : '-',
         timestamp: log.timestamp
           ? format(new Date(log.timestamp), 'yyyy-MM-dd HH:mm:ss')
           : format(new Date(), 'yyyy-MM-dd HH:mm:ss'),
@@ -101,7 +101,10 @@ const HistoryScreen = () => {
               <Text style={styles.dateText}>{title}</Text>
             </View>
           )}
-          renderItem={({ item }) => <HistoryCard {...item} />}
+          renderItem={({ item }) => {
+            console.log('item:', item)
+            return <HistoryCard {...item} />
+          }}
           ListEmptyComponent={
             loading ? (
               <ActivityIndicator

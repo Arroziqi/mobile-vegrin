@@ -1,12 +1,12 @@
 // hooks/usePlant.ts
-import { useCallback, useState } from 'react'
-import * as ImagePicker from 'expo-image-picker'
 import { useAppDispatch, useAppSelector } from '@/libs/store/reduxHooks'
 import {
   analyzePlant,
   getPlantDetail,
   getPlantLogs,
 } from '@/libs/store/slices/plant.slice'
+import * as ImagePicker from 'expo-image-picker'
+import { useCallback, useState } from 'react'
 
 export const usePlant = () => {
   const dispatch = useAppDispatch()
@@ -132,10 +132,10 @@ export const usePlant = () => {
   )
 
   // Get healthy plants
-  const healthyPlants = getLogsByCondition('Sehat')
+  const healthyPlants = getLogsByCondition('Baik')
 
   // Get sick plants
-  const sickPlants = getLogsByCondition('Sakit')
+  const sickPlants = getLogsByCondition('Cukup')
 
   // Get stats
   const stats = {
