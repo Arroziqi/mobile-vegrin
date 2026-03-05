@@ -5,6 +5,7 @@ import {
   getPlantDetail,
   getPlantLogs,
 } from '@/libs/store/slices/plant.slice'
+import * as ImageManipulator from 'expo-image-manipulator'
 import * as ImagePicker from 'expo-image-picker'
 import { useCallback, useState } from 'react'
 
@@ -73,9 +74,11 @@ export const usePlant = () => {
         throw new Error('Permission to access camera was denied')
       }
 
-      // Take photo
+      // Take photo — allowsEditing menampilkan UI crop setelah foto diambil
       const result = await ImagePicker.launchCameraAsync({
-        quality: 0.8,
+        quality: 0.5,
+        allowsEditing: true,
+        aspect: [4, 3],
       })
 
       if (result.canceled) {
@@ -83,13 +86,27 @@ export const usePlant = () => {
       }
 
       // Pass URI langsung — React Native tidak butuh convert ke Blob
-      const uri = result.assets[0].uri
+      const cameraUri = result.assets[0].uri
+      console.log('[captureAndAnalyze] URI kamera:', cameraUri)
+
+      // Resize ke max 1024px agar tidak melebihi batas upload server
+      const manipulated = await ImageManipulator.manipulateAsync(
+        cameraUri,
+        [{ resize: { width: 1024 } }],
+        { compress: 0.5, format: ImageManipulator.SaveFormat.JPEG }
+      )
+      const stableUri = manipulated.uri
+      console.log('[captureAndAnalyze] URI setelah resize:', stableUri)
 
       // Analyze
-      const analyzeResult = await dispatch(analyzePlant(uri)).unwrap()
+      const analyzeResult = await dispatch(analyzePlant(stableUri)).unwrap()
       return { success: true, data: analyzeResult }
     } catch (err) {
-      const errorMessage = (err as Error).message
+      console.error('[captureAndAnalyze] Error:', err, typeof err)
+      const errorMessage =
+        typeof err === 'string'
+          ? err
+          : ((err as Error).message ?? 'Gagal menganalisis tanaman')
       setLocalError(errorMessage)
       return { success: false, error: errorMessage }
     }
