@@ -16,6 +16,7 @@ import { useEffect } from 'react'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { Provider } from 'react-redux'
 import { PersistGate } from 'redux-persist/integration/react'
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
 
 export const unstable_settings = {
   anchor: '(tabs)',
@@ -53,8 +54,10 @@ export default function RootLayout() {
         >
           <Provider store={store}>
             <PersistGate loading={null} persistor={persistor}>
-              <RootNavigator />
-              <StatusBar style="auto" />
+              <BottomSheetModalProvider>
+                <RootNavigator />
+                <StatusBar style="auto" />
+              </BottomSheetModalProvider>
             </PersistGate>
           </Provider>
         </ThemeProvider>
