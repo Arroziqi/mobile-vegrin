@@ -1,12 +1,13 @@
-import React from 'react'
-import { ImageBackground, StyleSheet, Text } from 'react-native'
 import Avatar from '@/components/Avatar'
+import { buildAvatarUrl } from '@/libs/common/utils/buildAvatarUrl'
 import { useProfile } from '@/libs/hooks'
+import { ImageBackground, StyleSheet, Text } from 'react-native'
 
 const HEADER_HEIGHT = 200
 
 export default function ProfileDrawerHeader() {
   const { profile } = useProfile()
+  const avatarUrl = buildAvatarUrl(profile?.photo_profile)
   return (
     <ImageBackground
       source={require('@/assets/images/bg-header-sidebar.png')}
@@ -14,7 +15,9 @@ export default function ProfileDrawerHeader() {
       resizeMode="cover"
     >
       <Avatar
-        source={require('@/assets/images/avatar.jpg')}
+        source={
+          avatarUrl ? { uri: avatarUrl } : require('@/assets/images/avatar.jpg')
+        }
         style={styles.avatar}
       />
       <Text style={styles.name}>{profile?.front_name ?? 'username'}</Text>
