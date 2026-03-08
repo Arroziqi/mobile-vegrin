@@ -1,12 +1,14 @@
-import React from 'react'
 import Container from '@/components/container/Container'
-import { ScrollView, StyleSheet } from 'react-native'
-import NotificationTopBar from '@/libs/submodules/notification/components/NotificationTopBar/NotificationTopBar'
 import Flex from '@/components/Flex'
+import { useAppSelector } from '@/libs/store/reduxHooks'
 import NotificationCard from '@/libs/submodules/notification/components/NotificationCard/NotificationCard'
+import NotificationTopBar from '@/libs/submodules/notification/components/NotificationTopBar/NotificationTopBar'
 import { Feather } from '@expo/vector-icons'
+import { ScrollView, StyleSheet, Text } from 'react-native'
 
 function NotificationScreen() {
+  const notifications = useAppSelector(state => state.notification.items)
+
   return (
     <Container>
       <Flex
@@ -18,17 +20,25 @@ function NotificationScreen() {
       >
         <NotificationTopBar />
         <ScrollView style={styles.content}>
-          <NotificationCard
-            icon={<Feather name={'cloud-rain'} size={24} color={'#155DFC'} />}
-            type={'urgent'}
-            title={'🌧️ Hujan Terdeteksi!'}
-            description={
-              'Sensor IoT mendeteksi hujan mulai turun. Segera lindungi tanaman sensitif Anda!'
-            }
-            time={'Baru saja'}
-            statusLabel={'Mendesak'}
-            isLoaded={true}
-          />
+          {notifications.length === 0 ? (
+            <Text style={styles.emptyText}>Belum ada notifikasi</Text>
+          ) : (
+            notifications.map(item => (
+              <NotificationCard
+                key={item.id}
+                icon={<Feather name={'bell'} size={24} color={'#155DFC'} />}
+                type={'news'}
+                title={'📢 Notifikasi Baru'}
+                description={item.message}
+                time={new Date(item.receivedAt).toLocaleTimeString('id-ID', {
+                  hour: '2-digit',
+                  minute: '2-digit',
+                })}
+                statusLabel={'Informasi'}
+                isLoaded={true}
+              />
+            ))
+          )}
         </ScrollView>
       </Flex>
     </Container>
@@ -44,5 +54,11 @@ const styles = StyleSheet.create({
   content: {
     paddingHorizontal: 10,
     paddingBottom: 50,
+  },
+  emptyText: {
+    textAlign: 'center',
+    marginTop: 40,
+    color: '#999',
+    fontSize: 14,
   },
 })

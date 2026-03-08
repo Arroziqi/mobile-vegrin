@@ -1,15 +1,15 @@
-import React, { ReactNode } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
-import Flex from '@/components/Flex'
 import ButtonCustome from '@/components/buttons/button-custome/ButtonCustome'
+import Flex from '@/components/Flex'
 import { ShadowStyles } from '@/libs/common/styles/shadow.style'
+import UnreadDot from '@/libs/submodules/notification/components/NotificationCard/UnreadDot'
+import { ReactNode } from 'react'
+import { StyleSheet, Text, View } from 'react-native'
 import {
   notificationCardConfig,
   NotificationFlagType,
 } from './notificationCardConfig'
 import NotificationIcon from './NotificationIcon'
 import NotificationStatus from './NotificationStatus'
-import UnreadDot from '@/libs/submodules/notification/components/NotificationCard/UnreadDot'
 
 interface NotificationCardProps {
   type: NotificationFlagType
@@ -66,12 +66,15 @@ function NotificationCard({
 
           <Flex style={{ width: '100%' }} justify="space-between">
             <Text style={styles.time}>{time}</Text>
-            <ButtonCustome
-              title="Baca Selengkapnya"
-              onPress={onPress}
-              style={styles.buttonAction}
-              textStyle={styles.buttonActionText}
-            />
+            {/* only when type is news */}
+            {type === 'news' && (
+              <ButtonCustome
+                title="Baca Selengkapnya"
+                onPress={onPress}
+                style={styles.buttonAction}
+                textStyle={styles.buttonActionText}
+              />
+            )}
           </Flex>
 
           <NotificationStatus

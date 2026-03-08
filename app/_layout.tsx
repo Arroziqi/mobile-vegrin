@@ -8,7 +8,9 @@ import 'react-native-reanimated'
 
 import { RootNavigator } from '@/components/RootNavigator'
 import { useColorScheme } from '@/hooks/use-color-scheme'
+import { useSocket } from '@/libs/hooks/useSocket'
 import { persistor, store } from '@/libs/store'
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import * as Linking from 'expo-linking'
 import { useRouter } from 'expo-router'
@@ -16,10 +18,19 @@ import { useEffect } from 'react'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { Provider } from 'react-redux'
 import { PersistGate } from 'redux-persist/integration/react'
-import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
 
 export const unstable_settings = {
   anchor: '(tabs)',
+}
+
+function AppContent() {
+  useSocket()
+  return (
+    <>
+      <RootNavigator />
+      <StatusBar style="auto" />
+    </>
+  )
 }
 
 export default function RootLayout() {
@@ -55,8 +66,7 @@ export default function RootLayout() {
           <Provider store={store}>
             <PersistGate loading={null} persistor={persistor}>
               <BottomSheetModalProvider>
-                <RootNavigator />
-                <StatusBar style="auto" />
+                <AppContent />
               </BottomSheetModalProvider>
             </PersistGate>
           </Provider>

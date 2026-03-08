@@ -3,15 +3,18 @@ import { getCurrentLocation } from '@/libs/common/utils/location'
 import { createDevice } from '@/libs/services/location.service'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
-const setupDeviceAfterLogin = async () => {
+const setupDeviceAfterLogin = async (token: string) => {
   try {
     const { lat, lon } = await getCurrentLocation()
     const deviceId = await getDeviceId()
-    let token = await AsyncStorage.getItem('token')
 
-    if (!token) {
-      return
-    }
+    console.log(
+      'Setting up device with ID:',
+      deviceId,
+      'at location:',
+      lat,
+      lon
+    )
 
     await createDevice({
       body: {
