@@ -1,8 +1,8 @@
-import { useState } from 'react'
-import { Alert } from 'react-native'
-import { useRouter } from 'expo-router'
 import { useAuth } from '@/libs/hooks'
 import setupDeviceAfterLogin from '@/libs/services/setupDeviceAfterLogin'
+import { useRouter } from 'expo-router'
+import { useState } from 'react'
+import { Alert } from 'react-native'
 
 export const useLoginForm = () => {
   const { login } = useAuth()
@@ -25,14 +25,15 @@ export const useLoginForm = () => {
       password,
     })
 
-    await setupDeviceAfterLogin()
-
-    setLoading(false)
-
     if (!result.success) {
+      setLoading(false)
       Alert.alert('Login gagal', result.error)
       return
     }
+
+    await setupDeviceAfterLogin(result.data!.token)
+
+    setLoading(false)
 
     // ✅ login sukses → redirect ke home
     router.replace('/')

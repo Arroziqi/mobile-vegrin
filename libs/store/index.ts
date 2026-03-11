@@ -1,11 +1,12 @@
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import { configureStore } from '@reduxjs/toolkit'
 import { persistReducer, persistStore } from 'redux-persist'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import authReducer from './slices/auth.slice'
+import notificationReducer from './slices/notification.slice'
+import plantReducer from './slices/plant.slice'
 import profileReducer from './slices/profile.slice'
 import weatherReducer from './slices/weather.slice'
-import plantReducer from './slices/plant.slice'
 
 const authPersistConfig = {
   key: 'auth',
@@ -21,6 +22,7 @@ export const store = configureStore({
     profile: profileReducer,
     weather: weatherReducer,
     plant: plantReducer,
+    notification: notificationReducer,
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
