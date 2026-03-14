@@ -1,9 +1,9 @@
 import Flex from '@/components/Flex'
+import { PlantCondition } from '@/libs/common/utils/getPlantCondition'
 import { customizeColors } from '@/libs/core/config/theme/color'
 import { MaterialIcons } from '@expo/vector-icons'
 import { ComponentProps } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
-import { PlantCondition } from '@/libs/common/utils/getPlantCondition'
 
 const resultCardData = {
   plantName: 'Kangkung',
@@ -28,7 +28,7 @@ interface StatusConfigItem {
 }
 
 const statusConfig: Record<PlantCondition, StatusConfigItem> = {
-  [PlantCondition.SEHAT]: {
+  [PlantCondition.BAIK]: {
     icon: 'trending-up',
     iconColor: customizeColors.green4 || '#10B981',
     bgColor: '#ECFDF5',
@@ -36,7 +36,7 @@ const statusConfig: Record<PlantCondition, StatusConfigItem> = {
     titleColor: '#004F3B',
     descColor: customizeColors.green4 || '#10B981',
   },
-  [PlantCondition.SAKIT]: {
+  [PlantCondition.CUKUP]: {
     icon: 'trending-flat',
     iconColor: '#F59E0B',
     bgColor: '#FFFBEB',
@@ -44,7 +44,7 @@ const statusConfig: Record<PlantCondition, StatusConfigItem> = {
     titleColor: '#78350F',
     descColor: '#D97706',
   },
-  [PlantCondition.HAMA]: {
+  [PlantCondition.PERLU_PERHATIAN]: {
     icon: 'trending-down',
     iconColor: '#EF4444',
     bgColor: '#FEF2F2',
@@ -56,7 +56,7 @@ const statusConfig: Record<PlantCondition, StatusConfigItem> = {
 
 const ResultCard = ({ plant_name, condition, diagnose }: ResultCardProps) => {
   const currentStatus =
-    statusConfig[condition] ?? statusConfig[PlantCondition.SEHAT]
+    statusConfig[condition] ?? statusConfig[PlantCondition.BAIK]
 
   return (
     <Flex direction="column" style={styles.container} gap={10}>
