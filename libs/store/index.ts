@@ -11,7 +11,7 @@ import weatherReducer from './slices/weather.slice'
 const authPersistConfig = {
   key: 'auth',
   storage: AsyncStorage,
-  whitelist: ['token', 'userId', 'deviceId', 'isAuthenticated'],
+  whitelist: ['token', 'userId', 'deviceId', 'isAuthenticated', 'roleName'],
 }
 
 const persistedAuthReducer = persistReducer(authPersistConfig, authReducer)
