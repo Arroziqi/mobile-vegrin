@@ -42,7 +42,6 @@ function NotificationCard({
     if (onPress) {
       onPress()
     } else if (link) {
-      console.log('Navigating to:', link) // Debug log
       // Navigate ke link jika tersedia
       router.push(link as Parameters<typeof router.push>[0])
     }

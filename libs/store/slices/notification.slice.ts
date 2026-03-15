@@ -29,8 +29,6 @@ const notificationSlice = createSlice({
         id: Date.now().toString(),
         ...action.payload,
       }
-      console.log('✅ Notification Added to Redux:', newNotification)
-      console.log('📊 Total Notifications:', state.items.length + 1)
       state.items.unshift(newNotification)
     },
     clearNotifications: state => {

@@ -34,8 +34,6 @@ export const useNotifications = () => {
       const url =
         API_ENDPOINTS.NOTIFICATION.GET_LIST || `${baseUrl}/notifications`
 
-      console.log('📡 Fetching notifications from:', url)
-
       const response = await fetch(url, {
         method: 'GET',
         headers: {
@@ -44,8 +42,6 @@ export const useNotifications = () => {
           device_id: deviceId,
         },
       })
-
-      console.log('📥 Response status:', response.status, response.statusText)
 
       if (!response.ok) {
         const responseText = await response.text()
@@ -59,10 +55,6 @@ export const useNotifications = () => {
       const notificationsArray = Array.isArray(data?.data?.notifications)
         ? data.data.notifications
         : []
-
-      console.log('✅ Notifications fetched successfully:')
-      console.log('   Total count:', notificationsArray.length)
-      console.log('   Full response:', JSON.stringify(data))
 
       setNotifications(notificationsArray)
     } catch (err) {
