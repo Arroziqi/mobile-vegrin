@@ -15,8 +15,9 @@ export const useSocket = () => {
 
     socket.on('connect', () => console.log('Connected:', socket.id))
     socket.on('notification', data => {
+      console.log('📨 Received notification:', data)
       dispatch(addNotification(data))
-      sendLocalNotification('📢 Notifikasi Baru', data.message)
+      sendLocalNotification(data.title, data.text)
     })
     socket.on('weather-update', data => {
       console.log('Weather update:', data)

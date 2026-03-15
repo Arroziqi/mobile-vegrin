@@ -1,10 +1,12 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 export interface NotificationItem {
-  id: string
-  education_id: string
-  message: string
-  receivedAt: string
+  id?: string
+  link: string
+  notify_at: string
+  text: string
+  title: string
+  type: string
 }
 
 interface NotificationState {
@@ -21,14 +23,15 @@ const notificationSlice = createSlice({
   reducers: {
     addNotification: (
       state,
-      action: PayloadAction<{ education_id: string; message: string }>
+      action: PayloadAction<Omit<NotificationItem, 'id'>>
     ) => {
-      state.items.unshift({
+      const newNotification: NotificationItem = {
         id: Date.now().toString(),
-        education_id: action.payload.education_id,
-        message: action.payload.message,
-        receivedAt: new Date().toISOString(),
-      })
+        ...action.payload,
+      }
+      console.log('✅ Notification Added to Redux:', newNotification)
+      console.log('📊 Total Notifications:', state.items.length + 1)
+      state.items.unshift(newNotification)
     },
     clearNotifications: state => {
       state.items = []

@@ -43,4 +43,9 @@ export const API_ENDPOINTS = {
     DELETE: (id: string) => `${API_BASE_URL}/education/${id}`,
     UPDATE: (id: string) => `${API_BASE_URL}/education/${id}`,
   },
+
+  // Notification
+  NOTIFICATION: {
+    GET_LIST: `${API_BASE_URL}/notifications`,
+  },
 } as const
