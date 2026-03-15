@@ -13,7 +13,7 @@ import {
   type SensorThreshold,
   SKIP_KEYS,
   WEATHER_SENSOR_META,
-} from '../../types/sensorConfig'
+} from '../types/sensorConfig'
 
 // ─── Output types ─────────────────────────────────────────────
 

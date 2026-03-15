@@ -12,7 +12,7 @@ import {
   VerifyEmailResponse,
 } from '@/libs/store/types/service.type'
 import { API_ENDPOINTS } from '@/libs/common/const/endpoint.api'
-import { fetchWithTimeout } from '@/libs/helper/fetchWithTimeout'
+import { fetchWithTimeout } from '@/libs/common/helper/fetchWithTimeout'
 
 interface AuthState {
   token: string | null
