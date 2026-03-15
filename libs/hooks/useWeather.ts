@@ -8,7 +8,10 @@ import {
   WeatherTabKey,
 } from '@/libs/common/utils/weatherTransform'
 import { AppState } from 'react-native'
-import { endDate, startDate } from '@/libs/helper/getStartAndEndDateWeather'
+import {
+  endDate,
+  startDate,
+} from '@/libs/common/helper/getStartAndEndDateWeather'
 
 type WeatherState = Record<WeatherTabKey, WeatherItemProps[]>
 

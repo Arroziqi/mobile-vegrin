@@ -1,4 +1,4 @@
-import { sendLocalNotification } from '@/libs/helper/localNotification'
+import { sendLocalNotification } from '@/libs/common/helper/localNotification'
 import { connectSocket, disconnectSocket } from '@/libs/services/socket.service'
 import { useAppDispatch, useAppSelector } from '@/libs/store/reduxHooks'
 import { useEffect } from 'react'
