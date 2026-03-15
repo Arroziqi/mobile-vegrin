@@ -77,9 +77,9 @@ function ManualInputIdModal({ modal, onSuccess }: Props): JSX.Element {
           Contoh Device ID:
         </Text>
         <Column gap={5}>
-          <Text style={styles.exampleValue}>WS-2024-001</Text>
-          <Text style={styles.exampleValue}>WS-2024-002</Text>
-          <Text style={styles.exampleValue}>WS-2024-003</Text>
+          <Text style={styles.exampleValue}>SS-03</Text>
+          <Text style={styles.exampleValue}>SSW-01</Text>
+          <Text style={styles.exampleValue}>SSW-02</Text>
         </Column>
       </View>
 
