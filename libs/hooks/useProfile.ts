@@ -1,4 +1,6 @@
 // hooks/useProfile.ts
+import { API_ENDPOINTS } from '@/libs/common/const/endpoint.api'
+import { useAuth } from '@/libs/hooks/useAuth'
 import { useAppDispatch, useAppSelector } from '@/libs/store/reduxHooks'
 import { logout } from '@/libs/store/slices/auth.slice'
 import {
@@ -7,8 +9,6 @@ import {
 } from '@/libs/store/slices/profile.slice'
 import { UpdateProfileRequest } from '@/libs/store/types/service.type'
 import { useEffect, useState } from 'react'
-import { API_ENDPOINTS } from '@/libs/common/const/endpoint.api'
-import { useAuth } from '@/libs/hooks/useAuth'
 
 export const useProfile = (autoFetch = false) => {
   const dispatch = useAppDispatch()
@@ -25,8 +25,6 @@ export const useProfile = (autoFetch = false) => {
       return { success: true, data: result }
     } catch (err) {
       const errorMessage = err as string
-
-      console.log(errorMessage)
 
       // FORCE LOGOUT
       dispatch(logout())

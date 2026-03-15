@@ -87,7 +87,6 @@ export const usePlant = () => {
 
       // Pass URI langsung — React Native tidak butuh convert ke Blob
       const cameraUri = result.assets[0].uri
-      console.log('[captureAndAnalyze] URI kamera:', cameraUri)
 
       // Resize ke max 1024px agar tidak melebihi batas upload server
       const manipulated = await ImageManipulator.manipulateAsync(
@@ -96,7 +95,6 @@ export const usePlant = () => {
         { compress: 0.5, format: ImageManipulator.SaveFormat.JPEG }
       )
       const stableUri = manipulated.uri
-      console.log('[captureAndAnalyze] URI setelah resize:', stableUri)
 
       // Analyze
       const analyzeResult = await dispatch(analyzePlant(stableUri)).unwrap()

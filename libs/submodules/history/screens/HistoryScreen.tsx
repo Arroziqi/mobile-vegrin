@@ -54,8 +54,6 @@ const HistoryScreen = () => {
     [logs]
   )
 
-  console.log('logs:', logs) // Debug: cek hasil mapping
-
   const sections = useMemo(() => {
     const filtered = mappedPlants.filter(plant => {
       const matchesSearch = plant.name
@@ -102,7 +100,6 @@ const HistoryScreen = () => {
             </View>
           )}
           renderItem={({ item }) => {
-            console.log('item:', item)
             return <HistoryCard {...item} />
           }}
           ListEmptyComponent={

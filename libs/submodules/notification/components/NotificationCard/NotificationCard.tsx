@@ -2,8 +2,9 @@ import ButtonCustome from '@/components/buttons/button-custome/ButtonCustome'
 import Flex from '@/components/Flex'
 import { ShadowStyles } from '@/libs/common/styles/shadow.style'
 import UnreadDot from '@/libs/submodules/notification/components/NotificationCard/UnreadDot'
+import { useRouter } from 'expo-router'
 import { ReactNode } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { Pressable, StyleSheet, Text, View } from 'react-native'
 import {
   notificationCardConfig,
   NotificationFlagType,
@@ -19,6 +20,7 @@ interface NotificationCardProps {
   statusLabel: string
   onPress?: () => void
   icon: ReactNode
+  link?: string
   isLoaded?: boolean
 }
 
@@ -30,63 +32,76 @@ function NotificationCard({
   statusLabel,
   onPress,
   icon,
+  link,
   isLoaded,
 }: NotificationCardProps) {
+  const router = useRouter()
   const visual = notificationCardConfig[type]
 
+  const handlePress = () => {
+    if (onPress) {
+      onPress()
+    } else if (link) {
+      // Navigate ke link jika tersedia
+      router.push(link as Parameters<typeof router.push>[0])
+    }
+  }
+
   return (
-    <Flex
-      style={[
-        styles.container,
-        ShadowStyles.shadowBottom,
-        { backgroundColor: visual.backgroundColor },
-      ]}
-    >
-      {/* strip */}
-      <View style={[styles.strip, { backgroundColor: visual.stripColor }]} />
+    <Pressable onPress={handlePress}>
+      <Flex
+        style={[
+          styles.container,
+          ShadowStyles.shadowBottom,
+          { backgroundColor: visual.backgroundColor },
+        ]}
+      >
+        {/* strip */}
+        <View style={[styles.strip, { backgroundColor: visual.stripColor }]} />
 
-      <Flex style={styles.card} gap={10} align="flex-start">
-        <NotificationIcon
-          icon={icon}
-          backgroundColor={visual.iconBackgroundColor}
-        />
-
-        <Flex
-          style={styles.content}
-          direction="column"
-          gap={6}
-          align={'flex-start'}
-        >
-          <Text style={styles.title}>{title}</Text>
-
-          {/* WRAP FIX */}
-          <Text style={styles.description} numberOfLines={0}>
-            {description}
-          </Text>
-
-          <Flex style={{ width: '100%' }} justify="space-between">
-            <Text style={styles.time}>{time}</Text>
-            {/* only when type is news */}
-            {type === 'news' && (
-              <ButtonCustome
-                title="Baca Selengkapnya"
-                onPress={onPress}
-                style={styles.buttonAction}
-                textStyle={styles.buttonActionText}
-              />
-            )}
-          </Flex>
-
-          <NotificationStatus
-            label={statusLabel}
-            dotColor={visual.dotColor}
-            textColor={visual.textColor}
+        <Flex style={styles.card} gap={10} align="flex-start">
+          <NotificationIcon
+            icon={icon}
+            backgroundColor={visual.iconBackgroundColor}
           />
 
-          {isLoaded && <UnreadDot />}
+          <Flex
+            style={styles.content}
+            direction="column"
+            gap={6}
+            align={'flex-start'}
+          >
+            <Text style={styles.title}>{title}</Text>
+
+            {/* WRAP FIX */}
+            <Text style={styles.description} numberOfLines={0}>
+              {description}
+            </Text>
+
+            <Flex style={{ width: '100%' }} justify="space-between">
+              <Text style={styles.time}>{time}</Text>
+              {/* only when type is news */}
+              {type === 'news' && (
+                <ButtonCustome
+                  title="Baca Selengkapnya"
+                  onPress={onPress || handlePress}
+                  style={styles.buttonAction}
+                  textStyle={styles.buttonActionText}
+                />
+              )}
+            </Flex>
+
+            <NotificationStatus
+              label={statusLabel}
+              dotColor={visual.dotColor}
+              textColor={visual.textColor}
+            />
+
+            {isLoaded && <UnreadDot />}
+          </Flex>
         </Flex>
       </Flex>
-    </Flex>
+    </Pressable>
   )
 }
 

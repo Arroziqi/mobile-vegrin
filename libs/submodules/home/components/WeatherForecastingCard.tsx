@@ -1,21 +1,21 @@
-import WeatherItem, {
-  WeatherItemProps,
-} from '@/libs/submodules/home/components/WeatherItem'
 import PillButtonTabs from '@/components/tabs/pill/PillButtonTabs'
-import { useWeather } from '@/libs/hooks'
 import {
   WeatherTabKey,
   weatherTabs,
 } from '@/libs/common/utils/weatherTransform'
+import { useWeather } from '@/libs/hooks'
+import WeatherItem, {
+  WeatherItemProps,
+} from '@/libs/submodules/home/components/WeatherItem'
 
-import { Dimensions, FlatList, StyleSheet, Text, View } from 'react-native'
-import { useEffect, useRef, useState } from 'react'
-import EmptyState from '@/libs/submodules/manageContent/components/EmptyState'
 import {
   getCurrentLocation,
   getLocationFromStorage,
   saveLocationToStorage,
 } from '@/libs/common/utils/location'
+import EmptyState from '@/libs/submodules/manageContent/components/EmptyState'
+import { useEffect, useRef, useState } from 'react'
+import { Dimensions, FlatList, StyleSheet, Text, View } from 'react-native'
 
 const { width } = Dimensions.get('window')
 
