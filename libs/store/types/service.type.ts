@@ -38,6 +38,7 @@ export interface UserSession {
 export interface LoginResponse {
   message: string
   user_session: UserSession
+  role_name: string
 }
 
 export interface GoogleLoginRequest {
@@ -145,16 +146,18 @@ export interface PlantAnalyzeRequest {
 
 export interface PlantAnalyzeResponse {
   message: string
-  log_data: PlantLogData
+  plant: PlantLogData
 }
 
 export interface PlantLogData {
   id: string
   user_id?: string
   plant_name: string
+  plant_name_latin?: string
   plant_image: string
   condition: string
-  diagnosis: string
+  diagnosis: string | null
+  timestamp: string
   detail: {
     is_plant: boolean
     symptoms: string[]
@@ -168,7 +171,7 @@ export interface PlantLogData {
 
 export interface PlantLogsResponse {
   message: string
-  log_data: PlantLogData
+  log_data: PlantLogData[]
 }
 
 export interface PlantDetailResponse {

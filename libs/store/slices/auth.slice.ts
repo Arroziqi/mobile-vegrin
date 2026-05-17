@@ -12,7 +12,7 @@ import {
   VerifyEmailResponse,
 } from '@/libs/store/types/service.type'
 import { API_ENDPOINTS } from '@/libs/common/const/endpoint.api'
-import { fetchWithTimeout } from '@/libs/helper/fetchWithTimeout'
+import { fetchWithTimeout } from '@/libs/common/helper/fetchWithTimeout'
 
 interface AuthState {
   token: string | null
@@ -21,6 +21,7 @@ interface AuthState {
   loading: boolean
   error: string | null
   userId: string | null
+  roleName: string | null
 }
 
 const initialState: AuthState = {
@@ -30,6 +31,7 @@ const initialState: AuthState = {
   loading: false,
   error: null,
   userId: null,
+  roleName: null,
 }
 
 // Login with email/password
@@ -67,6 +69,7 @@ export const loginUser = createAsyncThunk(
         token: session.token,
         userId: session.user_id,
         deviceId: session.device_id,
+        roleName: result.data.role_name,
       }
     } catch (error) {
       const err = error as Error
@@ -235,6 +238,7 @@ const authSlice = createSlice({
         state.deviceId = action.payload.deviceId
         state.userId = action.payload.userId
         state.isAuthenticated = true
+        state.roleName = action.payload.roleName
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false
@@ -270,6 +274,7 @@ const authSlice = createSlice({
         state.deviceId = null
         state.isAuthenticated = false
         state.userId = null
+        state.roleName = null
       })
       .addCase(logoutUser.rejected, (state, action) => {
         state.loading = false

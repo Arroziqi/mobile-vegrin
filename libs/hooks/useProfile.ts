@@ -1,18 +1,21 @@
 // hooks/useProfile.ts
-import { useEffect, useState } from 'react'
+import { API_ENDPOINTS } from '@/libs/common/const/endpoint.api'
+import { useAuth } from '@/libs/hooks/useAuth'
 import { useAppDispatch, useAppSelector } from '@/libs/store/reduxHooks'
+import { logout } from '@/libs/store/slices/auth.slice'
 import {
   getUserProfile,
   updateUserProfile,
 } from '@/libs/store/slices/profile.slice'
 import { UpdateProfileRequest } from '@/libs/store/types/service.type'
-import { logout } from '@/libs/store/slices/auth.slice'
+import { useEffect, useState } from 'react'
 
 export const useProfile = (autoFetch = false) => {
   const dispatch = useAppDispatch()
   const { profile, loading, error } = useAppSelector(state => state.profile)
   const { isAuthenticated } = useAppSelector(state => state.auth)
   const [localError, setLocalError] = useState<string | null>(null)
+  const { token, deviceId } = useAuth()
 
   // Fetch user profile
   const fetchProfile = async () => {
@@ -22,8 +25,6 @@ export const useProfile = (autoFetch = false) => {
       return { success: true, data: result }
     } catch (err) {
       const errorMessage = err as string
-
-      console.log(errorMessage)
 
       // FORCE LOGOUT
       dispatch(logout())
@@ -41,6 +42,46 @@ export const useProfile = (autoFetch = false) => {
       return { success: true, data: result }
     } catch (err) {
       const errorMessage = err as string
+      setLocalError(errorMessage)
+      return { success: false, error: errorMessage }
+    }
+  }
+
+  // Update profile photo
+  const updateProfilePhoto = async (imageUri: string) => {
+    try {
+      setLocalError(null)
+
+      const formData = new FormData()
+
+      formData.append('photo_profile', {
+        uri: imageUri,
+        name: `profile-${Date.now()}.jpg`,
+        type: 'image/jpeg',
+      } as any)
+
+      const response = await fetch(API_ENDPOINTS.PROFILE.UPDATE, {
+        method: 'PUT',
+        headers: {
+          vtoken: token!,
+          device_id: deviceId!,
+        },
+        body: formData,
+      })
+
+      if (!response.ok) {
+        const error = await response.json()
+        throw new Error(error.message)
+      }
+
+      const data = await response.json()
+
+      // refresh profile setelah upload sukses
+      await fetchProfile()
+
+      return { success: true, data }
+    } catch (err) {
+      const errorMessage = (err as Error).message
       setLocalError(errorMessage)
       return { success: false, error: errorMessage }
     }
@@ -81,5 +122,6 @@ export const useProfile = (autoFetch = false) => {
     updateProfile,
     refreshProfile,
     clearError,
+    updateProfilePhoto,
   }
 }

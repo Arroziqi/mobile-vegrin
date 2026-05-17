@@ -1,12 +1,13 @@
 // hooks/usePlant.ts
-import { useCallback, useState } from 'react'
-import * as ImagePicker from 'expo-image-picker'
 import { useAppDispatch, useAppSelector } from '@/libs/store/reduxHooks'
 import {
   analyzePlant,
   getPlantDetail,
   getPlantLogs,
 } from '@/libs/store/slices/plant.slice'
+import * as ImageManipulator from 'expo-image-manipulator'
+import * as ImagePicker from 'expo-image-picker'
+import { useCallback, useState } from 'react'
 
 export const usePlant = () => {
   const dispatch = useAppDispatch()
@@ -15,11 +16,11 @@ export const usePlant = () => {
   )
   const [localError, setLocalError] = useState<string | null>(null)
 
-  // Analyze plant dari file/blob
-  const analyze = async (imageFile: File | Blob) => {
+  // Analyze plant dari URI
+  const analyze = async (uri: string) => {
     try {
       setLocalError(null)
-      const result = await dispatch(analyzePlant(imageFile)).unwrap()
+      const result = await dispatch(analyzePlant(uri)).unwrap()
       return { success: true, data: result }
     } catch (err) {
       const errorMessage = err as string
@@ -42,8 +43,6 @@ export const usePlant = () => {
       // Pick image
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-        aspect: [4, 3],
         quality: 0.8,
       })
 
@@ -51,13 +50,11 @@ export const usePlant = () => {
         return { success: false, error: 'Dibatalkan oleh user' }
       }
 
-      // Convert to blob
+      // Pass URI langsung — React Native tidak butuh convert ke Blob
       const uri = result.assets[0].uri
-      const response = await fetch(uri)
-      const blob = await response.blob()
 
       // Analyze
-      const analyzeResult = await dispatch(analyzePlant(blob)).unwrap()
+      const analyzeResult = await dispatch(analyzePlant(uri)).unwrap()
       return { success: true, data: analyzeResult }
     } catch (err) {
       const errorMessage = (err as Error).message
@@ -77,27 +74,37 @@ export const usePlant = () => {
         throw new Error('Permission to access camera was denied')
       }
 
-      // Take photo
+      // Take photo — allowsEditing menampilkan UI crop setelah foto diambil
       const result = await ImagePicker.launchCameraAsync({
+        quality: 0.5,
         allowsEditing: true,
         aspect: [4, 3],
-        quality: 0.8,
       })
 
       if (result.canceled) {
         return { success: false, error: 'Dibatalkan oleh user' }
       }
 
-      // Convert to blob
-      const uri = result.assets[0].uri
-      const response = await fetch(uri)
-      const blob = await response.blob()
+      // Pass URI langsung — React Native tidak butuh convert ke Blob
+      const cameraUri = result.assets[0].uri
+
+      // Resize ke max 1024px agar tidak melebihi batas upload server
+      const manipulated = await ImageManipulator.manipulateAsync(
+        cameraUri,
+        [{ resize: { width: 1024 } }],
+        { compress: 0.5, format: ImageManipulator.SaveFormat.JPEG }
+      )
+      const stableUri = manipulated.uri
 
       // Analyze
-      const analyzeResult = await dispatch(analyzePlant(blob)).unwrap()
+      const analyzeResult = await dispatch(analyzePlant(stableUri)).unwrap()
       return { success: true, data: analyzeResult }
     } catch (err) {
-      const errorMessage = (err as Error).message
+      console.error('[captureAndAnalyze] Error:', err, typeof err)
+      const errorMessage =
+        typeof err === 'string'
+          ? err
+          : ((err as Error).message ?? 'Gagal menganalisis tanaman')
       setLocalError(errorMessage)
       return { success: false, error: errorMessage }
     }
@@ -133,17 +140,17 @@ export const usePlant = () => {
   const getLogsByCondition = useCallback(
     (condition: string) => {
       return logs.filter(
-        log => log.condition.toLowerCase() === condition.toLowerCase()
+        log => log?.condition?.toLowerCase() === condition.toLowerCase()
       )
     },
     [logs]
   )
 
   // Get healthy plants
-  const healthyPlants = getLogsByCondition('Sehat')
+  const healthyPlants = getLogsByCondition('Baik')
 
   // Get sick plants
-  const sickPlants = getLogsByCondition('Sakit')
+  const sickPlants = getLogsByCondition('Cukup')
 
   // Get stats
   const stats = {

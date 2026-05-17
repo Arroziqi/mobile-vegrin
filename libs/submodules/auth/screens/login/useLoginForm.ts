@@ -1,7 +1,8 @@
+import { useAuth } from '@/libs/hooks'
+import setupDeviceAfterLogin from '@/libs/services/setupDeviceAfterLogin'
+import { useRouter } from 'expo-router'
 import { useState } from 'react'
 import { Alert } from 'react-native'
-import { useRouter } from 'expo-router'
-import { useAuth } from '@/libs/hooks'
 
 export const useLoginForm = () => {
   const { login } = useAuth()
@@ -24,15 +25,20 @@ export const useLoginForm = () => {
       password,
     })
 
-    setLoading(false)
-
     if (!result.success) {
+      setLoading(false)
       Alert.alert('Login gagal', result.error)
       return
     }
 
-    // ✅ login sukses → redirect ke home
-    router.replace('/')
+    await setupDeviceAfterLogin(result.data!.token)
+
+    setLoading(false)
+
+    Alert.alert(
+      'Verifikasi Email',
+      'Akun Anda berhasil didaftarkan. Silakan cek email untuk verifikasi terlebih dahulu, kemudian login!'
+    )
   }
 
   return {

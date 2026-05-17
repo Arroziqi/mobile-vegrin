@@ -5,7 +5,7 @@ import DashboardIotContent from '@/libs/submodules/iot/components/DashboardIotCo
 import NoSignalContent from '@/libs/submodules/iot/components/NoSignalContent'
 
 function IotScreen() {
-  const [isConnected, setIsConnected] = React.useState(false)
+  const [isConnected, setIsConnected] = React.useState(true)
 
   const renderContent = () => {
     if (isConnected) {

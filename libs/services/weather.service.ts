@@ -1,7 +1,7 @@
 // libs/common/services/weather.service.ts
 
 import { API_ENDPOINTS } from '@/libs/common/const/endpoint.api'
-import { WeatherApiResponse } from '@/libs/types/weather.type'
+import { WeatherApiResponse } from '@/libs/common/types/weather.type'
 
 export const fetchWeather = async (
   lat: number,

@@ -1,35 +1,53 @@
-import React, { useRef, useState } from 'react'
-import Container from '@/components/container/Container'
-import { StyleSheet, Text, View } from 'react-native'
-import ProfileTopBar from '@/libs/submodules/profile/components/topbar/ProfileTopBar'
-import { customizeColors } from '@/libs/core/config/theme/color'
 import Avatar from '@/components/Avatar'
+import Container from '@/components/container/Container'
 import Flex from '@/components/Flex'
-import { Link } from 'expo-router'
-import ProfileInfoRow from '@/libs/submodules/profile/components/ProfileInfoRow'
-import { useImagePicker } from '@/hooks/useImagePicker'
-import BottomSheet from '@gorhom/bottom-sheet'
 import ImagePickerBottomSheet from '@/components/ImagePickerBottomSheet'
+import { useImagePicker } from '@/hooks/useImagePicker'
+import { buildAvatarUrl } from '@/libs/common/utils/buildAvatarUrl'
+import { customizeColors } from '@/libs/core/config/theme/color'
 import { useProfile } from '@/libs/hooks'
+import ProfileInfoRow from '@/libs/submodules/profile/components/ProfileInfoRow'
+import ProfileTopBar from '@/libs/submodules/profile/components/topbar/ProfileTopBar'
+import { BottomSheetModal } from '@gorhom/bottom-sheet'
+import { Link } from 'expo-router'
+import { useEffect, useRef, useState } from 'react'
+import { StyleSheet, Text, View } from 'react-native'
 
 function ProfileScreen() {
-  const { profile } = useProfile()
-  const bottomSheetRef = useRef<BottomSheet>(null)
+  const { profile, updateProfilePhoto } = useProfile()
+  const bottomSheetRef = useRef<BottomSheetModal>(null)
   const { pickFromCamera, pickFromGallery } = useImagePicker()
   const [avatar, setAvatar] = useState<string | null>(
-    profile?.photo_profile ?? null
+    buildAvatarUrl(profile?.photo_profile)
   )
+
+  // Sync avatar ketika profile dari Redux berubah (misal setelah fetchProfile)
+  useEffect(() => {
+    setAvatar(buildAvatarUrl(profile?.photo_profile))
+  }, [profile?.photo_profile])
 
   const handleCamera = async () => {
     bottomSheetRef.current?.close()
     const uri = await pickFromCamera()
-    if (uri) setAvatar(uri)
+
+    if (uri) {
+      setAvatar(uri) // optimistic UI dengan URI lokal
+      await updateProfilePhoto(uri)
+      // setelah fetchProfile() di dalam updateProfilePhoto selesai,
+      // useEffect akan sync avatar dengan URL server otomatis
+    }
   }
 
   const handleGallery = async () => {
     bottomSheetRef.current?.close()
     const uri = await pickFromGallery()
-    if (uri) setAvatar(uri)
+
+    if (uri) {
+      setAvatar(uri) // optimistic UI dengan URI lokal
+      await updateProfilePhoto(uri)
+      // setelah fetchProfile() di dalam updateProfilePhoto selesai,
+      // useEffect akan sync avatar dengan URL server otomatis
+    }
   }
 
   return (
@@ -42,7 +60,7 @@ function ProfileScreen() {
               avatar ? { uri: avatar } : require('@/assets/images/avatar.jpg')
             }
             editable
-            onEditPress={() => bottomSheetRef.current?.expand()}
+            onEditPress={() => bottomSheetRef.current?.present()}
             style={styles.avatar}
           />
 

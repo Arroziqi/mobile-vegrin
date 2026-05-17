@@ -12,6 +12,11 @@ export const API_ENDPOINTS = {
     VERIFY_EMAIL: `${API_BASE_URL}/auth/verify-email`,
   },
 
+  // User
+  USER: {
+    CREATE_DEVICE: `${API_BASE_URL}/user/device`,
+  },
+
   // Profile
   PROFILE: {
     GET: `${API_BASE_URL}/user`,
@@ -37,5 +42,10 @@ export const API_ENDPOINTS = {
     GET_DETAIL: (id: string) => `${API_BASE_URL}/education/${id}`,
     DELETE: (id: string) => `${API_BASE_URL}/education/${id}`,
     UPDATE: (id: string) => `${API_BASE_URL}/education/${id}`,
+  },
+
+  // Notification
+  NOTIFICATION: {
+    GET_LIST: `${API_BASE_URL}/notifications`,
   },
 } as const

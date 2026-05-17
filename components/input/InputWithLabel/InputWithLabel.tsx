@@ -1,3 +1,5 @@
+import { customizeColors } from '@/libs/core/config/theme/color'
+import { MaterialIcons } from '@expo/vector-icons'
 import React, { useState } from 'react'
 import {
   Pressable,
@@ -8,8 +10,6 @@ import {
   View,
 } from 'react-native'
 import DateTimePickerModal from 'react-native-modal-datetime-picker'
-import { customizeColors } from '@/libs/core/config/theme/color'
-import { MaterialIcons } from '@expo/vector-icons'
 
 interface InputProps extends Pick<
   TextInputProps,
@@ -20,6 +20,8 @@ interface InputProps extends Pick<
   onChange?: (value: string) => void
   placeholder?: string
   disabled?: boolean
+  rightElement?: React.ReactNode
+  errorText?: string
 }
 
 const InputWithLabel = ({
@@ -32,6 +34,8 @@ const InputWithLabel = ({
   keyboardType,
   secureTextEntry,
   autoCapitalize,
+  rightElement,
+  errorText,
 }: InputProps) => {
   const [focused, setFocused] = useState(false)
   const [showDatePicker, setShowDatePicker] = useState(false)
@@ -62,6 +66,7 @@ const InputWithLabel = ({
             styles.container,
             focused && styles.focused,
             disabled && styles.disabled,
+            !!errorText && styles.errorBorder,
           ]}
         >
           <TextInput
@@ -87,6 +92,9 @@ const InputWithLabel = ({
               />
             </View>
           )}
+          {rightElement && (
+            <View style={styles.iconWrapper}>{rightElement}</View>
+          )}
         </View>
       </Pressable>
 
@@ -98,6 +106,7 @@ const InputWithLabel = ({
           onCancel={() => setShowDatePicker(false)}
         />
       )}
+      {!!errorText && <Text style={styles.errorText}>{errorText}</Text>}
     </View>
   )
 }
@@ -155,5 +164,14 @@ const styles = StyleSheet.create({
 
   iconWrapper: {
     paddingLeft: 8,
+  },
+  errorBorder: {
+    borderColor: '#E53935',
+  },
+  errorText: {
+    fontSize: 12,
+    color: '#E53935',
+    marginTop: 4,
+    marginLeft: 4,
   },
 })

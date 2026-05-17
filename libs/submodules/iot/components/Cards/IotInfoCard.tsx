@@ -4,7 +4,7 @@ import Flex from '@/components/Flex'
 import IotCardWrapper from '@/libs/submodules/iot/components/Cards/IotCardWrapper'
 
 interface Insight {
-  status?: 'negative' | 'positive'
+  status?: 'negative' | 'positive' | 'warning'
   text: string
 }
 

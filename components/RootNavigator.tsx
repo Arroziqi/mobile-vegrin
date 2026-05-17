@@ -3,7 +3,7 @@ import { useAuth } from '@/libs/hooks'
 import { ActivityIndicator, View } from 'react-native'
 
 export function RootNavigator() {
-  const { isAuthenticated, loading } = useAuth()
+  const { isAuthenticated, loading, roleName } = useAuth()
 
   // Optional: loading saat rehydrate token
   if (loading) {

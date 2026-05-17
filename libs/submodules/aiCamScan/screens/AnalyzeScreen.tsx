@@ -1,16 +1,20 @@
 import AppBar from '@/components/AppBar'
 import Container from '@/components/container/Container'
 import Flex from '@/components/Flex'
-import StatusTag from '@/components/text/StatusTag'
-import React from 'react'
+import { usePlant } from '@/libs/hooks/usePlants'
 import { ScrollView, StyleSheet } from 'react-native'
 import AnalyzeAICard from '../components/AnalyzeAICard'
 import ImageCard from '../components/ImageCard'
 import NoteCard from '../components/NoteCard'
 import ResultCard from '../components/ResultCard'
 import ScanButton from '../components/ScanButton'
+import { PlantCondition } from '@/libs/common/utils/getPlantCondition'
+import { useRouter } from 'expo-router'
 
 const AnalyzeScreen = () => {
+  const { currentLog } = usePlant()
+  const router = useRouter()
+  if (!currentLog) return null
   return (
     <Container style={styles.container}>
       <AppBar variant="default" title="Hasil Scan" />
@@ -19,12 +23,22 @@ const AnalyzeScreen = () => {
         contentContainerStyle={styles.listContainer}
         showsVerticalScrollIndicator={false}
       >
-        <Flex direction="row" justify="center">
-          <StatusTag label="Analisis Selesai" />
-        </Flex>
-        <ImageCard />
-        <ResultCard />
-        <AnalyzeAICard />
+        {/* <Flex direction="row" justify="center">
+          <StatusTag condition="Analisis Selesai" />
+        </Flex> */}
+        <ImageCard
+          imagePath={currentLog.plant_image}
+          confidence={currentLog.detail.confidence}
+        />
+        <ResultCard
+          plant_name={currentLog.plant_name}
+          condition={currentLog.condition as PlantCondition}
+          diagnose={currentLog.diagnosis}
+        />
+        <AnalyzeAICard
+          symptoms={currentLog.detail.symptoms}
+          treatment={currentLog.detail.treatment}
+        />
         <NoteCard />
       </ScrollView>
 
@@ -33,7 +47,7 @@ const AnalyzeScreen = () => {
         align="center"
         justify="center"
       >
-        <ScanButton />
+        <ScanButton onPress={() => router.push('/ai-cam-scan')} />
       </Flex>
     </Container>
   )
@@ -56,7 +70,8 @@ const styles = StyleSheet.create({
 
   actionButtonContainer: {
     backgroundColor: 'white',
-    height: 80,
+    height: 120,
     paddingHorizontal: 16,
+    paddingBottom: 40,
   },
 })

@@ -1,6 +1,5 @@
 // store/slices/plantSlice.ts
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import type { RootState } from '../index'
+import { API_ENDPOINTS } from '@/libs/common/const/endpoint.api'
 import {
   ApiResponse,
   PlantAnalyzeResponse,
@@ -8,7 +7,8 @@ import {
   PlantLogData,
   PlantLogsResponse,
 } from '@/libs/store/types/service.type'
-import { API_ENDPOINTS } from '@/libs/common/const/endpoint.api'
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import type { RootState } from '../index'
 
 interface PlantState {
   logs: PlantLogData[]
@@ -29,7 +29,7 @@ const initialState: PlantState = {
 // Analyze Plant
 export const analyzePlant = createAsyncThunk(
   'plant/analyze',
-  async (imageFile: File | Blob, { getState, rejectWithValue }) => {
+  async (imageUri: string, { getState, rejectWithValue }) => {
     try {
       const state = getState() as RootState
       const { token, deviceId } = state.auth
@@ -38,8 +38,13 @@ export const analyzePlant = createAsyncThunk(
         return rejectWithValue('Token atau Device ID tidak ditemukan')
       }
 
+      // React Native FormData: gunakan object URI, bukan Blob
       const formData = new FormData()
-      formData.append('image_file', imageFile)
+      formData.append('image_file', {
+        uri: imageUri,
+        type: 'image/jpeg',
+        name: 'plant.jpg',
+      } as unknown as Blob)
 
       const response = await fetch(API_ENDPOINTS.PLANT.ANALYZE, {
         method: 'POST',
@@ -51,12 +56,26 @@ export const analyzePlant = createAsyncThunk(
       })
 
       if (!response.ok) {
-        const error = await response.json()
-        return rejectWithValue(error.message || 'Gagal menganalisis tanaman')
+        let errorMessage = `Server error ${response.status}`
+        try {
+          const error = await response.json()
+          errorMessage = error.message || errorMessage
+        } catch {
+          // Server returned non-JSON (e.g. HTML error page — likely file too large)
+          if (response.status === 413) {
+            errorMessage = 'Ukuran gambar terlalu besar, coba ambil foto ulang'
+          }
+        }
+        console.error(
+          '[analyzePlant] Server error:',
+          response.status,
+          errorMessage
+        )
+        return rejectWithValue(errorMessage)
       }
 
       const data: ApiResponse<PlantAnalyzeResponse> = await response.json()
-      return data.data.log_data
+      return data.data.plant
     } catch (error) {
       return rejectWithValue((error as Error).message)
     }
@@ -90,9 +109,8 @@ export const getPlantLogs = createAsyncThunk(
       }
 
       const data: ApiResponse<PlantLogsResponse> = await response.json()
-      // API mengembalikan single log_data, tapi kita expect array
-      // Jadi wrap dalam array atau sesuaikan dengan response sebenarnya
-      return [data.data.log_data]
+      // log_data sudah berupa array dari API
+      return data.data.log_data ?? []
     } catch (error) {
       return rejectWithValue((error as Error).message)
     }

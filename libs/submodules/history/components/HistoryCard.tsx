@@ -2,17 +2,32 @@ import Flex from '@/components/Flex'
 import StatusTag from '@/components/text/StatusTag'
 import { customizeColors } from '@/libs/core/config/theme/color'
 import { type TPlant } from '@/libs/dummyData/plant.dummy'
-import { getTimeOnly } from '@/libs/helper/formatDate'
+import { getTimeOnly } from '@/libs/common/helper/formatDate'
+import { usePlant } from '@/libs/hooks/usePlants'
 import { MaterialIcons } from '@expo/vector-icons'
+import { useRouter } from 'expo-router'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { PlantCondition } from '@/libs/common/utils/getPlantCondition'
 
 const HistoryCard = ({
+  id,
   name,
   scientificName,
   condition,
   accuracy,
   timestamp,
 }: Partial<TPlant>) => {
+  const router = useRouter()
+  const { fetchDetail } = usePlant()
+
+  const handleViewDetail = async () => {
+    if (!id) return
+    const result = await fetchDetail(id)
+    if (result.success) {
+      router.push('/analyze')
+    }
+  }
+
   return (
     <Flex direction="row" gap={10} style={styles.container} align="center">
       <View style={styles.iconContainer}>
@@ -27,7 +42,7 @@ const HistoryCard = ({
         <Text style={styles.plantName}>{name}</Text>
         <Text style={styles.scientificName}>{scientificName}</Text>
 
-        <StatusTag label={condition} />
+        <StatusTag condition={condition as PlantCondition} />
         <Text style={styles.accuracyText}>{accuracy} Akurat</Text>
         <Text style={styles.accuracyText}>{getTimeOnly(timestamp || '')}</Text>
       </Flex>
@@ -37,7 +52,10 @@ const HistoryCard = ({
         gap={10}
         style={styles.actionWrapper}
       >
-        <TouchableOpacity onPress={() => {}} style={styles.forwardButton}>
+        <TouchableOpacity
+          onPress={handleViewDetail}
+          style={styles.forwardButton}
+        >
           <MaterialIcons
             name="arrow-forward-ios"
             size={20}

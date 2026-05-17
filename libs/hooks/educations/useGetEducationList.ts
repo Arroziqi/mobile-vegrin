@@ -1,6 +1,6 @@
-import { useQuery } from '@tanstack/react-query'
 import { API_ENDPOINTS } from '@/libs/common/const/endpoint.api'
 import { useAuth } from '@/libs/hooks'
+import { useQuery } from '@tanstack/react-query'
 
 export interface NewsData {
   id: string
@@ -20,11 +20,15 @@ export const useGetEducationList = () => {
     enabled: !!token && !!deviceId,
     staleTime: 1000 * 60 * 5, // 5 menit tidak refetch
     queryFn: async () => {
+      if (!token || !deviceId) {
+        throw new Error('Token atau Device ID belum tersedia')
+      }
+
       const response = await fetch(API_ENDPOINTS.EDUCATION.GET_LIST, {
         method: 'GET',
         headers: {
-          vtoken: token!,
-          device_Id: deviceId!,
+          vtoken: token,
+          device_Id: deviceId,
         },
       })
 

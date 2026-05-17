@@ -1,33 +1,60 @@
+import {
+  getConditionDisplay,
+  normalizeCondition,
+  PlantCondition,
+} from '@/libs/common/utils/getPlantCondition'
 import { customizeColors } from '@/libs/core/config/theme/color'
 import { MaterialIcons } from '@expo/vector-icons'
 import { StyleSheet, Text, View } from 'react-native'
 
 interface StatusTagProps {
-  label?: string
-  icon?: string
-  backgroundColor?: string
-  textColor?: string
-  iconColor?: string
+  condition: PlantCondition
 }
 
-const StatusTag = ({
-  label,
-  icon = 'check-circle',
-  backgroundColor = customizeColors.lightGreen,
-  textColor = customizeColors.green4,
-  iconColor = customizeColors.green4,
-}: StatusTagProps) => {
+const conditionConfig = {
+  [PlantCondition.BAIK]: {
+    label: 'Baik',
+    backgroundColor: customizeColors.lightGreen,
+    textColor: customizeColors.green4,
+    iconColor: customizeColors.green4,
+    icon: 'check-circle',
+  },
+  [PlantCondition.CUKUP]: {
+    label: 'Cukup',
+    backgroundColor: '#FEF3C7', // kuning soft
+    textColor: '#B45309',
+    iconColor: '#B45309',
+    icon: 'error-outline',
+  },
+  [PlantCondition.PERLU_PERHATIAN]: {
+    label: 'Perlu Perhatian',
+    backgroundColor: '#FEE2E2', // merah soft
+    textColor: '#DC2626',
+    iconColor: '#DC2626',
+    icon: 'warning',
+  },
+}
+
+const StatusTag = ({ condition }: StatusTagProps) => {
+  // Normalisasi condition ke enum
+  const normalizedCondition = normalizeCondition(condition)
+  const config = conditionConfig[normalizedCondition]
+
+  // Atau pakai display text dari utility function
+  const displayLabel = getConditionDisplay(condition)
+
   return (
     <View
-      style={[
-        styles.container,
-        {
-          backgroundColor,
-        },
-      ]}
+      style={[styles.container, { backgroundColor: config.backgroundColor }]}
     >
-      <MaterialIcons name={icon as any} size={18} color={iconColor} />
-      <Text style={[styles.text, { color: textColor }]}>{label}</Text>
+      <MaterialIcons
+        name={config.icon as any}
+        size={16}
+        color={config.iconColor}
+      />
+      <Text style={[styles.text, { color: config.textColor }]}>
+        {displayLabel}
+      </Text>
     </View>
   )
 }
@@ -39,9 +66,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 12,
-    paddingVertical: 8,
+    paddingVertical: 6,
     borderRadius: 20,
-    gap: 8,
+    gap: 6,
     alignSelf: 'flex-start',
   },
   text: {

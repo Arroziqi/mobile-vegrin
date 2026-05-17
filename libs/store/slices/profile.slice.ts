@@ -64,7 +64,10 @@ export const getUserProfile = createAsyncThunk(
 // Update User Profile
 export const updateUserProfile = createAsyncThunk(
   'profile/updateProfile',
-  async (profileData: UpdateProfileRequest, { getState, rejectWithValue }) => {
+  async (
+    profileData: UpdateProfileRequest | FormData,
+    { getState, rejectWithValue }
+  ) => {
     try {
       const state = getState() as RootState
       const { token, deviceId } = state.auth
@@ -73,14 +76,16 @@ export const updateUserProfile = createAsyncThunk(
         return rejectWithValue('Token atau Device ID tidak ditemukan')
       }
 
-      const response = await fetch(`${API_ENDPOINTS.PROFILE.UPDATE}`, {
+      const isFormData = profileData instanceof FormData
+
+      const response = await fetch(API_ENDPOINTS.PROFILE.UPDATE, {
         method: 'PUT',
         headers: {
-          'Content-Type': 'application/json',
           vtoken: token,
           device_id: deviceId,
+          ...(isFormData ? {} : { 'Content-Type': 'application/json' }),
         },
-        body: JSON.stringify(profileData),
+        body: isFormData ? profileData : JSON.stringify(profileData),
       })
 
       if (!response.ok) {

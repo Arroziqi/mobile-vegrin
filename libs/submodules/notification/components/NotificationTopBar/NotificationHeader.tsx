@@ -1,23 +1,22 @@
-import React from 'react'
-import { Pressable, StyleSheet, Text, View } from 'react-native'
-import { Ionicons, MaterialIcons } from '@expo/vector-icons'
-import { LinearGradient } from 'expo-linear-gradient'
 import Flex from '@/components/Flex'
 import { customizeColors } from '@/libs/core/config/theme/color'
+import { Ionicons, MaterialIcons } from '@expo/vector-icons'
+import { LinearGradient } from 'expo-linear-gradient'
+import { Pressable, StyleSheet, Text, View } from 'react-native'
 
 interface NotificationHeaderProps {
-  unreadCount: number
-  onMarkAll?: () => void
+  // unreadCount: number
+  // onMarkAll?: () => void
   onClose?: () => void
 }
 
 const NotificationHeader = ({
-  unreadCount,
-  onMarkAll,
+  // unreadCount,
+  // onMarkAll,
   onClose,
 }: NotificationHeaderProps) => {
-  const subtitle =
-    unreadCount > 0 ? `${unreadCount} belum dibaca` : 'Semua sudah dibaca'
+  // const subtitle =
+  //   unreadCount > 0 ? `${unreadCount} belum dibaca` : 'Semua sudah dibaca'
 
   return (
     <Flex justify="space-between" align="center" style={{ width: '100%' }}>
@@ -33,18 +32,18 @@ const NotificationHeader = ({
 
         <Flex direction="column">
           <Text style={styles.title}>Notifikasi</Text>
-          <Text style={styles.text}>{subtitle}</Text>
+          {/* <Text style={styles.text}>{subtitle}</Text> */}
         </Flex>
       </Flex>
 
       <Flex gap={10}>
-        {unreadCount > 0 && (
+        {/* {unreadCount > 0 && (
           <Pressable onPress={onMarkAll}>
             <View style={styles.buttonAction}>
               <Text style={styles.buttonText}>Tandai Semua</Text>
             </View>
           </Pressable>
-        )}
+        )} */}
 
         <Pressable onPress={onClose}>
           <View style={styles.buttonClose}>

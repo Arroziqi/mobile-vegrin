@@ -1,7 +1,7 @@
 // libs/common/utils/weather.transform.ts
 
 import { WeatherItemProps } from '@/libs/submodules/home/components/WeatherItem'
-import { WeatherApiItem } from '@/libs/types/weather.type'
+import { WeatherApiItem } from '@/libs/common/types/weather.type'
 import { PillButtonTabItem } from '@/components/tabs/pill/PillButtonTabs.type'
 
 export type WeatherTabKey = 'yesterday' | 'today' | 'tomorrow'
