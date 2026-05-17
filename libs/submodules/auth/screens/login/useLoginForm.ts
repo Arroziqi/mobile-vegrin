@@ -35,8 +35,10 @@ export const useLoginForm = () => {
 
     setLoading(false)
 
-    // ✅ login sukses → redirect ke home
-    router.replace('/')
+    Alert.alert(
+      'Verifikasi Email',
+      'Akun Anda berhasil didaftarkan. Silakan cek email untuk verifikasi terlebih dahulu, kemudian login!'
+    )
   }
 
   return {
